@@ -5,15 +5,14 @@ import MotoCard from "@/components/MotoCard";
 import { motorcycles } from "@/data/motorcycles";
 
 export const metadata: Metadata = {
-  title: "Catálogo de motos de lujo en Caracas",
+  title: "Catálogo de motos en Caracas",
   description:
-    "Explora nuestro inventario de motocicletas de alta cilindrada: Ducati, BMW Motorrad, Harley-Davidson CVO y KTM disponibles en Caracas, Venezuela.",
+    "Explora nuestro inventario de motocicletas BMW, Voge, Kawasaki y Kymco disponibles en Caracas, Venezuela.",
 };
 
 type SearchParams = Promise<{
   brand?: string;
   category?: string;
-  price?: string;
   cc?: string;
   condition?: string;
 }>;
@@ -28,7 +27,6 @@ export default async function CatalogPage({
   const filtered = motorcycles.filter((moto) => {
     if (filters.brand && moto.brand !== filters.brand) return false;
     if (filters.category && moto.category !== filters.category) return false;
-    if (filters.price && moto.priceTier !== filters.price) return false;
     if (filters.condition && moto.condition !== filters.condition) return false;
     if (filters.cc) {
       const [min, max] = filters.cc.split("-").map(Number);
@@ -42,8 +40,8 @@ export default async function CatalogPage({
       <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">Inventario</p>
       <h1 className="mt-2 font-display text-4xl uppercase tracking-wide">Catálogo</h1>
       <p className="mt-4 max-w-2xl text-brand-text/70">
-        Filtra por marca, categoría, cilindrada y presupuesto. Todos los precios se
-        manejan por asesoría directa — escríbenos para conocer disponibilidad y valor.
+        Filtra por marca, categoría y cilindrada. Todos los precios se manejan por
+        asesoría directa — escríbenos para conocer disponibilidad y valor.
       </p>
 
       <div className="mt-8">

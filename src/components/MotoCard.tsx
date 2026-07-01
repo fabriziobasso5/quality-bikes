@@ -1,5 +1,5 @@
 import Link from "next/link";
-import MotoImagePlaceholder from "./MotoImagePlaceholder";
+import MotoPhoto from "./MotoPhoto";
 import type { Motorcycle } from "@/data/motorcycles";
 
 export default function MotoCard({ moto }: { moto: Motorcycle }) {
@@ -8,7 +8,7 @@ export default function MotoCard({ moto }: { moto: Motorcycle }) {
       href={`/catalogo/${moto.slug}`}
       className="group block overflow-hidden border border-black/10 bg-brand-bg transition hover:border-brand-navy/40 hover:shadow-lg"
     >
-      <MotoImagePlaceholder brand={moto.brand} model={moto.model} className="h-56 w-full" />
+      <MotoPhoto moto={moto} className="h-56 w-full" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
       <div className="p-5">
         <p className="text-xs tracking-widest text-brand-navy uppercase">{moto.brand}</p>
         <h3 className="mt-1 font-display text-lg tracking-wide">{moto.model}</h3>

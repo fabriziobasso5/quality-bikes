@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import MotoImagePlaceholder from "@/components/MotoImagePlaceholder";
+import MotoGallery from "@/components/MotoGallery";
 import MotoCard from "@/components/MotoCard";
 import TestRideForm from "@/components/TestRideForm";
 import { motorcycles, getMotoBySlug } from "@/data/motorcycles";
@@ -45,7 +45,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
       </nav>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
-        <MotoImagePlaceholder brand={moto.brand} model={moto.model} className="h-96 w-full lg:h-full" />
+        <MotoGallery moto={moto} />
 
         <div>
           <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">{moto.brand}</p>
@@ -66,16 +66,20 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
               <dd className="mt-1 font-mono">{moto.specs.power}</dd>
             </div>
             <div>
-              <dt className="text-brand-text/50 uppercase">Torque</dt>
-              <dd className="mt-1 font-mono">{moto.specs.torque}</dd>
+              <dt className="text-brand-text/50 uppercase">Cilindros</dt>
+              <dd className="mt-1 font-mono">{moto.specs.cylinders}</dd>
             </div>
             <div>
-              <dt className="text-brand-text/50 uppercase">Peso</dt>
-              <dd className="mt-1 font-mono">{moto.specs.weight}</dd>
+              <dt className="text-brand-text/50 uppercase">Transmisión</dt>
+              <dd className="mt-1 font-mono">{moto.specs.transmission}</dd>
             </div>
             <div>
-              <dt className="text-brand-text/50 uppercase">Tanque</dt>
-              <dd className="mt-1 font-mono">{moto.specs.tank}</dd>
+              <dt className="text-brand-text/50 uppercase">Marchas</dt>
+              <dd className="mt-1 font-mono">{moto.specs.gears}</dd>
+            </div>
+            <div>
+              <dt className="text-brand-text/50 uppercase">Color</dt>
+              <dd className="mt-1 font-mono">{moto.specs.color}</dd>
             </div>
             <div>
               <dt className="text-brand-text/50 uppercase">Estado</dt>

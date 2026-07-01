@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { brands, categories, priceTiers } from "@/data/motorcycles";
+import { brands, categories } from "@/data/motorcycles";
 
 const selectClass =
   "w-full rounded-none border border-black/15 bg-brand-bg px-4 py-3 text-sm text-brand-text focus:border-brand-navy focus:outline-none";
@@ -23,7 +23,7 @@ export default function CatalogFilters() {
   const hasFilters = searchParams.toString().length > 0;
 
   return (
-    <div className="grid grid-cols-1 gap-4 border border-black/10 bg-brand-bg-soft p-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+    <div className="grid grid-cols-1 gap-4 border border-black/10 bg-brand-bg-soft p-6 sm:grid-cols-2 lg:grid-cols-5">
       <select
         className={selectClass}
         value={searchParams.get("brand") ?? ""}
@@ -52,26 +52,13 @@ export default function CatalogFilters() {
 
       <select
         className={selectClass}
-        value={searchParams.get("price") ?? ""}
-        onChange={(e) => setParam("price", e.target.value)}
-      >
-        <option value="">Todo presupuesto</option>
-        {priceTiers.map((p) => (
-          <option key={p.value} value={p.value}>
-            {p.label}
-          </option>
-        ))}
-      </select>
-
-      <select
-        className={selectClass}
         value={searchParams.get("cc") ?? ""}
         onChange={(e) => setParam("cc", e.target.value)}
       >
         <option value="">Toda cilindrada</option>
-        <option value="0-1000">Hasta 1000 cc</option>
-        <option value="1000-1500">1000 – 1500 cc</option>
-        <option value="1500-9999">+1500 cc</option>
+        <option value="0-350">Hasta 350 cc</option>
+        <option value="350-650">350 – 650 cc</option>
+        <option value="650-9999">+650 cc</option>
       </select>
 
       <select

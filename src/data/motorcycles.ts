@@ -1,5 +1,4 @@
-export type MotoCategory = "sport" | "touring" | "cruiser" | "naked" | "adventure";
-export type PriceTier = "20k-40k" | "40k-60k" | "60k-100k";
+export type MotoCategory = "dual-sport" | "enduro" | "scooter";
 
 export interface Motorcycle {
   slug: string;
@@ -10,145 +9,134 @@ export interface Motorcycle {
   category: MotoCategory;
   condition: "0km" | "seminueva";
   featured: boolean;
-  // Franja de precio SOLO para filtrar el catálogo. El precio exacto nunca se
-  // muestra en el sitio por decisión de negocio ("consultar precio" fuerza contacto).
-  priceTier: PriceTier;
   summary: string;
   specs: {
     power: string;
-    torque: string;
-    weight: string;
-    tank: string;
+    transmission: string;
+    gears: string;
+    cylinders: string;
+    color: string;
   };
+  // Fotos reales del inventario, en public/images/inventory/<slug>/
+  photoCount: number;
 }
 
-// TODO: reemplazar por el inventario real (fotos, specs y franjas de precio)
-// cuando el cliente entregue el catálogo. Los "consultar precio" son intencionales
-// (decisión de negocio: forzar contacto directo vía WhatsApp/formulario).
+// Inventario real, extraído del sitio anterior (qualitybikesvzla.com) el 2026-07-01.
+// El precio nunca se muestra (hide_price activo en el sistema de origen) — decisión
+// de negocio consistente: "consultar disponibilidad y precio" fuerza contacto directo.
 export const motorcycles: Motorcycle[] = [
   {
-    slug: "ducati-panigale-v4",
-    brand: "Ducati",
-    model: "Panigale V4",
+    slug: "bmw-g-310-gs",
+    brand: "BMW",
+    model: "G 310 GS",
     year: 2025,
-    cc: 1103,
-    category: "sport",
+    cc: 313,
+    category: "dual-sport",
     condition: "0km",
     featured: true,
-    priceTier: "40k-60k",
-    summary:
-      "La máxima expresión de ingeniería deportiva Ducati. Tecnología MotoGP para la calle.",
-    specs: { power: "214 hp", torque: "124 Nm", weight: "198 kg", tank: "16 L" },
+    summary: "La puerta de entrada BMW al mundo dual sport: ágil, confiable y lista para la aventura urbana o fuera de carretera.",
+    specs: { power: "—", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Azul" },
+    photoCount: 5,
   },
   {
-    slug: "bmw-r18-transcontinental",
-    brand: "BMW Motorrad",
-    model: "R 18 Transcontinental",
-    year: 2025,
-    cc: 1802,
-    category: "touring",
+    slug: "voge-ds-900x",
+    brand: "Voge",
+    model: "DS 900X",
+    year: 2026,
+    cc: 895,
+    category: "dual-sport",
     condition: "0km",
     featured: true,
-    priceTier: "40k-60k",
-    summary:
-      "Touring de lujo con el carácter inconfundible del boxer BMW más grande jamás construido.",
-    specs: { power: "91 hp", torque: "158 Nm", weight: "427 kg", tank: "24 L" },
+    summary: "Utiliza el mismo motor que el BMW F 900, mismo chasis, suspensiones, frenos y tornillería — a un precio nunca antes visto.",
+    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Negro" },
+    photoCount: 5,
   },
   {
-    slug: "harley-davidson-cvo-road-glide",
-    brand: "Harley-Davidson",
-    model: "CVO Road Glide",
-    year: 2025,
-    cc: 1977,
-    category: "cruiser",
+    slug: "kawasaki-klr-650-adventure-abs",
+    brand: "Kawasaki",
+    model: "KLR 650 Adventure ABS",
+    year: 2026,
+    cc: 650,
+    category: "enduro",
     condition: "0km",
     featured: true,
-    priceTier: "60k-100k",
-    summary:
-      "La cúspide de la personalización de fábrica Harley-Davidson. Exclusividad absoluta.",
-    specs: { power: "115 hp", torque: "175 Nm", weight: "379 kg", tank: "22.7 L" },
+    summary: "El enduro de largo recorrido más legendario de Kawasaki, ahora con ABS y equipamiento Adventure de fábrica.",
+    specs: { power: "40 hp", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Gris" },
+    photoCount: 5,
   },
   {
-    slug: "ktm-1390-super-duke-r-evo",
-    brand: "KTM",
-    model: "1390 Super Duke R Evo",
-    year: 2025,
-    cc: 1350,
-    category: "naked",
-    condition: "0km",
-    featured: true,
-    priceTier: "20k-40k",
-    summary: "\"The Beast\" evolucionada: potencia bruta con electrónica de punta.",
-    specs: { power: "190 hp", torque: "145 Nm", weight: "189 kg", tank: "16 L" },
-  },
-  {
-    slug: "ducati-multistrada-v4-s",
-    brand: "Ducati",
-    model: "Multistrada V4 S",
+    slug: "kymco-ak-550-premium",
+    brand: "Kymco",
+    model: "AK 550 Premium",
     year: 2024,
-    cc: 1158,
-    category: "adventure",
-    condition: "seminueva",
-    featured: false,
-    priceTier: "40k-60k",
-    summary: "Versatilidad extrema para quien no quiere elegir entre asfalto y aventura.",
-    specs: { power: "170 hp", torque: "121 Nm", weight: "232 kg", tank: "22 L" },
+    cc: 550,
+    category: "scooter",
+    condition: "0km",
+    featured: true,
+    summary: "El maxi-scooter insignia de Kymco: potencia bicilíndrica y confort premium para ciudad y carretera.",
+    specs: { power: "51 hp", transmission: "Automática", gears: "—", cylinders: "2 cilindros", color: "Negro" },
+    photoCount: 5,
   },
   {
-    slug: "bmw-s1000rr",
-    brand: "BMW Motorrad",
-    model: "S 1000 RR",
-    year: 2024,
-    cc: 999,
-    category: "sport",
-    condition: "seminueva",
-    featured: false,
-    priceTier: "20k-40k",
-    summary: "Referencia absoluta en superbikes de producción. Precisión alemana.",
-    specs: { power: "210 hp", torque: "113 Nm", weight: "197 kg", tank: "16.5 L" },
-  },
-  {
-    slug: "ktm-990-duke",
-    brand: "KTM",
-    model: "990 Duke",
-    year: 2025,
-    cc: 947,
-    category: "naked",
+    slug: "voge-ds-800x-rally",
+    brand: "Voge",
+    model: "DS 800X Rally",
+    year: 2026,
+    cc: 895,
+    category: "dual-sport",
     condition: "0km",
     featured: false,
-    priceTier: "20k-40k",
-    summary: "El equilibrio perfecto entre agilidad urbana y carácter naked KTM.",
-    specs: { power: "123 hp", torque: "103 Nm", weight: "179 kg", tank: "14.9 L" },
+    summary: "Versión Rally del DS 800X, pensada para quienes exigen aún más presencia y carácter off-road.",
+    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Negro" },
+    photoCount: 5,
   },
   {
-    slug: "harley-davidson-cvo-street-glide",
-    brand: "Harley-Davidson",
-    model: "CVO Street Glide",
-    year: 2024,
-    cc: 1977,
-    category: "touring",
-    condition: "seminueva",
+    slug: "voge-ds-525x",
+    brand: "Voge",
+    model: "DS 525X",
+    year: 2026,
+    cc: 500,
+    category: "dual-sport",
+    condition: "0km",
     featured: false,
-    priceTier: "60k-100k",
-    summary: "Touring premium con acabados exclusivos de la línea CVO.",
-    specs: { power: "115 hp", torque: "175 Nm", weight: "374 kg", tank: "22.7 L" },
+    summary: "Dual sport bicilíndrico de cilindrada intermedia, ideal para quien busca versatilidad sin sacrificar carácter.",
+    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Plateado" },
+    photoCount: 5,
+  },
+  {
+    slug: "voge-sr4-350-max",
+    brand: "Voge",
+    model: "SR4 350 MAX",
+    year: 2024,
+    cc: 350,
+    category: "scooter",
+    condition: "0km",
+    featured: false,
+    summary: "Usa el mismo motor y chasis que el BMW C 400 GT: un scooter de gran calidad a un precio muy competitivo.",
+    specs: { power: "29 hp", transmission: "Automática", gears: "—", cylinders: "1 cilindro", color: "Negro" },
+    photoCount: 5,
+  },
+  {
+    slug: "voge-sr3-250-max",
+    brand: "Voge",
+    model: "SR3 250 MAX",
+    year: 2024,
+    cc: 244,
+    category: "scooter",
+    condition: "0km",
+    featured: false,
+    summary: "Comodidad y versatilidad son lo que más destaca en este scooter urbano.",
+    specs: { power: "26 hp", transmission: "Automática", gears: "—", cylinders: "1 cilindro", color: "Blanco" },
+    photoCount: 5,
   },
 ];
 
 export const brands = Array.from(new Set(motorcycles.map((m) => m.brand)));
 
 export const categories: { value: MotoCategory; label: string }[] = [
-  { value: "sport", label: "Sport" },
-  { value: "touring", label: "Touring" },
-  { value: "cruiser", label: "Cruiser" },
-  { value: "naked", label: "Naked" },
-  { value: "adventure", label: "Adventure" },
-];
-
-export const priceTiers: { value: PriceTier; label: string }[] = [
-  { value: "20k-40k", label: "USD 20.000 – 40.000" },
-  { value: "40k-60k", label: "USD 40.000 – 60.000" },
-  { value: "60k-100k", label: "USD 60.000 – 100.000" },
+  { value: "dual-sport", label: "Dual Sport" },
+  { value: "enduro", label: "Enduro" },
+  { value: "scooter", label: "Scooter" },
 ];
 
 export function getMotoBySlug(slug: string) {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
+import { withBasePath } from "@/lib/base-path";
 import MobileMenu from "./MobileMenu";
 
 const navItems = [
@@ -16,13 +17,13 @@ export default function Header() {
         <Link href="/" className="flex items-center" aria-label={siteConfig.name}>
           {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
           <img
-            src="/assets/logo/quality-bikes-isotipo-qb.svg"
+            src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
             alt={siteConfig.name}
             className="h-9 w-auto md:hidden"
           />
           {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
           <img
-            src="/assets/logo/quality-bikes-logo-color.svg"
+            src={withBasePath("/assets/logo/quality-bikes-logo-color.svg")}
             alt={siteConfig.name}
             className="hidden h-11 w-auto md:block"
           />

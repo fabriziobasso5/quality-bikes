@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
+import { withBasePath } from "@/lib/base-path";
 
 export default function Footer() {
   return (
@@ -9,7 +10,7 @@ export default function Footer() {
           <div className="inline-block rounded bg-brand-bg px-3 py-2">
             {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
             <img
-              src="/assets/logo/quality-bikes-logo-color.svg"
+              src={withBasePath("/assets/logo/quality-bikes-logo-color.svg")}
               alt={siteConfig.name}
               className="h-8 w-auto"
             />

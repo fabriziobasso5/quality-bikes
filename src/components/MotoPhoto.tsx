@@ -1,5 +1,6 @@
 import Image from "next/image";
 import MotoImagePlaceholder from "./MotoImagePlaceholder";
+import { withBasePath } from "@/lib/base-path";
 import type { Motorcycle } from "@/data/motorcycles";
 
 export default function MotoPhoto({
@@ -22,7 +23,7 @@ export default function MotoPhoto({
   return (
     <div className={`relative ${className}`}>
       <Image
-        src={`/images/inventory/${moto.slug}/${index}.webp`}
+        src={withBasePath(`/images/inventory/${moto.slug}/${index}.webp`)}
         alt={`${moto.brand} ${moto.model}`}
         fill
         sizes={sizes ?? "(max-width: 768px) 100vw, 50vw"}

@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { siteConfig } from "@/lib/site-config";
+import { withBasePath } from "@/lib/base-path";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -56,9 +57,9 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/assets/logo/quality-bikes-isotipo-qb.svg",
-    shortcut: "/assets/logo/quality-bikes-isotipo-qb.svg",
-    apple: "/assets/logo/quality-bikes-isotipo-qb.svg",
+    icon: withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg"),
+    shortcut: withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg"),
+    apple: withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg"),
   },
 };
 

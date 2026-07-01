@@ -13,6 +13,10 @@ export function generateStaticParams() {
   return motorcycles.map((moto) => ({ slug: moto.slug }));
 }
 
+// Static export only serves the slugs above; there's no server to resolve
+// anything else at request time.
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
   const moto = getMotoBySlug(slug);

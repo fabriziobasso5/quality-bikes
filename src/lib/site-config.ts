@@ -19,7 +19,6 @@ export const siteConfig = {
   social: {
     instagram: "https://instagram.com/qualitybikes_vzla",
     instagramHandle: "@qualitybikes_vzla",
-    facebook: "https://facebook.com/qualitybikes", // TODO: confirmar URL real de Facebook
   },
   // Orden intencional: BMW y Ducati primero (marcas de lujo, el foco del negocio),
   // el resto son las marcas adicionales que también se comercializan.

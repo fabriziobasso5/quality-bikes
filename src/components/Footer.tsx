@@ -47,11 +47,6 @@ export default function Footer() {
                 Instagram ({siteConfig.social.instagramHandle})
               </a>
             </li>
-            <li>
-              <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-brand-red">
-                Facebook
-              </a>
-            </li>
           </ul>
         </div>
       </div>

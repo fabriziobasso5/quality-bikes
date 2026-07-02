@@ -22,7 +22,6 @@ export default function Footer() {
           <p className="text-xs tracking-widest text-brand-red uppercase">Navegación</p>
           <ul className="mt-4 space-y-2 text-sm text-brand-bg/70">
             <li><Link href="/catalogo" className="hover:text-brand-red">Catálogo</Link></li>
-            <li><Link href="/financiamiento" className="hover:text-brand-red">Financiamiento</Link></li>
             <li><Link href="/nosotros" className="hover:text-brand-red">Nosotros</Link></li>
             <li><Link href="/contacto" className="hover:text-brand-red">Contacto</Link></li>
           </ul>

@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import MotoCard from "@/components/MotoCard";
 import MotoImagePlaceholder from "@/components/MotoImagePlaceholder";
 import { motorcycles } from "@/data/motorcycles";
 import { siteConfig, buildWhatsAppLink } from "@/lib/site-config";
+import { withBasePath } from "@/lib/base-path";
 
 export default function Home() {
   const featured = motorcycles.filter((m) => m.featured);
@@ -11,15 +13,15 @@ export default function Home() {
     <>
       {/* Hero */}
       <section className="relative flex min-h-[85vh] items-end overflow-hidden">
-        <MotoImagePlaceholder
-          brand={siteConfig.name}
-          model="Hero"
-          className="absolute inset-0 h-full w-full"
-          showLabel={false}
-          align="top"
-          theme="dark"
+        <Image
+          src={withBasePath("/images/hero/africa-twin-hero.webp")}
+          alt="Motos Honda Africa Twin en acción sobre tierra"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/50 to-brand-navy/10" />
         <div className="relative z-10 mx-auto max-w-7xl px-6 pb-20 text-brand-bg">
           <p className="text-xs tracking-[0.3em] text-brand-bg/70 uppercase">
             Caracas · Venezuela
@@ -28,12 +30,10 @@ export default function Home() {
             {siteConfig.slogan}
           </p>
           <h1 className="mt-4 max-w-2xl font-display text-4xl leading-tight tracking-wide uppercase sm:text-6xl">
-            Motocicletas de alta cilindrada, curadas para quienes exigen lo mejor
+            Más de 40 años de experiencia en el mundo motero
           </h1>
-          <p className="mt-6 max-w-xl text-brand-bg/80">
-            Especialistas en motos de lujo BMW, con inventario adicional de Ducati,
-            Honda, Yamaha, Suzuki, Kawasaki y más. Asesoría experta y atención
-            personalizada para coleccionistas y entusiastas del motociclismo.
+          <p className="mt-6 max-w-xl text-lg text-brand-bg/80">
+            Aquí encontrarás las motos más buscadas del mercado.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
@@ -61,17 +61,13 @@ export default function Home() {
             Marcas representadas
           </p>
           <p className="mx-auto mt-2 mb-8 max-w-md text-center text-sm text-brand-text/60">
-            Con especial énfasis en motos de lujo BMW
+            Multimarca: las motos más reconocidas y buscadas del mercado
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
-            {siteConfig.brandsRepresented.map((brand, i) => (
+            {siteConfig.brandsRepresented.map((brand) => (
               <span
                 key={brand}
-                className={`font-display tracking-widest uppercase ${
-                  i === 0
-                    ? "text-xl text-brand-navy"
-                    : "text-lg text-brand-text/70"
-                }`}
+                className="font-display text-lg tracking-widest text-brand-text/70 uppercase"
               >
                 {brand}
               </span>
@@ -95,7 +91,15 @@ export default function Home() {
                 key={product.name}
                 className="border border-black/10 bg-brand-bg-soft p-6 text-center"
               >
-                <p className="font-display text-lg tracking-wide uppercase text-brand-navy">
+                <div className="mx-auto flex h-20 items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */}
+                  <img
+                    src={withBasePath(product.logo)}
+                    alt={product.name}
+                    className="max-h-20 max-w-[140px] object-contain"
+                  />
+                </div>
+                <p className="mt-4 font-display text-lg tracking-wide uppercase text-brand-navy">
                   {product.name}
                 </p>
                 <p className="mt-2 text-sm text-brand-text/60">{product.description}</p>
@@ -136,28 +140,14 @@ export default function Home() {
 
       {/* Propuesta de valor */}
       <section className="border-y border-black/10 bg-brand-bg-soft py-20">
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 md:grid-cols-3">
-          {[
-            {
-              title: "Curaduría experta",
-              body: "Cada unidad en nuestro inventario es seleccionada y verificada por especialistas, no es un lote genérico.",
-            },
-            {
-              title: "Asesoría personalizada",
-              body: "Te acompañamos en todo el proceso: desde elegir el modelo correcto hasta el financiamiento y la entrega.",
-            },
-            {
-              title: "Servicio postventa",
-              body: "Mantenimiento especializado y repuestos originales para proteger tu inversión a largo plazo.",
-            },
-          ].map((item) => (
-            <div key={item.title}>
-              <h3 className="font-display text-xl tracking-wide uppercase text-brand-navy">
-                {item.title}
-              </h3>
-              <p className="mt-3 text-sm text-brand-text/70">{item.body}</p>
-            </div>
-          ))}
+        <div className="mx-auto max-w-2xl px-6 text-center">
+          <h3 className="font-display text-2xl tracking-wide uppercase text-brand-navy">
+            Asesoría personalizada
+          </h3>
+          <p className="mt-3 text-brand-text/70">
+            Te ayudamos a conseguir la moto de tus sueños: te acompañamos en todo el
+            proceso, desde elegir el modelo correcto hasta la entrega.
+          </p>
         </div>
       </section>
 

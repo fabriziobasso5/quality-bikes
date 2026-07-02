@@ -6,7 +6,7 @@ import { motorcycles } from "@/data/motorcycles";
 export const metadata: Metadata = {
   title: "Catálogo de motos en Caracas",
   description:
-    "Explora nuestro inventario de motocicletas BMW, Voge, Kawasaki y Kymco disponibles en Caracas, Venezuela.",
+    "Explora nuestro inventario multimarca de motocicletas BMW, Voge y Kawasaki disponibles en Caracas, Venezuela.",
 };
 
 export default function CatalogPage() {

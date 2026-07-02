@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import MotoGallery from "@/components/MotoGallery";
 import MotoCard from "@/components/MotoCard";
-import TestRideForm from "@/components/TestRideForm";
+import QuoteForm from "@/components/QuoteForm";
 import { motorcycles, getMotoBySlug } from "@/data/motorcycles";
 import { buildWhatsAppLink } from "@/lib/site-config";
 
@@ -52,9 +52,22 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
         <MotoGallery moto={moto} />
 
         <div>
-          <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">{moto.brand}</p>
+          <div className="flex items-center gap-3">
+            <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">{moto.brand}</p>
+            {moto.availability === "proximo-arribo" && (
+              <span className="bg-brand-red px-2 py-0.5 text-xs tracking-widest text-brand-bg uppercase">
+                Próximo arribo
+              </span>
+            )}
+          </div>
           <h1 className="mt-2 font-display text-4xl uppercase tracking-wide">{moto.model}</h1>
           <p className="mt-4 text-brand-text/70">{moto.summary}</p>
+          {moto.availability === "proximo-arribo" && (
+            <p className="mt-2 text-sm text-brand-text/60">
+              Esta unidad aún no llega a Venezuela — puedes reservarla o consultar fecha
+              estimada de arribo con un asesor.
+            </p>
+          )}
 
           <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-black/10 py-6 text-sm sm:grid-cols-4">
             <div>
@@ -87,15 +100,28 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
             </div>
             <div>
               <dt className="text-brand-text/50 uppercase">Estado</dt>
-              <dd className="mt-1 font-mono">{moto.condition === "0km" ? "0 km" : "Seminueva"}</dd>
+              <dd className="mt-1 font-mono">
+                {moto.condition === "0km"
+                  ? "0 km"
+                  : `Seminueva${moto.mileageKm ? ` · ${moto.mileageKm} km` : ""}`}
+              </dd>
             </div>
+            {moto.specs.seatHeight && (
+              <div>
+                <dt className="text-brand-text/50 uppercase">Altura de asiento</dt>
+                <dd className="mt-1 font-mono">{moto.specs.seatHeight}</dd>
+              </div>
+            )}
+            {moto.specs.weight && (
+              <div>
+                <dt className="text-brand-text/50 uppercase">Peso</dt>
+                <dd className="mt-1 font-mono">{moto.specs.weight}</dd>
+              </div>
+            )}
           </dl>
 
           <p className="mt-6 text-sm text-brand-text/60">
-            Precio disponible por consulta directa con un asesor.{" "}
-            <Link href="/financiamiento" className="text-brand-red hover:underline">
-              Ver formas de pago y financiamiento
-            </Link>
+            Precio disponible por consulta directa con un asesor.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4">
@@ -113,9 +139,9 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
 
       <div className="mx-auto mt-16 max-w-xl">
         <h2 className="mb-6 text-center font-display text-2xl uppercase tracking-wide">
-          Agenda tu test ride o solicita cotización
+          Solicita tu cotización
         </h2>
-        <TestRideForm motoLabel={label} />
+        <QuoteForm motoLabel={label} />
       </div>
 
       {related.length > 0 && (

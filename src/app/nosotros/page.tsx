@@ -28,8 +28,10 @@ export default function NosotrosPage() {
           más de 40 años de experiencia en la industria de venta de motocicletas en
           Venezuela. Esa trayectoria es la que nos permite ofrecer una curaduría
           rigurosa, asesoría experta y un respaldo postventa que protege tu inversión a
-          largo plazo — especialmente en motos de lujo BMW, nuestro fuerte, además de
-          Ducati, Honda, Yamaha, Suzuki, Kawasaki, Voge y Kymco.
+          largo plazo. Somos multimarca: BMW, Ducati, Honda, Yamaha, Suzuki, Kawasaki y
+          Voge, con especial atención a los modelos más buscados de cada una — como la
+          BMW R 1250 GS Adventure, nuestra más vendida, junto a la Honda Africa Twin, la
+          Ducati Multistrada, la Yamaha Ténéré, la Suzuki DR650 y la Kawasaki KLR 650 ABS.
         </p>
         <p className="mt-4 max-w-2xl text-brand-text/70">
           Formamos parte del mismo grupo que Moto Accesorios Baro, nuestra otra tienda

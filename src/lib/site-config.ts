@@ -4,7 +4,7 @@ export const siteConfig = {
   slogan: "...mucho más que solo motos",
   tagline: "Motocicletas de alta cilindrada. Curadas para quienes exigen lo mejor.",
   description:
-    "Concesionario de motocicletas en Caracas especializado en marcas de lujo como BMW, además de Ducati, Honda, Suzuki, Kawasaki, Yamaha, Voge y Kymco. Asesoría experta, financiamiento y servicio especializado.",
+    "Concesionario multimarca de motocicletas de alta cilindrada en Caracas: BMW, Ducati, Honda, Suzuki, Kawasaki, Yamaha y Voge. Asesoría experta y personalizada para conseguir la moto de tus sueños.",
   url: "https://www.qualitybikes.example", // TODO: dominio real
   contact: {
     whatsappNumber: "584140267022",
@@ -20,23 +20,25 @@ export const siteConfig = {
     instagram: "https://instagram.com/qualitybikes_vzla",
     instagramHandle: "@qualitybikes_vzla",
   },
-  // Orden intencional: BMW y Ducati primero (marcas de lujo, el foco del negocio),
-  // el resto son las marcas adicionales que también se comercializan.
-  brandsRepresented: [
-    "BMW",
-    "Ducati",
-    "Honda",
-    "Yamaha",
-    "Suzuki",
-    "Kawasaki",
-    "Voge",
-    "Kymco",
-  ],
+  // Concesionario multimarca — sin orden de énfasis por marca.
+  brandsRepresented: ["BMW", "Ducati", "Honda", "Yamaha", "Suzuki", "Kawasaki", "Voge"],
   // Productos complementarios en tienda física (lubricantes/racing), no motocicletas.
   productsCarried: [
-    { name: "VP Racing", description: "Combustibles y aditivos de competición" },
-    { name: "Mobil 1", description: "Lubricantes sintéticos de alto desempeño" },
-    { name: "BK3", description: "Aceites y productos de mantenimiento" },
+    {
+      name: "VP Racing",
+      description: "Aditivos, gasolina de alto octanaje, ethanol y aceites",
+      logo: "/images/brands/vp-racing.png",
+    },
+    {
+      name: "Mobil 1",
+      description: "Aceites",
+      logo: "/images/brands/mobil-1.svg",
+    },
+    {
+      name: "BK3",
+      description: "Aditivos",
+      logo: "/images/brands/bk3.webp",
+    },
   ],
 } as const;
 

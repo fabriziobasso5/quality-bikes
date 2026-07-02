@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { brands, categories } from "@/data/motorcycles";
 
 const selectClass =
-  "w-full rounded-none border border-black/15 bg-brand-bg px-4 py-3 text-sm text-brand-text focus:border-brand-navy focus:outline-none";
+  "w-full rounded-none border border-black/15 bg-brand-bg px-4 py-3 text-base text-brand-text focus:border-brand-navy focus:outline-none sm:text-sm";
 
 export default function CatalogFilters() {
   const router = useRouter();

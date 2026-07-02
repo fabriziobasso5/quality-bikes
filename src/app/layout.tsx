@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter, Space_Mono, Beau_Rivage } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -29,6 +29,13 @@ const beauRivage = Beau_Rivage({
   subsets: ["latin"],
   weight: "400",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#003462",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

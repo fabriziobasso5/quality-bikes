@@ -26,7 +26,7 @@ export default function ContactForm() {
   }
 
   const inputClass =
-    "w-full rounded-none border border-black/15 bg-brand-bg px-4 py-3 text-sm text-brand-text placeholder:text-brand-text/40 focus:border-brand-navy focus:outline-none";
+    "w-full rounded-none border border-black/15 bg-brand-bg px-4 py-3 text-base text-brand-text placeholder:text-brand-text/40 focus:border-brand-navy focus:outline-none sm:text-sm";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

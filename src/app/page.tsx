@@ -204,6 +204,39 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Ubícanos */}
+      <section className="mx-auto max-w-7xl px-6 py-20">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
+          <div>
+            <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">Visítanos</p>
+            <h2 className="mt-2 font-display text-3xl uppercase tracking-wide">
+              Nuestro showroom
+            </h2>
+            <p className="mt-4 max-w-md text-sm text-brand-text/70">
+              {siteConfig.contact.address}
+            </p>
+            <p className="mt-2 text-sm text-brand-text/70">{siteConfig.contact.hours}</p>
+            <a
+              href={siteConfig.contact.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block rounded-full bg-brand-navy px-8 py-3 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy/90"
+            >
+              Cómo llegar
+            </a>
+          </div>
+          <div className="aspect-video w-full overflow-hidden rounded-2xl border border-black/10 shadow-xl">
+            <iframe
+              src={siteConfig.contact.mapsEmbedUrl}
+              className="h-full w-full"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Ubicación de Quality Bikes en Caracas"
+            />
+          </div>
+        </div>
+      </section>
     </>
   );
 }

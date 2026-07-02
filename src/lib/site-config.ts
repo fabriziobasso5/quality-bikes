@@ -11,9 +11,9 @@ export const siteConfig = {
     whatsappDisplay: "+58 414 026 7022",
     phoneAltDisplay: "+58 414 325 6868",
     email: "fabrizio@qualitybikesvzla.com",
-    address: "Av. Principal, Urb. Prados del Este, Caracas, Venezuela",
-    mapsEmbedUrl:
-      "https://www.google.com/maps?q=Av.+Principal,+Urb.+Prados+del+Este,+Caracas,+Venezuela&output=embed",
+    address: "C. Comercio, Caracas 1080, Miranda, Venezuela",
+    mapsUrl: "https://maps.app.goo.gl/CpP6jYSy3NXsYs2x6",
+    mapsEmbedUrl: "https://www.google.com/maps?cid=4800077332504803431&output=embed",
     hours: "Lunes a Viernes, 8:00 am – 5:00 pm",
   },
   social: {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
+import { RevealGroup, RevealItem } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -15,8 +16,8 @@ export default function ContactoPage() {
         Hablemos de tu próxima moto
       </h1>
 
-      <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-2">
-        <div>
+      <RevealGroup className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-2">
+        <RevealItem>
           <h2 className="font-display text-xl uppercase tracking-wide text-brand-navy">
             Escríbenos
           </h2>
@@ -31,9 +32,9 @@ export default function ContactoPage() {
             <p>{siteConfig.contact.email}</p>
             <p>{siteConfig.contact.hours}</p>
           </div>
-        </div>
+        </RevealItem>
 
-        <div>
+        <RevealItem>
           <h2 className="font-display text-xl uppercase tracking-wide text-brand-navy">
             Nuestro showroom
           </h2>
@@ -46,8 +47,8 @@ export default function ContactoPage() {
               title="Ubicación de Quality Bikes en Caracas"
             />
           </div>
-        </div>
-      </div>
+        </RevealItem>
+      </RevealGroup>
     </div>
   );
 }

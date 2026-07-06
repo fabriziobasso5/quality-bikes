@@ -4,6 +4,7 @@ import Link from "next/link";
 import MotoGallery from "@/components/MotoGallery";
 import MotoCard from "@/components/MotoCard";
 import QuoteForm from "@/components/QuoteForm";
+import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles, getMotoBySlug } from "@/data/motorcycles";
 import { buildWhatsAppLink } from "@/lib/site-config";
 
@@ -137,23 +138,27 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
         </div>
       </div>
 
-      <div className="mx-auto mt-16 max-w-xl">
+      <Reveal className="mx-auto mt-16 max-w-xl">
         <h2 className="mb-6 text-center font-display text-2xl uppercase tracking-wide">
           Solicita tu cotización
         </h2>
         <QuoteForm motoLabel={label} />
-      </div>
+      </Reveal>
 
       {related.length > 0 && (
         <div className="mt-20">
-          <h2 className="mb-6 font-display text-2xl uppercase tracking-wide">
-            También te puede interesar
-          </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <Reveal>
+            <h2 className="mb-6 font-display text-2xl uppercase tracking-wide">
+              También te puede interesar
+            </h2>
+          </Reveal>
+          <RevealGroup className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {related.map((m) => (
-              <MotoCard key={m.slug} moto={m} />
+              <RevealItem key={m.slug}>
+                <MotoCard moto={m} />
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       )}
     </div>

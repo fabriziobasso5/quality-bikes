@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import MotoCard from "@/components/MotoCard";
 import MotoImagePlaceholder from "@/components/MotoImagePlaceholder";
+import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
 import { siteConfig, buildWhatsAppLink } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
@@ -57,37 +58,40 @@ export default function Home() {
       {/* Marcas */}
       <section className="border-b border-black/10 bg-brand-bg-soft py-12">
         <div className="mx-auto max-w-7xl px-6">
-          <p className="text-center text-xs tracking-[0.3em] text-brand-text/50 uppercase">
-            Marcas representadas
-          </p>
-          <p className="mx-auto mt-2 mb-8 max-w-md text-center text-sm text-brand-text/60">
-            Multimarca: las motos más reconocidas y buscadas del mercado
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
+          <Reveal>
+            <p className="text-center text-xs tracking-[0.3em] text-brand-text/50 uppercase">
+              Marcas representadas
+            </p>
+            <p className="mx-auto mt-2 mb-8 max-w-md text-center text-sm text-brand-text/60">
+              Multimarca: las motos más reconocidas y buscadas del mercado
+            </p>
+          </Reveal>
+          <RevealGroup className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
             {siteConfig.brandsRepresented.map((brand) => (
-              <span
-                key={brand}
-                className="font-display text-lg tracking-widest text-brand-text/70 uppercase"
-              >
-                {brand}
-              </span>
+              <RevealItem key={brand}>
+                <span className="font-display text-lg tracking-widest text-brand-text/70 uppercase">
+                  {brand}
+                </span>
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
       {/* Productos y lubricantes */}
       <section className="border-b border-black/10 py-16">
         <div className="mx-auto max-w-7xl px-6">
-          <p className="text-center text-xs tracking-[0.3em] text-brand-navy uppercase">
-            También en tienda
-          </p>
-          <h2 className="mt-2 text-center font-display text-2xl uppercase tracking-wide">
-            Productos y lubricantes
-          </h2>
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <Reveal>
+            <p className="text-center text-xs tracking-[0.3em] text-brand-navy uppercase">
+              También en tienda
+            </p>
+            <h2 className="mt-2 text-center font-display text-2xl uppercase tracking-wide">
+              Productos y lubricantes
+            </h2>
+          </Reveal>
+          <RevealGroup className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {siteConfig.productsCarried.map((product) => (
-              <div
+              <RevealItem
                 key={product.name}
                 className="border border-black/10 bg-brand-bg-soft p-6 text-center"
               >
@@ -103,15 +107,15 @@ export default function Home() {
                   {product.name}
                 </p>
                 <p className="mt-2 text-sm text-brand-text/60">{product.description}</p>
-              </div>
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
       {/* Selección destacada */}
       <section className="mx-auto max-w-7xl px-6 py-20">
-        <div className="mb-10 flex items-end justify-between">
+        <Reveal className="mb-10 flex items-end justify-between">
           <div>
             <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">Selección</p>
             <h2 className="mt-2 font-display text-3xl uppercase tracking-wide">
@@ -124,12 +128,14 @@ export default function Home() {
           >
             Ver catálogo completo →
           </Link>
-        </div>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        </Reveal>
+        <RevealGroup className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featured.map((moto) => (
-            <MotoCard key={moto.slug} moto={moto} />
+            <RevealItem key={moto.slug}>
+              <MotoCard moto={moto} />
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
         <Link
           href="/catalogo"
           className="mt-8 block text-center text-sm tracking-wide text-brand-text/70 hover:text-brand-red md:hidden"
@@ -140,7 +146,7 @@ export default function Home() {
 
       {/* Propuesta de valor */}
       <section className="border-y border-black/10 bg-brand-bg-soft py-20">
-        <div className="mx-auto max-w-2xl px-6 text-center">
+        <Reveal className="mx-auto max-w-2xl px-6 text-center">
           <h3 className="font-display text-2xl tracking-wide uppercase text-brand-navy">
             Asesoría personalizada
           </h3>
@@ -148,28 +154,30 @@ export default function Home() {
             Te ayudamos a conseguir la moto de tus sueños: te acompañamos en todo el
             proceso, desde elegir el modelo correcto hasta la entrega.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       {/* Instagram feed placeholder */}
       <section className="mx-auto max-w-7xl px-6 py-20">
-        <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">Síguenos</p>
-        <h2 className="mt-2 font-display text-3xl uppercase tracking-wide">
-          {siteConfig.social.instagramHandle}
-        </h2>
+        <Reveal>
+          <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">Síguenos</p>
+          <h2 className="mt-2 font-display text-3xl uppercase tracking-wide">
+            {siteConfig.social.instagramHandle}
+          </h2>
+        </Reveal>
         {/* TODO: integrar feed real de Instagram (API oficial o widget tipo SnapWidget/Elfsight) cuando se entregue la cuenta */}
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+        <RevealGroup className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="aspect-square">
+            <RevealItem key={i} className="aspect-square">
               <MotoImagePlaceholder brand="Instagram" model="" className="h-full w-full" />
-            </div>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </section>
 
       {/* CTA final */}
       <section className="bg-brand-navy py-20 text-center text-brand-bg">
-        <div className="mx-auto max-w-2xl px-6">
+        <Reveal className="mx-auto max-w-2xl px-6">
           <h2 className="font-display text-3xl uppercase tracking-wide">
             ¿Listo para tu próxima moto?
           </h2>
@@ -192,13 +200,13 @@ export default function Home() {
               Escríbenos por WhatsApp
             </a>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Ubícanos */}
       <section className="mx-auto max-w-7xl px-6 py-20">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
-          <div>
+        <RevealGroup className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
+          <RevealItem>
             <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">Visítanos</p>
             <h2 className="mt-2 font-display text-3xl uppercase tracking-wide">
               Nuestro showroom
@@ -215,8 +223,8 @@ export default function Home() {
             >
               Cómo llegar
             </a>
-          </div>
-          <div className="aspect-video w-full overflow-hidden rounded-2xl border border-black/10 shadow-xl">
+          </RevealItem>
+          <RevealItem className="aspect-video w-full overflow-hidden rounded-2xl border border-black/10 shadow-xl">
             <iframe
               src={siteConfig.contact.mapsEmbedUrl}
               className="h-full w-full"
@@ -224,8 +232,8 @@ export default function Home() {
               referrerPolicy="no-referrer-when-downgrade"
               title="Ubicación de Quality Bikes en Caracas"
             />
-          </div>
-        </div>
+          </RevealItem>
+        </RevealGroup>
       </section>
     </>
   );

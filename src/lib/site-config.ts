@@ -5,7 +5,7 @@ export const siteConfig = {
   tagline: "Motocicletas de alta cilindrada. Curadas para quienes exigen lo mejor.",
   description:
     "Concesionario multimarca de motocicletas de alta cilindrada en Caracas: BMW, Ducati, Honda, Suzuki, Kawasaki, Yamaha y Voge. Asesoría experta y personalizada para conseguir la moto de tus sueños.",
-  url: "https://www.qualitybikes.example", // TODO: dominio real
+  url: "https://fabriziobasso5.github.io/quality-bikes/",
   contact: {
     whatsappNumber: "584140267022",
     whatsappDisplay: "+58 414 026 7022",

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import MotoImagePlaceholder from "@/components/MotoImagePlaceholder";
+import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -43,26 +44,30 @@ export default function NosotrosPage() {
 
       <section className="border-y border-black/10 bg-brand-bg-soft py-16">
         <div className="mx-auto max-w-5xl px-6">
-          <h2 className="font-display text-2xl uppercase tracking-wide">Nuestro equipo</h2>
-          <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <Reveal>
+            <h2 className="font-display text-2xl uppercase tracking-wide">Nuestro equipo</h2>
+          </Reveal>
+          <RevealGroup className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-3">
             {team.map((member) => (
-              <div key={member.name}>
+              <RevealItem key={member.name}>
                 <MotoImagePlaceholder brand={member.name} model="" className="h-48 w-full" />
                 <p className="mt-4 font-display tracking-wide uppercase">{member.name}</p>
                 <p className="text-sm text-brand-text/60">{member.role}</p>
-              </div>
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
       <section className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="font-display text-2xl uppercase tracking-wide">Nuestro showroom</h2>
-        <p className="mt-4 max-w-2xl text-brand-text/70">
-          Visítanos en {siteConfig.contact.address}. Un espacio pensado para que vivas la
-          experiencia de marca antes de decidir.
-        </p>
-        <MotoImagePlaceholder brand="Showroom" model="Quality Bikes" className="mt-8 h-80 w-full" />
+        <Reveal>
+          <h2 className="font-display text-2xl uppercase tracking-wide">Nuestro showroom</h2>
+          <p className="mt-4 max-w-2xl text-brand-text/70">
+            Visítanos en {siteConfig.contact.address}. Un espacio pensado para que vivas la
+            experiencia de marca antes de decidir.
+          </p>
+          <MotoImagePlaceholder brand="Showroom" model="Quality Bikes" className="mt-8 h-80 w-full" />
+        </Reveal>
       </section>
     </div>
   );

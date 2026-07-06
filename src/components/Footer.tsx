@@ -1,11 +1,13 @@
 import Link from "next/link";
+import CursorGlow from "@/components/CursorGlow";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
 export default function Footer() {
   return (
-    <footer className="bg-brand-navy text-brand-bg">
-      <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 md:grid-cols-4">
+    <footer className="relative overflow-hidden bg-brand-navy text-brand-bg">
+      <CursorGlow />
+      <div className="relative mx-auto grid max-w-7xl gap-10 px-6 py-16 md:grid-cols-4">
         <div>
           <div className="inline-block rounded bg-brand-bg px-3 py-2">
             {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}

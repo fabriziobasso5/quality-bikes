@@ -5,6 +5,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import MotionProvider from "@/components/MotionProvider";
+import IntroLoader from "@/components/IntroLoader";
+import CustomCursor from "@/components/CustomCursor";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
@@ -84,10 +86,12 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-brand-bg text-brand-text">
         <MotionProvider>
+          <IntroLoader />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
           <WhatsAppFloat />
+          <CustomCursor />
         </MotionProvider>
       </body>
     </html>

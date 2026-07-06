@@ -1,12 +1,14 @@
 import Link from "next/link";
 import MotoPhoto from "./MotoPhoto";
+import TiltCard from "./TiltCard";
 import type { Motorcycle } from "@/data/motorcycles";
 
 export default function MotoCard({ moto }: { moto: Motorcycle }) {
   return (
+    <TiltCard>
     <Link
       href={`/catalogo/${moto.slug}`}
-      className="group block overflow-hidden border border-black/10 bg-brand-bg transition duration-300 hover:-translate-y-1 hover:border-brand-navy/40 hover:shadow-xl"
+      className="group block overflow-hidden border border-black/10 bg-brand-bg transition duration-300 hover:border-brand-navy/40"
     >
       <div className="relative overflow-hidden">
         <MotoPhoto
@@ -32,5 +34,6 @@ export default function MotoCard({ moto }: { moto: Motorcycle }) {
         </p>
       </div>
     </Link>
+    </TiltCard>
   );
 }

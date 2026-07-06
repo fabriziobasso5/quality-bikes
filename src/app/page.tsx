@@ -1,5 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
+import CursorGlow from "@/components/CursorGlow";
+import Hero from "@/components/Hero";
+import Magnetic from "@/components/Magnetic";
 import MotoCard from "@/components/MotoCard";
 import MotoImagePlaceholder from "@/components/MotoImagePlaceholder";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
@@ -12,48 +14,7 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative flex min-h-[85vh] items-end overflow-hidden">
-        <Image
-          src={withBasePath("/images/hero/africa-twin-hero.webp")}
-          alt="Motos Honda Africa Twin en acción sobre tierra"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/50 to-brand-navy/10" />
-        <div className="relative z-10 mx-auto max-w-7xl px-6 pb-20 text-brand-bg">
-          <p className="text-xs tracking-[0.3em] text-brand-bg/70 uppercase">
-            Caracas · Venezuela
-          </p>
-          <p className="font-script mt-2 text-4xl text-brand-bg sm:text-5xl">
-            {siteConfig.slogan}
-          </p>
-          <h1 className="mt-4 max-w-2xl font-display text-4xl leading-tight tracking-wide uppercase sm:text-6xl">
-            Más de 40 años de experiencia en el mundo motero
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-brand-bg/80">
-            Aquí encontrarás las motos más buscadas del mercado.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              href="/catalogo"
-              className="rounded-full bg-brand-bg px-8 py-3 text-sm tracking-widest text-brand-navy uppercase transition hover:bg-brand-bg/90"
-            >
-              Ver inventario
-            </Link>
-            <a
-              href={buildWhatsAppLink("Hola, quiero agendar una asesoría privada.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-brand-bg/40 px-8 py-3 text-sm tracking-widest uppercase transition hover:border-brand-red hover:text-brand-red"
-            >
-              Agenda una asesoría
-            </a>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       {/* Marcas */}
       <section className="border-b border-black/10 bg-brand-bg-soft py-12">
@@ -124,7 +85,7 @@ export default function Home() {
           </div>
           <Link
             href="/catalogo"
-            className="hidden text-sm tracking-wide text-brand-text/70 hover:text-brand-red md:block"
+            className="link-underline hidden text-sm tracking-wide text-brand-text/70 hover:text-brand-red md:block"
           >
             Ver catálogo completo →
           </Link>
@@ -176,8 +137,9 @@ export default function Home() {
       </section>
 
       {/* CTA final */}
-      <section className="bg-brand-navy py-20 text-center text-brand-bg">
-        <Reveal className="mx-auto max-w-2xl px-6">
+      <section className="relative overflow-hidden bg-brand-navy py-20 text-center text-brand-bg">
+        <CursorGlow />
+        <Reveal className="relative mx-auto max-w-2xl px-6">
           <h2 className="font-display text-3xl uppercase tracking-wide">
             ¿Listo para tu próxima moto?
           </h2>
@@ -185,20 +147,24 @@ export default function Home() {
             Agenda una asesoría privada con nuestro equipo, sin compromiso.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link
-              href="/contacto"
-              className="rounded-full bg-brand-bg px-8 py-3 text-sm tracking-widest text-brand-navy uppercase transition hover:bg-brand-bg/90"
-            >
-              Agenda tu asesoría
-            </Link>
-            <a
-              href={buildWhatsAppLink("Hola, quiero más información sobre Quality Bikes.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-brand-bg/40 px-8 py-3 text-sm tracking-widest uppercase transition hover:border-brand-red hover:text-brand-red"
-            >
-              Escríbenos por WhatsApp
-            </a>
+            <Magnetic className="inline-block">
+              <Link
+                href="/contacto"
+                className="inline-block rounded-full bg-brand-bg px-8 py-3 text-sm tracking-widest text-brand-navy uppercase transition hover:bg-brand-bg/90"
+              >
+                Agenda tu asesoría
+              </Link>
+            </Magnetic>
+            <Magnetic className="inline-block">
+              <a
+                href={buildWhatsAppLink("Hola, quiero más información sobre Quality Bikes.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-full border border-brand-bg/40 px-8 py-3 text-sm tracking-widest uppercase transition hover:border-brand-red hover:text-brand-red"
+              >
+                Escríbenos por WhatsApp
+              </a>
+            </Magnetic>
           </div>
         </Reveal>
       </section>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import MotoGallery from "@/components/MotoGallery";
 import MotoCard from "@/components/MotoCard";
 import QuoteForm from "@/components/QuoteForm";
+import Magnetic from "@/components/Magnetic";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles, getMotoBySlug } from "@/data/motorcycles";
 import { buildWhatsAppLink } from "@/lib/site-config";
@@ -126,14 +127,16 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4">
-            <a
-              href={buildWhatsAppLink(`Hola, me interesa la ${label} disponible en Quality Bikes.`)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-brand-navy px-8 py-3 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
-            >
-              Consultar por WhatsApp
-            </a>
+            <Magnetic className="inline-block">
+              <a
+                href={buildWhatsAppLink(`Hola, me interesa la ${label} disponible en Quality Bikes.`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-full bg-brand-navy px-8 py-3 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
+              >
+                Consultar por WhatsApp
+              </a>
+            </Magnetic>
           </div>
         </div>
       </div>

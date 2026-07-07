@@ -57,7 +57,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
           <div className="flex items-center gap-3">
             <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">{moto.brand}</p>
             {moto.availability === "proximo-arribo" && (
-              <span className="bg-brand-red px-2 py-0.5 text-xs tracking-widest text-brand-bg uppercase">
+              <span className="rounded-full border border-brand-red px-3 py-0.5 text-[10px] tracking-widest text-brand-red uppercase">
                 Próximo arribo
               </span>
             )}

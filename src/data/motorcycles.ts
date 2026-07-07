@@ -1,4 +1,4 @@
-export type MotoCategory = "dual-sport" | "enduro";
+export type MotoCategory = "dual-sport" | "enduro" | "naked" | "adventure";
 
 export interface Motorcycle {
   slug: string;
@@ -29,8 +29,18 @@ export interface Motorcycle {
   photoCount: number;
 }
 
-// Inventario 2026-07-02: 2 unidades físicas en showroom (BMW G 310 GS, Kawasaki KLR
-// 650 Adventure ABS) + la gama dual sport Voge DS-X de próximo arribo. Se retiró
+// Portada de catálogo/mega-menú: foto de prensa oficial del fabricante en
+// public/images/catalog/<slug>.webp — perfil derecho sobre fondo blanco puro,
+// normalizada a lienzo 4:3 para que todas las motos se vean del mismo tamaño
+// (estilo ducati.com). La galería de la ficha sigue usando las fotos reales
+// de public/images/inventory/<slug>/.
+export function catalogCoverPath(slug: string) {
+  return `/images/catalog/${slug}.webp`;
+}
+
+// Inventario 2026-07-07: unidades físicas en showroom (BMW G 310 GS, Kawasaki KLR
+// 650 ABS, Ducati Monster, Ducati Multistrada V4) + la gama dual sport Voge DS-X
+// de próximo arribo. Se retiró
 // Kymco y los scooters Voge SR3/SR4 del catálogo. El precio nunca se muestra (decisión
 // de negocio): "consultar disponibilidad y precio" fuerza contacto directo.
 export const motorcycles: Motorcycle[] = [
@@ -50,18 +60,50 @@ export const motorcycles: Motorcycle[] = [
     photoCount: 5,
   },
   {
-    slug: "kawasaki-klr-650-adventure-abs",
+    slug: "kawasaki-klr-650-abs",
     brand: "Kawasaki",
-    model: "KLR 650 Adventure ABS",
+    model: "KLR 650 ABS",
     year: 2026,
     cc: 650,
     category: "enduro",
     condition: "0km",
     availability: "en-stock",
     featured: true,
-    summary: "El enduro de largo recorrido más legendario de Kawasaki, ahora con ABS y equipamiento Adventure de fábrica.",
+    summary: "El enduro de largo recorrido más legendario de Kawasaki, ahora con ABS de fábrica.",
     specs: { power: "40 hp", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Gris" },
     photoCount: 5,
+  },
+  {
+    slug: "ducati-monster",
+    brand: "Ducati",
+    model: "Monster",
+    year: 2025,
+    cc: 937,
+    category: "naked",
+    condition: "seminueva",
+    availability: "en-stock",
+    featured: true,
+    summary: "La naked italiana por excelencia: motor Testastretta 11° de 111 hp, 166 kg en seco y la agilidad que hizo leyenda al nombre Monster.",
+    specs: { power: "111 hp", transmission: "Sincrónica", gears: "6 + Quick Shift", cylinders: "2 cilindros (L-Twin)", color: "Rojo Ducati", seatHeight: "820 mm", weight: "188 kg" },
+    photoCount: 10,
+  },
+  {
+    slug: "ducati-multistrada-v4",
+    brand: "Ducati",
+    model: "Multistrada V4",
+    year: 2025,
+    cc: 1158,
+    category: "adventure",
+    condition: "seminueva",
+    availability: "en-stock",
+    featured: true,
+    summary: "La sport-touring definitiva: V4 Granturismo de 170 hp con radar, electrónica de punta y comodidad para devorar continentes.",
+    specs: { power: "170 hp", transmission: "Sincrónica", gears: "6 + Quick Shift", cylinders: "4 cilindros (V4)", color: "Rojo Ducati", seatHeight: "840–860 mm", weight: "229 kg" },
+    // TODO(cliente): aún no hay fotos reales de esta unidad — photoCount: 1 usa
+    // la foto de prensa oficial en inventory/ducati-multistrada-v4/1.webp.
+    // Cuando lleguen las fotos del showroom, reemplazar/añadir en esa carpeta
+    // y actualizar photoCount.
+    photoCount: 1,
   },
   {
     slug: "voge-ds-900x",
@@ -140,6 +182,8 @@ export const brands = Array.from(new Set(motorcycles.map((m) => m.brand)));
 export const categories: { value: MotoCategory; label: string }[] = [
   { value: "dual-sport", label: "Dual Sport" },
   { value: "enduro", label: "Enduro" },
+  { value: "naked", label: "Naked" },
+  { value: "adventure", label: "Adventure" },
 ];
 
 export function getMotoBySlug(slug: string) {

@@ -15,7 +15,7 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
         index={active}
         className="h-96 w-full lg:h-[480px]"
         sizes="(max-width: 1024px) 100vw, 50vw"
-        priority
+        preload
       />
       {total > 1 && (
         <div className="mt-3 grid grid-cols-5 gap-2">

@@ -21,34 +21,49 @@ function detectCanUse3D() {
   }
 }
 
-export default function Logo3D({ heroRef }: { heroRef: React.RefObject<HTMLElement | null> }) {
-  const [ready, setReady] = useState(false);
-  const [use3D, setUse3D] = useState(false);
-  const [isTouch, setIsTouch] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
+/**
+ * Lazy 3D emblem: WebGL only downloads when this section approaches the
+ * viewport AND the device can afford it; everyone else gets the animated
+ * 2D fallback (or a static logo without WebGL/JS).
+ */
+export default function Logo3D() {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [nearViewport, setNearViewport] = useState(false);
+  const [use3D, setUse3D] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     setUse3D(detectCanUse3D());
-    setIsTouch(window.matchMedia("(pointer: coarse)").matches);
     setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     setReady(true);
   }, []);
 
-  if (!ready) return null;
+  // Defer the WebGL bundle until the section is actually approaching.
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setNearViewport(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "600px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div ref={wrapperRef} className="pointer-events-none absolute inset-0">
-      {use3D ? (
-        <Logo3DCanvas
-          heroRef={heroRef}
-          canvasWrapperRef={wrapperRef}
-          isTouch={isTouch}
-          reduceMotion={reduceMotion}
-        />
-      ) : (
-        <LogoFallback2D />
-      )}
+    <div ref={wrapperRef} className="pointer-events-none h-full w-full">
+      {ready &&
+        (use3D ? (
+          nearViewport && <Logo3DCanvas reduceMotion={reduceMotion} />
+        ) : (
+          <LogoFallback2D />
+        ))}
     </div>
   );
 }

@@ -54,6 +54,7 @@ export const metadata: Metadata = {
     "BMW R 1250 GS Adventure Venezuela",
     "Honda Africa Twin Venezuela",
     "Ducati Multistrada Venezuela",
+    "Ducati Monster Venezuela",
     "Yamaha Ténéré Venezuela",
     "Suzuki DR650 Venezuela",
     "Kawasaki KLR 650 Venezuela",

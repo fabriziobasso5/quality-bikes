@@ -1,5 +1,5 @@
 import Link from "next/link";
-import MotoPhoto from "./MotoPhoto";
+import MotoCover from "./MotoCover";
 import TiltCard from "./TiltCard";
 import type { Motorcycle } from "@/data/motorcycles";
 
@@ -11,13 +11,14 @@ export default function MotoCard({ moto }: { moto: Motorcycle }) {
       className="group block overflow-hidden border border-black/10 bg-brand-bg transition duration-300 hover:border-brand-navy/40"
     >
       <div className="relative overflow-hidden">
-        <MotoPhoto
+        <MotoCover
           moto={moto}
-          className="h-56 w-full transition-transform duration-300 group-hover:scale-105"
+          className="h-56 w-full"
+          imgClassName="transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
         {moto.availability === "proximo-arribo" && (
-          <span className="absolute top-3 left-3 bg-brand-red px-3 py-1 text-xs tracking-widest text-brand-bg uppercase">
+          <span className="absolute top-3 left-3 rounded-full border border-brand-red bg-white/90 px-3 py-1 text-[10px] tracking-widest text-brand-red uppercase">
             Próximo arribo
           </span>
         )}

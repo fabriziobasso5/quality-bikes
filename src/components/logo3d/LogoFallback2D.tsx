@@ -13,7 +13,7 @@ export default function LogoFallback2D() {
     <div className="flex h-full w-full items-center justify-center [perspective:1200px]">
       {/* eslint-disable-next-line @next/next/no-img-element -- animated via Framer Motion transform, not next/image territory */}
       <motion.img
-        src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
+        src={withBasePath("/assets/logo/quality-bikes-moto-silueta.svg")}
         alt="Quality Bikes"
         className="h-40 w-auto drop-shadow-2xl sm:h-56"
         animate={shouldReduceMotion ? undefined : { rotateY: [0, 360] }}

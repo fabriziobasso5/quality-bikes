@@ -2,15 +2,27 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import MotoCover from "./MotoCover";
+import { motorcycles } from "@/data/motorcycles";
 
 const navItems = [
-  { href: "/catalogo", label: "Catálogo" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
 
+/**
+ * Mobile counterpart of the mega menu: "Catálogo" expands in place into a
+ * clean tappable list of every bike (thumbnail + brand + model), mirroring
+ * the desktop panel without hover dependence.
+ */
 export default function MobileMenu() {
   const [open, setOpen] = useState(false);
+  const [catalogOpen, setCatalogOpen] = useState(false);
+
+  function closeAll() {
+    setOpen(false);
+    setCatalogOpen(false);
+  }
 
   return (
     <div className="md:hidden">
@@ -32,14 +44,55 @@ export default function MobileMenu() {
       {open && (
         <nav
           data-testid="mobile-nav"
-          className="absolute inset-x-0 top-full flex flex-col gap-1 border-b border-black/10 bg-brand-bg px-6 py-4 shadow-lg"
+          className="absolute inset-x-0 top-full max-h-[calc(100svh-4.5rem)] overflow-y-auto border-b border-black/10 bg-brand-bg px-6 py-4 shadow-lg"
         >
+          <button
+            onClick={() => setCatalogOpen((v) => !v)}
+            aria-expanded={catalogOpen}
+            className="flex w-full items-center justify-between py-3 text-sm tracking-wide uppercase text-brand-text/80"
+          >
+            Catálogo
+            <span
+              className={`text-brand-text/40 transition-transform duration-200 ${catalogOpen ? "rotate-90" : ""}`}
+            >
+              →
+            </span>
+          </button>
+
+          {catalogOpen && (
+            <div className="mb-2 border-l border-black/10 pl-4">
+              {motorcycles.map((moto) => (
+                <Link
+                  key={moto.slug}
+                  href={`/catalogo/${moto.slug}`}
+                  onClick={closeAll}
+                  className="flex items-center gap-4 py-2.5"
+                >
+                  <MotoCover moto={moto} className="h-12 w-16 shrink-0 overflow-hidden" sizes="64px" />
+                  <div>
+                    <p className="text-[10px] tracking-widest text-brand-text/50 uppercase">
+                      {moto.brand}
+                    </p>
+                    <p className="font-display text-sm tracking-wide">{moto.model}</p>
+                  </div>
+                </Link>
+              ))}
+              <Link
+                href="/catalogo"
+                onClick={closeAll}
+                className="block py-3 text-sm tracking-wide text-brand-navy uppercase"
+              >
+                Ver catálogo completo →
+              </Link>
+            </div>
+          )}
+
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              onClick={() => setOpen(false)}
-              className="py-3 text-sm tracking-wide uppercase text-brand-text/80 transition hover:text-brand-red"
+              onClick={closeAll}
+              className="block py-3 text-sm tracking-wide uppercase text-brand-text/80 transition hover:text-brand-red"
             >
               {item.label}
             </Link>

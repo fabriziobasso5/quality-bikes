@@ -8,13 +8,13 @@ export default function MotoPhoto({
   index = 1,
   className = "",
   sizes,
-  priority = false,
+  preload = false,
 }: {
   moto: Motorcycle;
   index?: number;
   className?: string;
   sizes?: string;
-  priority?: boolean;
+  preload?: boolean;
 }) {
   if (!moto.photoCount || index > moto.photoCount) {
     return <MotoImagePlaceholder brand={moto.brand} model={moto.model} className={className} />;
@@ -28,7 +28,7 @@ export default function MotoPhoto({
         fill
         sizes={sizes ?? "(max-width: 768px) 100vw, 50vw"}
         className="object-cover"
-        priority={priority}
+        preload={preload}
       />
     </div>
   );

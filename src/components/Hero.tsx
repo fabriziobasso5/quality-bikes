@@ -4,11 +4,16 @@ import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import Logo3D from "@/components/Logo3D";
 import Magnetic from "@/components/Magnetic";
-import { siteConfig, buildWhatsAppLink } from "@/lib/site-config";
+import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
+/**
+ * Minimal hero: one cinematic image, one short headline, one CTA. Anything
+ * else was cut on purpose — if in doubt, remove.
+ * TODO(cliente): reemplazar la foto por la R1300 GSA en tierra cuando exista;
+ * mantener encuadre panorámico con las motos hacia el lado derecho.
+ */
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion();
@@ -18,59 +23,42 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Background photo drifts slower (~0.4x) than the text (~0.8x) as the
-  // hero scrolls past, reading as depth rather than a flat parallax trick.
+  // Background drifts slower than the text on scroll — depth, not a trick.
   const imageY = useTransform(scrollYProgress, [0, 1], shouldReduceMotion ? ["0%", "0%"] : ["0%", "18%"]);
   const textY = useTransform(scrollYProgress, [0, 1], shouldReduceMotion ? ["0%", "0%"] : ["0%", "36%"]);
 
   return (
-    <section ref={sectionRef} className="relative flex min-h-[85vh] items-end overflow-hidden">
+    <section ref={sectionRef} className="relative flex min-h-[92svh] items-end overflow-hidden">
       <motion.div style={{ y: imageY }} className="absolute inset-x-0 -top-[8%] h-[116%]">
         <Image
           src={withBasePath("/images/hero/africa-twin-hero.webp")}
-          alt="Motos Honda Africa Twin en acción sobre tierra"
+          alt="Motos de alta cilindrada en acción sobre tierra"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="object-cover object-[63%_50%] sm:object-center"
         />
       </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/50 to-brand-navy/10" />
-      <div className="absolute inset-x-0 top-0 z-[5] mx-auto h-[45%] w-full max-w-xs sm:h-[65%] sm:max-w-3xl">
-        <Logo3D heroRef={sectionRef} />
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-brand-navy/30 to-transparent" />
       <motion.div
         style={{ y: textY }}
-        className="relative z-10 mx-auto max-w-7xl px-6 pb-20 text-brand-bg"
+        className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-24 text-brand-bg"
       >
         <p className="text-xs tracking-[0.3em] text-brand-bg/70 uppercase">
           Caracas · Venezuela
         </p>
-        <p className="font-script mt-2 text-4xl text-brand-bg sm:text-5xl">{siteConfig.slogan}</p>
-        <h1 className="mt-4 max-w-2xl font-display text-4xl leading-tight tracking-wide uppercase sm:text-6xl">
-          Más de 40 años de experiencia en el mundo motero
+        <p className="font-script mt-3 text-4xl sm:text-5xl">{siteConfig.slogan}</p>
+        <h1 className="mt-5 max-w-3xl font-display text-4xl leading-tight tracking-wide uppercase sm:text-6xl">
+          Más de 40 años en el mundo motero
         </h1>
-        <p className="mt-6 max-w-xl text-lg text-brand-bg/80">
-          Aquí encontrarás las motos más buscadas del mercado.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-4">
+        <div className="mt-10">
           <Magnetic className="inline-block">
             <Link
               href="/catalogo"
-              className="inline-block rounded-full bg-brand-bg px-8 py-3 text-sm tracking-widest text-brand-navy uppercase transition hover:bg-brand-bg/90"
+              className="inline-block rounded-full bg-brand-bg px-10 py-4 text-sm tracking-widest text-brand-navy uppercase transition hover:bg-brand-bg/90"
             >
-              Ver inventario
+              Ver catálogo
             </Link>
-          </Magnetic>
-          <Magnetic className="inline-block">
-            <a
-              href={buildWhatsAppLink("Hola, quiero agendar una asesoría privada.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-full border border-brand-bg/40 px-8 py-3 text-sm tracking-widest uppercase transition hover:border-brand-red hover:text-brand-red"
-            >
-              Agenda una asesoría
-            </a>
           </Magnetic>
         </div>
       </motion.div>

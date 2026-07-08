@@ -56,7 +56,7 @@ export const motorcycles: Motorcycle[] = [
     availability: "en-stock",
     featured: true,
     summary: "La puerta de entrada BMW al mundo dual sport: ágil, confiable y lista para la aventura urbana o fuera de carretera.",
-    specs: { power: "34 hp", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Azul" },
+    specs: { power: "34 hp", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Polar White / Racing Blue", seatHeight: "835 mm", weight: "175 kg" },
     photoCount: 5,
   },
   {
@@ -70,7 +70,7 @@ export const motorcycles: Motorcycle[] = [
     availability: "en-stock",
     featured: true,
     summary: "El enduro de largo recorrido más legendario de Kawasaki, ahora con ABS de fábrica.",
-    specs: { power: "40 hp", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Gris" },
+    specs: { power: "40 hp", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Negro (Ebony)", seatHeight: "870 mm", weight: "209 kg" },
     photoCount: 5,
   },
   {
@@ -99,11 +99,11 @@ export const motorcycles: Motorcycle[] = [
     featured: true,
     summary: "La sport-touring definitiva: V4 Granturismo de 170 hp con radar, electrónica de punta y comodidad para devorar continentes.",
     specs: { power: "170 hp", transmission: "Sincrónica", gears: "6 + Quick Shift", cylinders: "4 cilindros (V4)", color: "Rojo Ducati", seatHeight: "840–860 mm", weight: "229 kg" },
-    // TODO(cliente): aún no hay fotos reales de esta unidad — photoCount: 1 usa
-    // la foto de prensa oficial en inventory/ducati-multistrada-v4/1.webp.
-    // Cuando lleguen las fotos del showroom, reemplazar/añadir en esa carpeta
-    // y actualizar photoCount.
-    photoCount: 1,
+    // TODO(cliente): aún no hay fotos reales de esta unidad — la galería
+    // muestra solo la portada oficial. Cuando lleguen las fotos del showroom,
+    // copiarlas a public/images/inventory/ducati-multistrada-v4/1..N.webp y
+    // poner photoCount: N.
+    photoCount: 0,
   },
   {
     slug: "voge-ds-900x",

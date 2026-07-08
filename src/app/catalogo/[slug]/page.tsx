@@ -71,55 +71,52 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
             </p>
           )}
 
-          <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-black/10 py-6 text-sm sm:grid-cols-4">
-            <div>
-              <dt className="text-brand-text/50 uppercase">Año</dt>
-              <dd className="mt-1 font-mono">{moto.year}</dd>
-            </div>
-            <div>
-              <dt className="text-brand-text/50 uppercase">Cilindrada</dt>
-              <dd className="mt-1 font-mono">{moto.cc} cc</dd>
-            </div>
-            <div>
-              <dt className="text-brand-text/50 uppercase">Potencia</dt>
-              <dd className="mt-1 font-mono">{moto.specs.power}</dd>
-            </div>
-            <div>
-              <dt className="text-brand-text/50 uppercase">Cilindros</dt>
-              <dd className="mt-1 font-mono">{moto.specs.cylinders}</dd>
-            </div>
-            <div>
-              <dt className="text-brand-text/50 uppercase">Transmisión</dt>
-              <dd className="mt-1 font-mono">{moto.specs.transmission}</dd>
-            </div>
-            <div>
-              <dt className="text-brand-text/50 uppercase">Marchas</dt>
-              <dd className="mt-1 font-mono">{moto.specs.gears}</dd>
-            </div>
-            <div>
-              <dt className="text-brand-text/50 uppercase">Color</dt>
-              <dd className="mt-1 font-mono">{moto.specs.color}</dd>
-            </div>
-            <div>
-              <dt className="text-brand-text/50 uppercase">Estado</dt>
-              <dd className="mt-1 font-mono">
-                {moto.condition === "0km"
-                  ? "0 km"
-                  : `Seminueva${moto.mileageKm ? ` · ${moto.mileageKm} km` : ""}`}
-              </dd>
-            </div>
-            {moto.specs.seatHeight && (
-              <div>
-                <dt className="text-brand-text/50 uppercase">Altura de asiento</dt>
-                <dd className="mt-1 font-mono">{moto.specs.seatHeight}</dd>
+          {/* Spec sheet estilo hoja técnica de lujo: los tres datos estrella
+              en grande arriba, el resto en filas finas etiqueta-valor. */}
+          <div className="mt-10 grid grid-cols-3 gap-4 border-y border-black/10 py-8">
+            {[
+              { value: `${moto.cc}`, unit: "cc", label: "Cilindrada" },
+              { value: moto.specs.power.replace(/\s*hp$/i, ""), unit: "hp", label: "Potencia" },
+              { value: (moto.specs.weight ?? "—").replace(/\s*kg$/i, ""), unit: "kg", label: "Peso" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <p className="font-mono text-3xl tracking-tight sm:text-4xl">
+                  {stat.value}
+                  <span className="ml-1 text-sm text-brand-text/50 sm:text-base">{stat.unit}</span>
+                </p>
+                <p className="mt-2 text-[10px] tracking-[0.25em] text-brand-text/50 uppercase">
+                  {stat.label}
+                </p>
               </div>
-            )}
-            {moto.specs.weight && (
-              <div>
-                <dt className="text-brand-text/50 uppercase">Peso</dt>
-                <dd className="mt-1 font-mono">{moto.specs.weight}</dd>
+            ))}
+          </div>
+
+          <dl className="divide-y divide-black/[0.07] border-b border-black/10">
+            {(
+              [
+                ["Año", String(moto.year)],
+                ["Cilindros", moto.specs.cylinders],
+                ["Transmisión", moto.specs.transmission],
+                ["Marchas", moto.specs.gears],
+                ["Color", moto.specs.color],
+                ...(moto.specs.seatHeight
+                  ? ([["Altura de asiento", moto.specs.seatHeight]] as const)
+                  : []),
+                [
+                  "Estado",
+                  moto.condition === "0km"
+                    ? "0 km"
+                    : `Seminueva${moto.mileageKm ? ` · ${moto.mileageKm} km` : ""}`,
+                ],
+              ] as const
+            ).map(([label, value]) => (
+              <div key={label} className="flex items-baseline justify-between gap-6 py-3.5">
+                <dt className="text-[11px] tracking-[0.2em] text-brand-text/45 uppercase">
+                  {label}
+                </dt>
+                <dd className="text-right font-mono text-sm">{value}</dd>
               </div>
-            )}
+            ))}
           </dl>
 
           <p className="mt-6 text-sm text-brand-text/60">

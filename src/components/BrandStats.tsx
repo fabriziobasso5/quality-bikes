@@ -47,8 +47,9 @@ export default function BrandStats() {
   const stats = [
     { target: 40, prefix: "+", label: "años de experiencia" },
     { target: 2, prefix: "", label: "tiendas en Caracas" },
-    // Derivado del propio sitio para que nunca quede desactualizado.
-    { target: siteConfig.brandsRepresented.length, prefix: "", label: "marcas representadas" },
+    // Derivado del propio sitio para que nunca quede desactualizado. La
+    // etiqueta es "Marcas" a secas: no todas son representaciones oficiales.
+    { target: siteConfig.brandsRepresented.length, prefix: "", label: "Marcas" },
   ];
 
   return (

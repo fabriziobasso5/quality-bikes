@@ -4,7 +4,7 @@ export const siteConfig = {
   slogan: "...mucho más que solo motos",
   tagline: "Motocicletas de alta cilindrada. Curadas para quienes exigen lo mejor.",
   description:
-    "Concesionario multimarca de motocicletas de alta cilindrada en Caracas: BMW, Ducati, Honda, Suzuki, Kawasaki, Yamaha y Voge. Asesoría experta y personalizada para conseguir la moto de tus sueños.",
+    "Concesionario multimarca de motocicletas de alta cilindrada en Caracas: BMW, Ducati, Honda, Suzuki, Kawasaki, Yamaha, Triumph y Voge. Asesoría experta y personalizada para conseguir la moto de tus sueños.",
   url: "https://fabriziobasso5.github.io/quality-bikes/",
   contact: {
     whatsappNumber: "584140267022",
@@ -20,8 +20,9 @@ export const siteConfig = {
     instagram: "https://instagram.com/qualitybikes_vzla",
     instagramHandle: "@qualitybikes_vzla",
   },
-  // Concesionario multimarca — sin orden de énfasis por marca.
-  brandsRepresented: ["BMW", "Ducati", "Honda", "Yamaha", "Suzuki", "Kawasaki", "Voge"],
+  // Concesionario multimarca — sin orden de énfasis por marca. Son marcas
+  // que la casa vende o ha vendido, no representaciones oficiales.
+  brandsRepresented: ["BMW", "Ducati", "Honda", "Yamaha", "Suzuki", "Kawasaki", "Triumph", "Voge"],
   // Productos complementarios en tienda física (lubricantes/racing), no
   // motocicletas. BK3 se presenta como marca tipográfica de la casa (logo:
   // null + sublabel): decisión de diseño — el arte oficial del distribuidor

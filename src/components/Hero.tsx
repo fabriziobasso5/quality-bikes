@@ -23,20 +23,27 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Background drifts slower than the text on scroll — depth, not a trick.
-  const imageY = useTransform(scrollYProgress, [0, 1], shouldReduceMotion ? ["0%", "0%"] : ["0%", "18%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], shouldReduceMotion ? ["0%", "0%"] : ["0%", "36%"]);
+  // Profundidad en capas (la foto es plana, así que se simula): la imagen
+  // deriva lenta y crece apenas, el texto viaja al doble — fondo lento,
+  // sujeto rápido. Solo transforms, sin costo en mobile; estático bajo
+  // prefers-reduced-motion.
+  const imageY = useTransform(scrollYProgress, [0, 1], shouldReduceMotion ? ["0%", "0%"] : ["0%", "16%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], shouldReduceMotion ? [1, 1] : [1, 1.07]);
+  const textY = useTransform(scrollYProgress, [0, 1], shouldReduceMotion ? ["0%", "0%"] : ["0%", "42%"]);
 
   return (
-    <section ref={sectionRef} className="relative flex min-h-[92svh] items-end overflow-hidden">
-      <motion.div style={{ y: imageY }} className="absolute inset-x-0 -top-[8%] h-[116%]">
+    // Mobile: hero más bajo (62svh) — la foto es panorámica 3:1 y a 92svh un
+    // teléfono solo muestra ~420px de sus 2400px; a 62svh entra la moto
+    // completa. El focal point 74% centra la Africa Twin roja del encuadre.
+    <section ref={sectionRef} className="relative flex min-h-[62svh] items-end overflow-hidden sm:min-h-[92svh]">
+      <motion.div style={{ y: imageY, scale: imageScale }} className="absolute inset-x-0 -top-[8%] h-[116%]">
         <Image
           src={withBasePath("/images/hero/africa-twin-hero.webp")}
           alt="Motos de alta cilindrada en acción sobre tierra"
           fill
-          priority
+          preload
           sizes="100vw"
-          className="object-cover object-[63%_50%] sm:object-center"
+          className="object-cover object-[74%_50%] sm:object-center"
         />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-brand-navy/30 to-transparent" />

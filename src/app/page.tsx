@@ -3,6 +3,7 @@ import Link from "next/link";
 import BrandStats from "@/components/BrandStats";
 import Hero from "@/components/Hero";
 import Logo3D from "@/components/Logo3D";
+import MotoCover from "@/components/MotoCover";
 import Magnetic from "@/components/Magnetic";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
@@ -45,16 +46,14 @@ export default function Home() {
           {inShowroom.map((moto) => (
             <RevealItem key={moto.slug}>
               <Link href={`/catalogo/${moto.slug}`} className="group block">
-                {/* object-contain: la unidad real siempre completa, sin recortes */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-bg-soft">
-                  <Image
-                    src={withBasePath(`/images/inventory/${moto.slug}/1.webp`)}
-                    alt={`${moto.brand} ${moto.model}`}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                    className="object-contain transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                </div>
+                {/* Portada oficial fondo blanco — las fotos reales viven solo
+                    en la galería de la ficha */}
+                <MotoCover
+                  moto={moto}
+                  className="aspect-[4/3] w-full overflow-hidden"
+                  imgClassName="transition-transform duration-500 group-hover:scale-[1.03]"
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                />
                 <div className="mt-6 flex items-baseline justify-between gap-4">
                   <div>
                     <p className="text-xs tracking-widest text-brand-text/50 uppercase">

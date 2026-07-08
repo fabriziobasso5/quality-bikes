@@ -21,13 +21,15 @@ export default function MotoPhoto({
   }
 
   return (
-    <div className={`relative ${className}`}>
+    // object-contain: la moto siempre se ve completa, nunca recortada —
+    // el fondo blanco absorbe el letterboxing que deje cada encuadre.
+    <div className={`relative bg-white ${className}`}>
       <Image
         src={withBasePath(`/images/inventory/${moto.slug}/${index}.webp`)}
         alt={`${moto.brand} ${moto.model}`}
         fill
         sizes={sizes ?? "(max-width: 768px) 100vw, 50vw"}
-        className="object-cover"
+        className="object-contain"
         preload={preload}
       />
     </div>

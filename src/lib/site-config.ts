@@ -23,27 +23,27 @@ export const siteConfig = {
   // Concesionario multimarca — sin orden de énfasis por marca.
   brandsRepresented: ["BMW", "Ducati", "Honda", "Yamaha", "Suzuki", "Kawasaki", "Voge"],
   // Productos complementarios en tienda física (lubricantes/racing), no
-  // motocicletas. El logo oficial de BK3 tiene elementos blancos, por eso se
-  // usa la versión sobre tarjeta azul marino de marca (card: true); la versión
-  // de fondo transparente queda de respaldo en /images/brands/bk3-transparente.webp.
+  // motocicletas. BK3 se presenta como marca tipográfica de la casa (logo:
+  // null + sublabel): decisión de diseño — el arte oficial del distribuidor
+  // no convive con la estética minimalista del sitio.
   productsCarried: [
     {
       name: "VP Racing",
       description: "Aditivos, gasolina de alto octanaje, ethanol y aceites",
       logo: "/images/brands/vp-racing.png",
-      card: false,
+      sublabel: null,
     },
     {
       name: "Mobil 1",
       description: "Aceites",
       logo: "/images/brands/mobil-1.svg",
-      card: false,
+      sublabel: null,
     },
     {
       name: "BK3",
       description: "Aditivos",
-      logo: "/images/brands/bk3-tarjeta-navy.webp",
-      card: true,
+      logo: null,
+      sublabel: "Potenciador de octanaje",
     },
   ],
 } as const;

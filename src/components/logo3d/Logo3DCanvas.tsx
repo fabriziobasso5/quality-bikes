@@ -7,7 +7,9 @@ import * as THREE from "three";
 import LogoMesh from "./LogoMesh";
 import { withBasePath } from "@/lib/base-path";
 
-const ROTATION_SPEED = 0.3; // rad/s — lento, ritmo de plataforma giratoria
+// Negativo: giro antihorario visto desde arriba (sentido invertido a pedido
+// del cliente), siempre lento, ritmo de plataforma giratoria.
+const ROTATION_SPEED = -0.3; // rad/s
 
 /**
  * La moto del isotipo como pieza de museo: giro lento y continuo SOLO sobre

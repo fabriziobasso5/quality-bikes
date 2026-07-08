@@ -1,9 +1,16 @@
+import Image from "next/image";
 import Link from "next/link";
 import MotoCover from "./MotoCover";
 import TiltCard from "./TiltCard";
+import { withBasePath } from "@/lib/base-path";
 import type { Motorcycle } from "@/data/motorcycles";
 
 export default function MotoCard({ moto }: { moto: Motorcycle }) {
+  // Unidades físicas en showroom con fotos reales propias (photoCount > 1
+  // distingue de la Multistrada, cuya única "foto" es la de prensa): al
+  // hover en desktop la portada oficial hace crossfade a la unidad real.
+  const hasRealPhotos = moto.availability === "en-stock" && moto.photoCount > 1;
+
   return (
     <TiltCard>
     <Link
@@ -14,11 +21,28 @@ export default function MotoCard({ moto }: { moto: Motorcycle }) {
         <MotoCover
           moto={moto}
           className="h-56 w-full"
-          imgClassName="transition-transform duration-300 group-hover:scale-105"
+          imgClassName={
+            hasRealPhotos
+              ? "transition-opacity duration-300 md:group-hover:opacity-0"
+              : "transition-transform duration-300 group-hover:scale-105"
+          }
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
+        {hasRealPhotos && (
+          /* Solo desktop (hidden md:block): en mobile no hay hover y no
+             tiene sentido descargar la segunda imagen. */
+          <div className="absolute inset-0 hidden bg-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block">
+            <Image
+              src={withBasePath(`/images/inventory/${moto.slug}/1.webp`)}
+              alt={`${moto.brand} ${moto.model} — unidad real en showroom`}
+              fill
+              sizes="(max-width: 1024px) 50vw, 25vw"
+              className="object-contain"
+            />
+          </div>
+        )}
         {moto.availability === "proximo-arribo" && (
-          <span className="absolute top-3 left-3 rounded-full border border-brand-red bg-white/90 px-3 py-1 text-[10px] tracking-widest text-brand-red uppercase">
+          <span className="absolute top-3 left-3 rounded-full border border-brand-red/40 bg-white/90 px-2.5 py-0.5 text-[9px] tracking-[0.18em] text-brand-red uppercase">
             Próximo arribo
           </span>
         )}

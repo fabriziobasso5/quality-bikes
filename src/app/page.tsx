@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import BrandStats from "@/components/BrandStats";
 import Hero from "@/components/Hero";
 import Logo3D from "@/components/Logo3D";
 import Magnetic from "@/components/Magnetic";
@@ -44,13 +45,14 @@ export default function Home() {
           {inShowroom.map((moto) => (
             <RevealItem key={moto.slug}>
               <Link href={`/catalogo/${moto.slug}`} className="group block">
+                {/* object-contain: la unidad real siempre completa, sin recortes */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-brand-bg-soft">
                   <Image
                     src={withBasePath(`/images/inventory/${moto.slug}/1.webp`)}
                     alt={`${moto.brand} ${moto.model}`}
                     fill
                     sizes="(max-width: 640px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    className="object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </div>
                 <div className="mt-6 flex items-baseline justify-between gap-4">
@@ -63,7 +65,9 @@ export default function Home() {
                     </h3>
                   </div>
                   <p className="shrink-0 font-mono text-sm text-brand-text/60">
-                    {moto.condition === "0km" ? "0 km" : `${moto.mileageKm} km`}
+                    {moto.condition === "0km"
+                      ? "0 km"
+                      : `Seminueva${moto.mileageKm ? ` · ${moto.mileageKm} km` : ""}`}
                   </p>
                 </div>
                 <p className="link-underline mt-4 inline-block text-sm tracking-wide text-brand-navy uppercase">
@@ -74,6 +78,9 @@ export default function Home() {
           ))}
         </RevealGroup>
       </section>
+
+      {/* Franja de datos de marca: respira entre el showroom y el lifestyle */}
+      <BrandStats />
 
       {/* Lifestyle a sangre #1
           TODO(cliente): reemplazar por la foto real de la R1300 GSA en tierra. */}
@@ -158,7 +165,47 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* La pieza de la casa: el emblema QB girando, presentado como en vitrina */}
+      {/* Productos en tienda: tres marcas, tres logos, nada más */}
+      <section className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
+        <Reveal>
+          <p className="text-center text-xs tracking-[0.3em] text-brand-text/40 uppercase">
+            También en tienda
+          </p>
+        </Reveal>
+        <RevealGroup className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-12 sm:grid-cols-3">
+          {siteConfig.productsCarried.map((product) => (
+            <RevealItem key={product.name} className="text-center">
+              <div className="flex h-16 flex-col items-center justify-center">
+                {product.logo ? (
+                  /* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */
+                  <img
+                    src={withBasePath(product.logo)}
+                    alt={product.name}
+                    className="max-h-14 w-auto max-w-[150px] object-contain"
+                  />
+                ) : (
+                  /* Marca tipográfica de la casa (BK3): wordmark + sublabel,
+                     misma altura de bloque que los logos vecinos. */
+                  <>
+                    <span className="font-display text-4xl font-bold leading-none tracking-wide text-brand-navy">
+                      {product.name}
+                    </span>
+                    {product.sublabel && (
+                      <span className="mt-1.5 text-[10px] tracking-[0.22em] text-brand-text/50 uppercase">
+                        {product.sublabel}
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+              <p className="mt-4 text-sm text-brand-text/50">{product.description}</p>
+            </RevealItem>
+          ))}
+        </RevealGroup>
+      </section>
+
+      {/* La pieza de la casa: la moto del isotipo girando, cierre visual de la
+          página — después de productos, justo antes del bloque de contacto */}
       <section className="bg-brand-bg-soft">
         <div className="mx-auto max-w-7xl px-6 py-24 text-center sm:py-28">
           <Reveal>
@@ -173,34 +220,6 @@ export default function Home() {
             <p className="font-script text-3xl text-brand-navy sm:text-4xl">{siteConfig.slogan}</p>
           </Reveal>
         </div>
-      </section>
-
-      {/* Productos en tienda: tres marcas, tres logos, nada más */}
-      <section className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
-        <Reveal>
-          <p className="text-center text-xs tracking-[0.3em] text-brand-text/40 uppercase">
-            También en tienda
-          </p>
-        </Reveal>
-        <RevealGroup className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-12 sm:grid-cols-3">
-          {siteConfig.productsCarried.map((product) => (
-            <RevealItem key={product.name} className="text-center">
-              <div className="flex h-16 items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */}
-                <img
-                  src={withBasePath(product.logo)}
-                  alt={product.name}
-                  className={
-                    product.card
-                      ? "h-16 w-auto rounded-lg object-contain"
-                      : "max-h-14 w-auto max-w-[150px] object-contain"
-                  }
-                />
-              </div>
-              <p className="mt-4 text-sm text-brand-text/50">{product.description}</p>
-            </RevealItem>
-          ))}
-        </RevealGroup>
       </section>
 
       {/* Cierre único: asesoría + ubicación + WhatsApp */}

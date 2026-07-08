@@ -43,7 +43,10 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-black/10 bg-brand-bg/95 backdrop-blur">
       <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center" aria-label={siteConfig.name}>
+        {/* Anchor plano en vez de next/link: navegación dura al home con el
+            basePath ya resuelto — funciona desde cualquier subpágina de
+            GitHub Pages sin depender del estado del router del cliente. */}
+        <a href={withBasePath("/")} className="flex items-center" aria-label={siteConfig.name}>
           {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
           <img
             src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
@@ -56,7 +59,7 @@ export default function Header() {
             alt={siteConfig.name}
             className="hidden h-11 w-auto md:block"
           />
-        </Link>
+        </a>
 
         <nav className="hidden items-center gap-8 text-sm tracking-wide uppercase md:flex">
           <button
@@ -115,12 +118,19 @@ export default function Header() {
                       onClick={() => setMegaOpen(false)}
                       className="group text-center"
                     >
-                      <MotoCover
-                        moto={moto}
-                        className="mx-auto aspect-[4/3] w-full overflow-hidden"
-                        imgClassName="transition-transform duration-300 group-hover:scale-105"
-                        sizes="220px"
-                      />
+                      <div className="relative">
+                        <MotoCover
+                          moto={moto}
+                          className="mx-auto aspect-[4/3] w-full overflow-hidden"
+                          imgClassName="transition-transform duration-300 group-hover:scale-105"
+                          sizes="220px"
+                        />
+                        {moto.availability === "proximo-arribo" && (
+                          <span className="absolute top-1.5 left-1.5 rounded-full border border-brand-red/40 bg-white/90 px-2 py-0.5 text-[8px] tracking-[0.18em] text-brand-red uppercase">
+                            Próximo arribo
+                          </span>
+                        )}
+                      </div>
                       <p className="mt-3 text-[11px] tracking-widest text-brand-text/50 uppercase">
                         {moto.brand}
                       </p>

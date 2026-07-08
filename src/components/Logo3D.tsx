@@ -1,125 +1,103 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import LogoFallback2D from "./logo3d/LogoFallback2D";
+import { motion, useReducedMotion } from "framer-motion";
 import { MOTO_SILHOUETTE_PATH, MOTO_SILHOUETTE_VIEWBOX } from "./logo3d/moto-silhouette-path";
 
-const Logo3DCanvas = dynamic(() => import("./logo3d/Logo3DCanvas"), {
-  ssr: false,
-  loading: () => null,
-});
+const TAUPE = "#A79F9D"; // gris taupe de marca (relleno sólido del logo)
+const NAVY = "#003462"; // azul de marca (contorno del "bordado")
 
-function detectCanUse3D() {
-  if (window.innerWidth < 768) return false;
-  const cores = navigator.hardwareConcurrency;
-  if (typeof cores === "number" && cores < 4) return false;
-  try {
-    const canvas = document.createElement("canvas");
-    return !!(canvas.getContext("webgl2") || canvas.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}
+const DRAW_S = 1.7; // duración del stroke-draw del contorno
+const FILL_DELAY_S = 1.45; // el relleno entra casi al terminar el trazo
+const FILL_S = 0.6; // crossfade contorno → sólido
+const SPIN_S = 16; // vuelta completa, lenta (plataforma de exhibición)
 
 /**
- * Lazy 3D emblem con "ensamblaje por trazo" tipo blueprint: al hacer scroll
- * hacia la sección, la silueta de la moto se dibuja como wireframe en azul de
- * marca (stroke-draw ligado al scroll); al completarse un flash sutil revela
- * la pieza metálica sólida que gira. De esqueleto de líneas a pieza terminada.
- *
- * WebGL solo se descarga al acercarse y si el equipo lo permite; el resto ve
- * el fallback 2D animado (o el logo estático sin WebGL/JS). Bajo reduced
- * motion se muestra la pieza final directa, sin ensamblaje.
+ * Pieza de cierre, 100% 2D en todos los viewports (sin WebGL). Secuencia al
+ * entrar en viewport: (1) "bordado" — el contorno de la silueta de la moto se
+ * dibuja con stroke azul de marca; (2) el logo se rellena/solidifica en gris
+ * taupe de marca, mismo tamaño que la silueta; (3) gira lento sobre su eje
+ * vertical (Y), como plataforma giratoria. Bajo prefers-reduced-motion se
+ * muestra el logo sólido estático, sin bordado ni giro.
  */
 export default function Logo3D() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const [nearViewport, setNearViewport] = useState(false);
-  const [use3D, setUse3D] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const [ready, setReady] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const [inView, setInView] = useState(false);
+  const [spinning, setSpinning] = useState(false);
 
   useEffect(() => {
-    setUse3D(detectCanUse3D());
-    setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-    setReady(true);
-  }, []);
-
-  // Defer the WebGL bundle until the section is actually approaching.
-  useEffect(() => {
-    const el = wrapperRef.current;
+    const el = ref.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
-          setNearViewport(true);
-          observer.disconnect();
+          setInView(true);
+          io.disconnect();
         }
       },
-      { rootMargin: "600px" }
+      { rootMargin: "0px 0px -15% 0px" }
     );
-    observer.observe(el);
-    return () => observer.disconnect();
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
-  // El ensamblaje blueprint solo corre en la ruta 3D con movimiento permitido.
-  const blueprint = ready && use3D && !reduceMotion;
-
-  // Progreso de scroll a través de la sección: 0 cuando el bloque asoma por
-  // abajo, 1 cuando ya está bien dentro del viewport.
-  const { scrollYProgress } = useScroll({
-    target: wrapperRef,
-    offset: ["start 0.85", "start 0.3"],
-  });
-  const pathLength = useTransform(scrollYProgress, [0, 0.72], [0, 1]);
-  const wireOpacity = useTransform(scrollYProgress, [0, 0.05, 0.74, 0.9], [0, 1, 1, 0]);
-  const flashOpacity = useTransform(scrollYProgress, [0.7, 0.79, 0.9], [0, 0.8, 0]);
-  const pieceOpacity = useTransform(scrollYProgress, [0.7, 0.92], [0, 1]);
+  // Reproducir la animación solo al entrar y si el usuario permite movimiento.
+  const play = inView && !reduce;
 
   return (
-    <div ref={wrapperRef} className="pointer-events-none relative h-full w-full">
-      {ready && !use3D && <LogoFallback2D />}
-
-      {ready && use3D && (
-        <>
-          <motion.div
-            className="absolute inset-0"
-            style={blueprint ? { opacity: pieceOpacity } : undefined}
-          >
-            {nearViewport && <Logo3DCanvas reduceMotion={reduceMotion} />}
-          </motion.div>
-
-          {blueprint && (
-            <>
-              <motion.svg
-                aria-hidden
-                viewBox={MOTO_SILHOUETTE_VIEWBOX}
-                fill="none"
-                preserveAspectRatio="xMidYMid meet"
-                className="absolute inset-0 h-full w-full"
-                style={{ opacity: wireOpacity }}
-              >
-                <motion.path
-                  d={MOTO_SILHOUETTE_PATH}
-                  stroke="#003462"
-                  strokeWidth={2.5}
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  style={{ pathLength }}
-                />
-              </motion.svg>
-
-              {/* Flash de revelado: pulso blanco breve al terminar el trazo. */}
-              <motion.div
-                aria-hidden
-                className="absolute inset-0 bg-white"
-                style={{ opacity: flashOpacity }}
-              />
-            </>
+    <div
+      ref={ref}
+      className="pointer-events-none flex h-full w-full items-center justify-center [perspective:1200px]"
+    >
+      <motion.div
+        className="inline-block"
+        style={{ transformStyle: "preserve-3d" }}
+        animate={spinning ? { rotateY: [0, 360] } : { rotateY: 0 }}
+        transition={
+          spinning
+            ? { duration: SPIN_S, repeat: Infinity, ease: "linear" }
+            : { duration: 0 }
+        }
+      >
+        <svg
+          viewBox={MOTO_SILHOUETTE_VIEWBOX}
+          fill="none"
+          preserveAspectRatio="xMidYMid meet"
+          className="h-40 w-auto drop-shadow-2xl sm:h-56"
+        >
+          {/* Relleno sólido taupe: estado final de la pieza. */}
+          <motion.path
+            d={MOTO_SILHOUETTE_PATH}
+            fill={TAUPE}
+            initial={{ fillOpacity: reduce ? 1 : 0 }}
+            animate={{ fillOpacity: play || reduce ? 1 : 0 }}
+            transition={{ delay: reduce ? 0 : FILL_DELAY_S, duration: reduce ? 0 : FILL_S }}
+            onAnimationComplete={() => {
+              if (play) setSpinning(true);
+            }}
+          />
+          {/* "Bordado": contorno azul que se dibuja y luego se desvanece al
+              solidificarse el relleno. No se renderiza bajo reduced motion. */}
+          {!reduce && (
+            <motion.path
+              d={MOTO_SILHOUETTE_PATH}
+              stroke={NAVY}
+              strokeWidth={2}
+              vectorEffect="non-scaling-stroke"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              fill="none"
+              initial={{ pathLength: 0, opacity: 1 }}
+              animate={play ? { pathLength: 1, opacity: [1, 1, 0] } : { pathLength: 0, opacity: 1 }}
+              transition={{
+                pathLength: { duration: DRAW_S, ease: "easeInOut" },
+                opacity: { duration: FILL_S, delay: FILL_DELAY_S },
+              }}
+            />
           )}
-        </>
-      )}
+        </svg>
+      </motion.div>
     </div>
   );
 }

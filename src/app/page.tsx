@@ -155,7 +155,10 @@ export default function Home() {
           alt="Triumph Tiger 900 Rally derrapando sobre tierra en terreno desértico"
           fill
           sizes="100vw"
-          className="object-cover"
+          /* La moto/piloto están a la derecha del encuadre (~65%). En mobile
+             el recorte vertical se centra ahí para que la moto sea protagónica
+             y no solo la cola; en desktop la foto entra casi completa. */
+          className="object-cover object-[66%_45%] sm:object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         <Reveal className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14">

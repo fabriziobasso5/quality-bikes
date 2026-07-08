@@ -42,7 +42,9 @@ export default function MotoCard({ moto }: { moto: Motorcycle }) {
           </div>
         )}
         {moto.availability === "proximo-arribo" && (
-          <span className="absolute top-3 left-3 rounded-full border border-brand-red/40 bg-white/90 px-2.5 py-0.5 text-[9px] tracking-[0.18em] text-brand-red uppercase">
+          /* Fondo opaco + sombra: sobre la portada blanca el badge se separa
+             y queda legible en cualquier viewport, incluido mobile. */
+          <span className="absolute top-3 left-3 z-10 rounded-full border border-brand-red/50 bg-white px-2.5 py-0.5 text-[9px] tracking-[0.18em] text-brand-red uppercase shadow-sm shadow-black/10">
             Próximo arribo
           </span>
         )}

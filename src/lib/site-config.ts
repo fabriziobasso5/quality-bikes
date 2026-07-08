@@ -30,7 +30,7 @@ export const siteConfig = {
   productsCarried: [
     {
       name: "VP Racing",
-      description: "Aditivos, gasolina de alto octanaje, ethanol y aceites",
+      description: "Gasolina de alto octanaje, elevadores, ethanol y aceites",
       logo: "/images/brands/vp-racing.png",
       sublabel: null,
     },
@@ -42,7 +42,7 @@ export const siteConfig = {
     },
     {
       name: "BK3",
-      description: "Aditivos",
+      description: "Elevadores de octanaje",
       logo: null,
       sublabel: "Potenciador de octanaje",
     },

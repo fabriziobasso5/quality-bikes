@@ -10,9 +10,8 @@ import { withBasePath } from "@/lib/base-path";
 
 /**
  * Minimal hero: one cinematic image, one short headline, one CTA. Anything
- * else was cut on purpose — if in doubt, remove.
- * TODO(cliente): reemplazar la foto por la R1300 GSA en tierra cuando exista;
- * mantener encuadre panorámico con las motos hacia el lado derecho.
+ * else was cut on purpose — if in doubt, remove. Foto de prensa oficial
+ * limpia (sin marca de agua): dos adventure sobre terreno rocoso.
  */
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -32,18 +31,18 @@ export default function Hero() {
   const textY = useTransform(scrollYProgress, [0, 1], shouldReduceMotion ? ["0%", "0%"] : ["0%", "42%"]);
 
   return (
-    // Mobile: hero más bajo (62svh) — la foto es panorámica 3:1 y a 92svh un
-    // teléfono solo muestra ~420px de sus 2400px; a 62svh entra la moto
-    // completa. El focal point 74% centra la Africa Twin roja del encuadre.
+    // Mobile: hero más bajo (62svh) — la foto es ancha (2.46:1) y a 92svh un
+    // teléfono recortaría demasiado; a 62svh las dos motos entran centradas.
+    // Las motos están al centro, así que object-center sirve en todos lados.
     <section ref={sectionRef} className="relative flex min-h-[62svh] items-end overflow-hidden sm:min-h-[92svh]">
       <motion.div style={{ y: imageY, scale: imageScale }} className="absolute inset-x-0 -top-[8%] h-[116%]">
         <Image
-          src={withBasePath("/images/hero/africa-twin-hero.webp")}
-          alt="Motos de alta cilindrada en acción sobre tierra"
+          src={withBasePath("/images/hero/adventure-hero.webp")}
+          alt="Dos motos adventure en acción sobre terreno rocoso"
           fill
           preload
           sizes="100vw"
-          className="object-cover object-[74%_50%] sm:object-center"
+          className="object-cover object-[58%_50%] sm:object-center"
         />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-brand-navy/30 to-transparent" />

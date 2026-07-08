@@ -81,12 +81,13 @@ export default function Home() {
       {/* Franja de datos de marca: respira entre el showroom y el lifestyle */}
       <BrandStats />
 
-      {/* Lifestyle a sangre #1
-          TODO(cliente): reemplazar por la foto real de la R1300 GSA en tierra. */}
+      {/* Lifestyle a sangre #1 — BMW R 1300 GS Adventure en paisaje de montaña
+          (foto de prensa oficial, alta resolución). Intercala marca con el
+          bloque Triumph más abajo. */}
       <section className="relative h-[65vh] overflow-hidden">
         <Image
-          src={withBasePath("/images/inventory/voge-ds-900x/2.webp")}
-          alt="Moto dual sport levantando tierra en una subida de grava"
+          src={withBasePath("/images/lifestyle/bmw-r1300-gsa-scenic.webp")}
+          alt="BMW R 1300 GS Adventure sobre un mirador de montaña al atardecer"
           fill
           sizes="100vw"
           className="object-cover"
@@ -94,7 +95,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         <Reveal className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14">
           <p className="max-w-md font-display text-3xl leading-snug tracking-wide text-white uppercase sm:text-4xl">
-            Hechas para la tierra venezolana
+            Ideal para todo terreno
           </p>
         </Reveal>
       </section>
@@ -146,12 +147,12 @@ export default function Home() {
         </section>
       )}
 
-      {/* Lifestyle a sangre #2
-          TODO(cliente): reemplazar por la foto real de la Africa Twin en el aire. */}
+      {/* Lifestyle a sangre #2 — Triumph Tiger 900 Rally en acción off-road
+          (foto de prensa oficial, alta resolución). */}
       <section className="relative h-[65vh] overflow-hidden">
         <Image
-          src={withBasePath("/images/inventory/voge-ds-525x/2.webp")}
-          alt="Piloto de pie sobre una dual sport cruzando terreno alpino"
+          src={withBasePath("/images/lifestyle/tiger-900-rally-action.webp")}
+          alt="Triumph Tiger 900 Rally derrapando sobre tierra en terreno desértico"
           fill
           sizes="100vw"
           className="object-cover"

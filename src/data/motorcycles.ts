@@ -81,6 +81,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 937,
     category: "naked",
     condition: "seminueva",
+    mileageKm: 500,
     availability: "en-stock",
     featured: true,
     summary: "La naked italiana por excelencia: motor Testastretta 11° de 111 hp, 166 kg en seco y la agilidad que hizo leyenda al nombre Monster.",
@@ -99,11 +100,12 @@ export const motorcycles: Motorcycle[] = [
     featured: true,
     summary: "La sport-touring definitiva: V4 Granturismo de 170 hp con radar, electrónica de punta y comodidad para devorar continentes.",
     specs: { power: "170 hp", transmission: "Sincrónica", gears: "6 + Quick Shift", cylinders: "4 cilindros (V4)", color: "Rojo Ducati", seatHeight: "840–860 mm", weight: "229 kg" },
-    // TODO(cliente): aún no hay fotos reales de esta unidad — la galería
-    // muestra solo la portada oficial. Cuando lleguen las fotos del showroom,
-    // copiarlas a public/images/inventory/ducati-multistrada-v4/1..N.webp y
-    // poner photoCount: N.
-    photoCount: 0,
+    // Galería con fotos de prensa oficiales de Ducati (lifestyle en Rojo, el
+    // color de la unidad) mientras no haya fotos reales del showroom. La
+    // portada del catálogo sigue siendo la oficial sobre blanco.
+    // TODO(cliente): al tener fotos reales de la unidad, reemplazar
+    // public/images/inventory/ducati-multistrada-v4/1..5.webp y ajustar km.
+    photoCount: 5,
   },
   {
     slug: "voge-ds-900x",

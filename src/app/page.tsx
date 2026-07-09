@@ -7,6 +7,7 @@ import MotoCover from "@/components/MotoCover";
 import Magnetic from "@/components/Magnetic";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
+import { productBrands } from "@/data/products";
 import { siteConfig, buildWhatsAppLink } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
@@ -176,34 +177,45 @@ export default function Home() {
           </p>
         </Reveal>
         <RevealGroup className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-12 sm:grid-cols-3">
-          {siteConfig.productsCarried.map((product) => (
-            <RevealItem key={product.name} className="text-center">
-              <div className="flex h-16 flex-col items-center justify-center">
-                {product.logo ? (
-                  /* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */
-                  <img
-                    src={withBasePath(product.logo)}
-                    alt={product.name}
-                    className="max-h-14 w-auto max-w-[150px] object-contain"
-                  />
-                ) : (
-                  /* Marca tipográfica de la casa (BK3): wordmark + sublabel,
-                     misma altura de bloque que los logos vecinos. */
-                  <>
-                    <span className="font-display text-4xl font-bold leading-none tracking-wide text-brand-navy">
-                      {product.name}
-                    </span>
-                    {product.sublabel && (
-                      <span className="mt-1.5 text-[10px] tracking-[0.22em] text-brand-text/50 uppercase">
-                        {product.sublabel}
-                      </span>
+          {siteConfig.productsCarried.map((product, i) => {
+            // productsCarried y productBrands describen las mismas tres casas en
+            // el mismo orden (VP Racing, Mobil, BK3): el índice da el id de la
+            // ruta. (Asunción: si se reordena una lista, reordenar la otra.)
+            const brandId = productBrands[i]?.id;
+            return (
+              <RevealItem key={product.name} className="text-center">
+                <Link href={brandId ? `/productos/${brandId}` : "/productos"} className="group block">
+                  <div className="flex h-16 flex-col items-center justify-center">
+                    {product.logo ? (
+                      /* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */
+                      <img
+                        src={withBasePath(product.logo)}
+                        alt={product.name}
+                        className="max-h-14 w-auto max-w-[150px] object-contain transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      /* Marca tipográfica de la casa (BK3): wordmark + sublabel,
+                         misma altura de bloque que los logos vecinos. */
+                      <div className="flex flex-col items-center transition-transform duration-500 group-hover:scale-105">
+                        <span className="font-display text-4xl font-bold leading-none tracking-wide text-brand-navy">
+                          {product.name}
+                        </span>
+                        {product.sublabel && (
+                          <span className="mt-1.5 text-[10px] tracking-[0.22em] text-brand-text/50 uppercase">
+                            {product.sublabel}
+                          </span>
+                        )}
+                      </div>
                     )}
-                  </>
-                )}
-              </div>
-              <p className="mt-4 text-sm text-brand-text/50">{product.description}</p>
-            </RevealItem>
-          ))}
+                  </div>
+                  <p className="mt-4 text-sm text-brand-text/50">{product.description}</p>
+                  <p className="link-underline mt-3 inline-block text-xs tracking-widest text-brand-navy uppercase">
+                    Ver productos →
+                  </p>
+                </Link>
+              </RevealItem>
+            );
+          })}
         </RevealGroup>
       </section>
 

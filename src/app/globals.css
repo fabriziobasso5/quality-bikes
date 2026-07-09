@@ -92,3 +92,15 @@ body::after {
     transition: none;
   }
 }
+
+/*
+  Oculta la barra de scroll en los carruseles horizontales de Productos
+  (estilo Jesko/Lando) sin perder el desplazamiento táctil ni por rueda.
+*/
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

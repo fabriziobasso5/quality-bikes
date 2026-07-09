@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import MotoCover from "./MotoCover";
+import BrandLogo from "./products/BrandLogo";
 import { motorcycles } from "@/data/motorcycles";
+import { productBrands } from "@/data/products";
 
 const navItems = [
   { href: "/nosotros", label: "Nosotros" },
@@ -18,10 +20,12 @@ const navItems = [
 export default function MobileMenu() {
   const [open, setOpen] = useState(false);
   const [catalogOpen, setCatalogOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
 
   function closeAll() {
     setOpen(false);
     setCatalogOpen(false);
+    setProductsOpen(false);
   }
 
   return (
@@ -83,6 +87,52 @@ export default function MobileMenu() {
                 className="block py-3 text-sm tracking-wide text-brand-navy uppercase"
               >
                 Ver catálogo completo →
+              </Link>
+            </div>
+          )}
+
+          <button
+            onClick={() => setProductsOpen((v) => !v)}
+            aria-expanded={productsOpen}
+            className="flex w-full items-center justify-between py-3 text-sm tracking-wide uppercase text-brand-text/80"
+          >
+            Productos
+            <span
+              className={`text-brand-text/40 transition-transform duration-200 ${productsOpen ? "rotate-90" : ""}`}
+            >
+              →
+            </span>
+          </button>
+
+          {productsOpen && (
+            <div className="mb-2 border-l border-black/10 pl-4">
+              {productBrands.map((brand) => (
+                <Link
+                  key={brand.id}
+                  href={`/productos/${brand.id}`}
+                  onClick={closeAll}
+                  className="flex items-center gap-4 py-2.5"
+                >
+                  <span
+                    className="flex h-12 w-16 shrink-0 items-center justify-center rounded"
+                    style={{
+                      backgroundImage: `radial-gradient(120% 120% at 50% 30%, ${brand.accent}12 0%, transparent 62%)`,
+                    }}
+                  >
+                    <BrandLogo brand={brand} className="text-base" imgClassName="max-h-7 max-w-[52px]" />
+                  </span>
+                  <div>
+                    <p className="font-display text-sm tracking-wide">{brand.name}</p>
+                    <p className="text-[11px] text-brand-text/50">{brand.tagline}</p>
+                  </div>
+                </Link>
+              ))}
+              <Link
+                href="/productos"
+                onClick={closeAll}
+                className="block py-3 text-sm tracking-wide text-brand-navy uppercase"
+              >
+                Ver todos los productos →
               </Link>
             </div>
           )}

@@ -232,15 +232,6 @@ export default function Header() {
                       </Link>
                     ))}
                   </div>
-                  <div className="mt-8 flex items-center justify-end border-t border-black/10 pt-5 text-sm">
-                    <Link
-                      href="/productos"
-                      onClick={() => setOpenMenu(null)}
-                      className="link-underline tracking-wide text-brand-navy uppercase"
-                    >
-                      Ver todos los productos →
-                    </Link>
-                  </div>
                 </div>
               </motion.div>
             )}

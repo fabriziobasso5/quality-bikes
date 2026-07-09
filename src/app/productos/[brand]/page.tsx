@@ -32,24 +32,72 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
+// Tipos de lubricante (campo tags) en orden de gama, con su título de subsección.
+const TAG_ORDER = ["Sintético", "Semisintético", "Mineral"] as const;
+const TAG_TITLE: Record<string, string> = {
+  "Sintético": "Sintéticos (Full)",
+  "Semisintético": "Semisintéticos",
+  "Mineral": "Minerales",
+};
+
+interface Lane {
+  title: string;
+  items: Product[];
+}
+interface GroupBlock {
+  group: string;
+  tagged: boolean;
+  lanes: Lane[];
+}
+interface CategorySection {
+  category: ProductCategory;
+  blocks: GroupBlock[];
+}
+
 /**
- * Agrupa los productos de la marca por categoría (en el orden que declara la
- * marca) y, dentro de cada categoría, por subgrupo (group) preservando el
- * orden de aparición en los datos. Cada subgrupo va a un carrusel.
+ * Separación clara: categoría → línea (group) → y, cuando los productos traen
+ * tipo (tags, caso Mobil), cada tipo (Sintéticos Full / Semisintéticos /
+ * Minerales) en su propia fila con subtítulo. Marcas sin tags (VP, BK3) usan
+ * la línea directamente como carrusel. Se preserva el orden de los datos.
  */
-function groupByCategory(products: Product[], categories: ProductCategory[]) {
+function buildSections(products: Product[], categories: ProductCategory[]): CategorySection[] {
   return categories
     .map((category) => {
       const inCategory = products.filter((p) => p.category === category);
-      const groups: { group: string; items: Product[] }[] = [];
-      for (const product of inCategory) {
-        const existing = groups.find((g) => g.group === product.group);
-        if (existing) existing.items.push(product);
-        else groups.push({ group: product.group, items: [product] });
+
+      const groupOrder: string[] = [];
+      const byGroup = new Map<string, Product[]>();
+      for (const p of inCategory) {
+        if (!byGroup.has(p.group)) {
+          byGroup.set(p.group, []);
+          groupOrder.push(p.group);
+        }
+        byGroup.get(p.group)!.push(p);
       }
-      return { category, groups };
+
+      const blocks: GroupBlock[] = groupOrder.map((group) => {
+        const items = byGroup.get(group)!;
+        const tagged = items.some((p) => p.tags && p.tags.length > 0);
+        if (!tagged) return { group, tagged: false, lanes: [{ title: group, items }] };
+
+        const lanes: Lane[] = [];
+        const placed = new Set<Product>();
+        for (const tag of TAG_ORDER) {
+          const laneItems = items.filter((p) => p.tags?.includes(tag));
+          if (laneItems.length) {
+            laneItems.forEach((p) => placed.add(p));
+            lanes.push({ title: TAG_TITLE[tag], items: laneItems });
+          }
+        }
+        // Cualquier producto con un tag fuera del orden conocido no se pierde.
+        const rest = items.filter((p) => !placed.has(p));
+        if (rest.length) lanes.push({ title: group, items: rest });
+        return { group, tagged: true, lanes };
+      });
+
+      return { category, blocks };
     })
-    .filter((c) => c.groups.length > 0);
+    .filter((c) => c.blocks.length > 0);
 }
 
 export default async function BrandPage({ params }: { params: Params }) {
@@ -58,7 +106,7 @@ export default async function BrandPage({ params }: { params: Params }) {
   if (!meta) notFound();
 
   const products = getProductsByBrand(meta.id);
-  const sections = groupByCategory(products, meta.categories);
+  const sections = buildSections(products, meta.categories);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
@@ -87,20 +135,42 @@ export default async function BrandPage({ params }: { params: Params }) {
         </div>
       </Reveal>
 
-      <div className="mt-14 space-y-16">
-        {sections.map(({ category, groups }) => (
+      <div className="mt-14 space-y-20">
+        {sections.map(({ category, blocks }) => (
           <section key={category}>
             <Reveal>
-              <h2 className="mb-8 font-display text-2xl uppercase tracking-wide">
+              <h2 className="mb-10 font-display text-2xl uppercase tracking-wide text-brand-text">
                 {categoryLabels[category]}
               </h2>
             </Reveal>
-            <div className="space-y-12">
-              {groups.map(({ group, items }) => (
-                <Reveal key={group}>
-                  <ProductCarousel title={group} products={items} />
-                </Reveal>
-              ))}
+            <div className="space-y-14">
+              {blocks.map((block) =>
+                block.tagged ? (
+                  <div key={block.group}>
+                    <Reveal>
+                      <h3 className="mb-7 flex items-center gap-3 font-display text-xl tracking-wide text-brand-navy">
+                        <span
+                          aria-hidden
+                          className="inline-block h-5 w-1.5 rounded-full"
+                          style={{ backgroundColor: meta.accent }}
+                        />
+                        {block.group}
+                      </h3>
+                    </Reveal>
+                    <div className="space-y-10 border-l border-black/[0.06] pl-4 sm:pl-6">
+                      {block.lanes.map((lane) => (
+                        <Reveal key={lane.title}>
+                          <ProductCarousel title={lane.title} products={lane.items} accent={meta.accent} />
+                        </Reveal>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Reveal key={block.group}>
+                    <ProductCarousel title={block.group} products={block.lanes[0].items} accent={meta.accent} />
+                  </Reveal>
+                ),
+              )}
             </div>
           </section>
         ))}

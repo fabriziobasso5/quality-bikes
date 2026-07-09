@@ -12,9 +12,11 @@ import type { Product } from "@/data/products";
 export default function ProductCarousel({
   title,
   products,
+  accent,
 }: {
   title: string;
   products: Product[];
+  accent?: string;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
@@ -52,7 +54,14 @@ export default function ProductCarousel({
   return (
     <div>
       <div className="mb-4 flex items-end justify-between gap-4">
-        <h3 className="font-display text-lg tracking-wide uppercase text-brand-text/80">{title}</h3>
+        <h4 className="flex items-center gap-2.5 font-display text-lg tracking-wide uppercase text-brand-navy">
+          <span
+            aria-hidden
+            className="inline-block h-4 w-1 rounded-full"
+            style={{ backgroundColor: accent ?? "#003462" }}
+          />
+          {title}
+        </h4>
         <div className="hidden gap-2 sm:flex">
           <button
             type="button"
@@ -80,7 +89,7 @@ export default function ProductCarousel({
         className="hide-scrollbar -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-6 px-6 pb-2"
       >
         {products.map((product) => (
-          <div key={product.slug} className="w-[240px] shrink-0 snap-start sm:w-[268px]">
+          <div key={product.slug} className="w-[260px] shrink-0 snap-start sm:w-[280px]">
             <ProductCard product={product} />
           </div>
         ))}

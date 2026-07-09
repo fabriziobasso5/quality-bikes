@@ -127,13 +127,6 @@ export default function MobileMenu() {
                   </div>
                 </Link>
               ))}
-              <Link
-                href="/productos"
-                onClick={closeAll}
-                className="block py-3 text-sm tracking-wide text-brand-navy uppercase"
-              >
-                Ver todos los productos →
-              </Link>
             </div>
           )}
 

@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import BrandLogo from "@/components/products/BrandLogo";
-import BrandCatalog, { type CatalogLane, type CatalogOption } from "@/components/products/BrandCatalog";
+import BrandCatalog, { type CatalogLane, type CatalogNode } from "@/components/products/BrandCatalog";
 import { Reveal } from "@/components/Reveal";
 import {
-  categoryLabels,
   getProductBrand,
   getProductsByBrand,
   productBrands,
@@ -32,7 +31,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
-// Título de subsección por tipo de lubricante (campo tags).
+// Título de subsección por tipo de lubricante (campo tags, caso Mobil).
 const TAG_TITLE: Record<string, string> = {
   "Sintético": "Sintéticos (Full)",
   "Semisintético": "Semisintéticos",
@@ -69,49 +68,66 @@ function lanesByTag(items: Product[], tagOrder: string[]): CatalogLane[] {
   return lanes;
 }
 
+const laneCount = (lanes: CatalogLane[]) => lanes.reduce((n, l) => n + l.products.length, 0);
+const nodeCount = (children: CatalogNode[]) => children.reduce((n, c) => n + c.count, 0);
+
+const leaf = (id: string, label: string, bg: string, lanes: CatalogLane[]): CatalogNode => ({
+  id,
+  label,
+  bg,
+  count: laneCount(lanes),
+  lanes,
+});
+const branch = (id: string, label: string, bg: string, children: CatalogNode[]): CatalogNode => ({
+  id,
+  label,
+  bg,
+  count: nodeCount(children),
+  children,
+});
+
 /**
- * Opciones (pantalla de entrada) por marca:
- * - Mobil: "Gasolina" (líneas gasolina + moto, separado por tipo) y "Diesel"
- *   (con el orden Minerales → Full → Semi). No son categorías: Mobil es toda
- *   una categoría "lubricantes".
- * - VP / BK3: cada categoría de la marca es una opción; dentro, subgrupos por
- *   línea (group). BK3 tiene una sola opción → entra directo a sus productos.
+ * Árbol de navegación anidada por marca (cambio de vista in-page):
+ * - BK3: 1 nivel, 2 opciones — Gasolina (octane boosters + performance marine)
+ *   y Diesel (cetanium).
+ * - VP Racing: 2 niveles — Gasolina (→ Combustibles de competencia / Aditivos /
+ *   Alcoholes) y Diesel (aditivos diesel, hoja directa).
+ * - Mobil: Gasolina y Diesel, separado por tipo (Diesel: Min → Full → Semi).
  */
-function buildOptions(meta: ProductBrandMeta, products: Product[]): CatalogOption[] {
-  if (meta.id === "mobil") {
-    const gasolina = products.filter(
-      (p) => p.group === "Línea gasolina" || p.group === "Línea moto 2T y 4T",
-    );
-    const diesel = products.filter((p) => p.group === "Línea diesel");
-    const options: CatalogOption[] = [];
-    if (gasolina.length)
-      options.push({
-        id: "gasolina",
-        label: "Gasolina",
-        count: gasolina.length,
-        lanes: lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"]),
-      });
-    if (diesel.length)
-      options.push({
-        id: "diesel",
-        label: "Diesel",
-        count: diesel.length,
-        lanes: lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético"]),
-      });
-    return options;
+function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] {
+  if (meta.id === "bk3") {
+    const gasolina = products.filter((p) => p.group === "Gasolina" || p.group === "Marino");
+    const diesel = products.filter((p) => p.group === "Diesel");
+    return [
+      leaf("gasolina", "Gasolina", "gasolina", lanesByGroup(gasolina)),
+      leaf("diesel", "Diesel", "diesel", lanesByGroup(diesel)),
+    ].filter((n) => n.count > 0);
   }
 
-  return meta.categories
-    .map((category) => {
-      const items = products.filter((p) => p.category === category);
-      return {
-        id: category,
-        label: categoryLabels[category],
-        count: items.length,
-        lanes: lanesByGroup(items),
-      };
-    })
-    .filter((o) => o.lanes.length > 0);
+  if (meta.id === "vp-racing") {
+    const combustibles = products.filter((p) => p.category === "gasolinas");
+    const aditivos = products.filter((p) => p.category === "aditivos" && p.group !== "Diesel");
+    const alcoholes = products.filter((p) => p.category === "alcoholes");
+    const dieselAditivos = products.filter((p) => p.category === "aditivos" && p.group === "Diesel");
+    return [
+      branch("gasolina", "Gasolina", "gasolina", [
+        leaf("combustibles", "Combustibles de competencia", "combustibles", lanesByGroup(combustibles)),
+        leaf("aditivos", "Aditivos", "aditivos", lanesByGroup(aditivos)),
+        leaf("alcoholes", "Alcoholes", "alcoholes", lanesByGroup(alcoholes)),
+      ].filter((n) => n.count > 0)),
+      leaf("diesel", "Diesel", "diesel", lanesByGroup(dieselAditivos)),
+    ].filter((n) => n.count > 0);
+  }
+
+  // Mobil
+  const gasolina = products.filter(
+    (p) => p.group === "Línea gasolina" || p.group === "Línea moto 2T y 4T",
+  );
+  const diesel = products.filter((p) => p.group === "Línea diesel");
+  return [
+    leaf("gasolina", "Gasolina", "gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
+    leaf("diesel", "Diesel", "diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético"])),
+  ].filter((n) => n.count > 0);
 }
 
 export default async function BrandPage({ params }: { params: Params }) {
@@ -120,7 +136,7 @@ export default async function BrandPage({ params }: { params: Params }) {
   if (!meta) notFound();
 
   const products = getProductsByBrand(meta.id);
-  const options = buildOptions(meta, products);
+  const nodes = buildNodes(meta, products);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
@@ -138,18 +154,15 @@ export default async function BrandPage({ params }: { params: Params }) {
             <h1 className="mt-2 font-display text-4xl uppercase tracking-wide">{meta.name}</h1>
             <p className="mt-3 max-w-xl text-brand-text/70">{meta.tagline}</p>
           </div>
-          <div
-            className="flex h-24 w-52 shrink-0 items-center justify-center rounded-lg"
-            style={{
-              backgroundImage: `radial-gradient(120% 120% at 50% 30%, ${meta.accent}12 0%, transparent 62%)`,
-            }}
-          >
-            <BrandLogo brand={meta} imgClassName="max-h-14 max-w-[170px]" className="text-3xl" />
+          {/* Placa de logo consistente entre marcas: fondo claro, alto fijo,
+              centrado y con aire. */}
+          <div className="flex h-24 w-56 shrink-0 items-center justify-center rounded-lg border border-black/10 bg-white px-8">
+            <BrandLogo brand={meta} />
           </div>
         </div>
       </Reveal>
 
-      <BrandCatalog options={options} accent={meta.accent} />
+      <BrandCatalog nodes={nodes} accent={meta.accent} />
     </div>
   );
 }

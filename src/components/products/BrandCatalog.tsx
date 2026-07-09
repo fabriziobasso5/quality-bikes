@@ -3,75 +3,94 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import ProductCarousel from "./ProductCarousel";
-import TiltCard from "@/components/TiltCard";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
+import { withBasePath } from "@/lib/base-path";
 import type { Product } from "@/data/products";
 
 export interface CatalogLane {
   title: string;
   products: Product[];
 }
-export interface CatalogOption {
+export interface CatalogNode {
   id: string;
   label: string;
   count: number;
-  lanes: CatalogLane[];
+  bg?: string; // slug de foto de fondo en /images/products/backgrounds/<bg>.webp
+  children?: CatalogNode[]; // sub-opciones (nivel siguiente)
+  lanes?: CatalogLane[]; // hoja: productos en carruseles por subgrupo
 }
 
-// Fade-in por remonte con `key` (sin AnimatePresence): al cambiar de vista el
-// motion.div se re-monta y reproduce initial→animate. Se evitó AnimatePresence
-// mode="wait" porque su salida no completaba (los hijos Reveal usan whileInView
-// sin variante exit y bloqueaban onExitComplete), dejando la vista congelada.
 const fade = {
   initial: { opacity: 0, y: 8 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const },
+  transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const },
 };
 
-/** Tarjeta grande seleccionable de categoría (opción), con hover-zoom. */
+/**
+ * Tarjeta de opción con foto de contexto de fondo + degradado oscuro para que
+ * el texto se lea. Si la foto no existe, cae a un degradado elegante con el
+ * accent de la marca (nunca un cuadrado plano). Hover-zoom sutil, sin tilt.
+ */
 function OptionCard({
-  option,
+  node,
   accent,
   onSelect,
 }: {
-  option: CatalogOption;
+  node: CatalogNode;
   accent: string;
   onSelect: () => void;
 }) {
+  const [imgFailed, setImgFailed] = useState(false);
+  const bgUrl = node.bg ? withBasePath(`/images/products/backgrounds/${node.bg}.webp`) : null;
+  const showImg = bgUrl && !imgFailed;
+
   return (
-    <TiltCard>
-      <button
-        type="button"
-        onClick={onSelect}
-        className="group flex h-full w-full flex-col overflow-hidden border border-black/10 bg-brand-bg text-left shadow-sm shadow-black/[0.03] transition duration-300 hover:border-brand-navy/40 hover:shadow-lg hover:shadow-brand-navy/10"
-      >
+    <button
+      type="button"
+      onClick={onSelect}
+      className="group relative flex h-56 w-full flex-col justify-end overflow-hidden border border-black/10 text-left"
+    >
+      {/* Base: foto (si existe) sobre un degradado con el accent; hover-zoom. */}
+      <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
         <div
-          className="relative flex h-44 items-center justify-center overflow-hidden bg-white"
-          style={{ backgroundImage: `linear-gradient(155deg, ${accent}22 0%, ${accent}0a 46%, #ffffff 100%)` }}
-        >
-          <span aria-hidden className="absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: accent }} />
-          <span className="px-4 text-center font-display text-2xl uppercase tracking-wide text-brand-navy transition-transform duration-500 group-hover:scale-105 sm:text-3xl">
-            {option.label}
+          className="absolute inset-0"
+          style={{ backgroundImage: `linear-gradient(145deg, ${accent} 0%, ${accent}cc 38%, #0b1622 100%)` }}
+        />
+        {showImg && (
+          /* eslint-disable-next-line @next/next/no-img-element -- foto opcional con fallback por onError */
+          <img
+            src={bgUrl}
+            alt=""
+            aria-hidden
+            onError={() => setImgFailed(true)}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+      </div>
+      {/* Velo oscuro para legibilidad del texto en ambos casos. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/5" />
+
+      <div className="relative p-6">
+        <p className="font-display text-2xl uppercase tracking-wide text-white sm:text-3xl">
+          {node.label}
+        </p>
+        <div className="mt-2 flex items-center justify-between gap-4">
+          <span className="text-[11px] tracking-widest text-white/70 uppercase">
+            {node.count} {node.count === 1 ? "producto" : "productos"}
+          </span>
+          <span className="text-sm tracking-wide text-white uppercase transition group-hover:text-brand-red">
+            {node.children ? "Ver opciones →" : "Ver productos →"}
           </span>
         </div>
-        <div className="flex items-center justify-between p-6">
-          <span className="text-sm text-brand-text/60">
-            {option.count} {option.count === 1 ? "producto" : "productos"}
-          </span>
-          <span className="text-sm tracking-wide text-brand-navy uppercase transition group-hover:text-brand-red">
-            Ver productos →
-          </span>
-        </div>
-      </button>
-    </TiltCard>
+      </div>
+    </button>
   );
 }
 
-/** Filas de productos de una opción (subgrupos en carruseles). */
-function OptionProducts({ option, accent }: { option: CatalogOption; accent: string }) {
+function ProductLanes({ lanes, accent }: { lanes: CatalogLane[]; accent: string }) {
   return (
     <div className="space-y-12">
-      {option.lanes.map((lane) => (
+      {lanes.map((lane) => (
         <Reveal key={lane.title}>
           <ProductCarousel title={lane.title} products={lane.products} accent={accent} />
         </Reveal>
@@ -80,52 +99,74 @@ function OptionProducts({ option, accent }: { option: CatalogOption; accent: str
   );
 }
 
+interface Resolved {
+  options?: CatalogNode[];
+  leaf?: CatalogNode;
+  trail: CatalogNode[];
+}
+
+function resolvePath(nodes: CatalogNode[], path: string[]): Resolved {
+  let level = nodes;
+  const trail: CatalogNode[] = [];
+  for (const id of path) {
+    const node = level.find((n) => n.id === id);
+    if (!node) break;
+    trail.push(node);
+    if (node.lanes) return { leaf: node, trail };
+    level = node.children ?? [];
+  }
+  return { options: level, trail };
+}
+
 /**
- * Vista in-page de una marca: primero una pantalla de "opciones" (categorías)
- * como tarjetas grandes seleccionables; al elegir una se muestran sus
- * productos en carruseles, con un control para volver. Marcas con una sola
- * opción (BK3) van directo a los productos. Sin rutas nuevas.
+ * Navegación anidada in-page de una marca (estilo Mobil, ahora de varios
+ * niveles): se muestran tarjetas de opción y al elegir una se baja al
+ * siguiente nivel de opciones o a los productos. Botón para volver al nivel
+ * anterior. Sin rutas nuevas.
  */
 export default function BrandCatalog({
-  options,
+  nodes,
   accent,
 }: {
-  options: CatalogOption[];
+  nodes: CatalogNode[];
   accent: string;
 }) {
-  const single = options.length === 1;
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = single ? options[0] : options.find((o) => o.id === selectedId) ?? null;
+  const [path, setPath] = useState<string[]>([]);
+  const { options, leaf, trail } = resolvePath(nodes, path);
+  const atRoot = path.length === 0;
 
   return (
     <div className="mt-14">
-      <motion.div key={selected ? selected.id : "__options"} {...fade}>
-        {!selected ? (
+      {!atRoot && (
+        <div className="mb-10 flex flex-wrap items-center gap-4">
+          <button
+            type="button"
+            onClick={() => setPath((p) => p.slice(0, -1))}
+            className="flex items-center gap-2 rounded-full border border-black/15 px-4 py-2 text-xs tracking-widest text-brand-text/70 uppercase transition hover:border-brand-navy hover:text-brand-navy"
+          >
+            ← Volver
+          </button>
+          <h2 className="font-display text-2xl uppercase tracking-wide text-brand-text">
+            {trail.map((n) => n.label).join(" / ")}
+          </h2>
+        </div>
+      )}
+
+      <motion.div key={path.join("/") || "__root"} {...fade}>
+        {leaf ? (
+          <ProductLanes lanes={leaf.lanes!} accent={accent} />
+        ) : (
           <RevealGroup className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {options.map((opt) => (
-              <RevealItem key={opt.id} className="h-full">
-                <OptionCard option={opt} accent={accent} onSelect={() => setSelectedId(opt.id)} />
+            {(options ?? []).map((node) => (
+              <RevealItem key={node.id} className="h-full">
+                <OptionCard
+                  node={node}
+                  accent={accent}
+                  onSelect={() => setPath((p) => [...p, node.id])}
+                />
               </RevealItem>
             ))}
           </RevealGroup>
-        ) : (
-          <>
-            {!single && (
-              <div className="mb-10 flex flex-wrap items-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => setSelectedId(null)}
-                  className="flex items-center gap-2 rounded-full border border-black/15 px-4 py-2 text-xs tracking-widest text-brand-text/70 uppercase transition hover:border-brand-navy hover:text-brand-navy"
-                >
-                  ← Opciones
-                </button>
-                <h2 className="font-display text-2xl uppercase tracking-wide text-brand-text">
-                  {selected.label}
-                </h2>
-              </div>
-            )}
-            <OptionProducts option={selected} accent={accent} />
-          </>
         )}
       </motion.div>
     </div>

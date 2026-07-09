@@ -113,13 +113,8 @@ export default function MobileMenu() {
                   onClick={closeAll}
                   className="flex items-center gap-4 py-2.5"
                 >
-                  <span
-                    className="flex h-12 w-16 shrink-0 items-center justify-center rounded"
-                    style={{
-                      backgroundImage: `radial-gradient(120% 120% at 50% 30%, ${brand.accent}12 0%, transparent 62%)`,
-                    }}
-                  >
-                    <BrandLogo brand={brand} className="text-base" imgClassName="max-h-7 max-w-[52px]" />
+                  <span className="flex h-12 w-16 shrink-0 items-center justify-center rounded border border-black/10 bg-white px-2">
+                    <BrandLogo brand={brand} imgClassName="max-h-7" />
                   </span>
                   <div>
                     <p className="font-display text-sm tracking-wide">{brand.name}</p>

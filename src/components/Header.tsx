@@ -201,16 +201,11 @@ export default function Header() {
                         onClick={() => setOpenMenu(null)}
                         className="group flex flex-col border border-black/10 transition hover:border-brand-navy/40"
                       >
-                        <div
-                          className="relative flex h-32 items-center justify-center overflow-hidden bg-white"
-                          style={{
-                            backgroundImage: `radial-gradient(120% 120% at 50% 25%, ${brand.accent}12 0%, transparent 62%)`,
-                          }}
-                        >
+                        <div className="relative flex h-32 items-center justify-center overflow-hidden bg-white px-8">
                           <BrandLogo
                             brand={brand}
-                            className="text-3xl transition-transform duration-500 group-hover:scale-105"
-                            imgClassName="max-h-12 max-w-[160px]"
+                            className="transition-transform duration-500 group-hover:scale-105"
+                            imgClassName="max-h-11"
                           />
                         </div>
                         <div className="border-t border-black/10 p-4">

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import ProductCover from "./ProductCover";
-import TiltCard from "@/components/TiltCard";
 import { useCart } from "@/components/cart/CartContext";
 import type { Product } from "@/data/products";
 
@@ -30,13 +29,13 @@ export default function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <TiltCard>
-      <article className="group flex h-full flex-col overflow-hidden border border-black/10 bg-brand-bg shadow-sm shadow-black/[0.03] transition duration-300 hover:border-brand-navy/40 hover:shadow-lg hover:shadow-brand-navy/10">
+    <article className="group flex h-full flex-col overflow-hidden border border-black/10 bg-brand-bg shadow-sm shadow-black/[0.03] transition duration-300 hover:border-brand-navy/40">
         <div className="relative overflow-hidden">
+          {/* Hover = solo un zoom suave de la imagen, igual que MotoCard. */}
           <ProductCover
             product={product}
             className="h-48 w-full"
-            imgClassName="transition-transform duration-500 group-hover:scale-105"
+            imgClassName="transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 640px) 80vw, 300px"
           />
         </div>
@@ -104,7 +103,6 @@ export default function ProductCard({ product }: { product: Product }) {
             </button>
           </div>
         </div>
-      </article>
-    </TiltCard>
+    </article>
   );
 }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import BrandLogo from "@/components/products/BrandLogo";
-import ProductCarousel from "@/components/products/ProductCarousel";
+import BrandCatalog, { type CatalogLane, type CatalogOption } from "@/components/products/BrandCatalog";
 import { Reveal } from "@/components/Reveal";
 import {
   categoryLabels,
@@ -10,7 +10,7 @@ import {
   getProductsByBrand,
   productBrands,
   type Product,
-  type ProductCategory,
+  type ProductBrandMeta,
 } from "@/data/products";
 
 type Params = Promise<{ brand: string }>;
@@ -32,72 +32,86 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
-// Tipos de lubricante (campo tags) en orden de gama, con su título de subsección.
-const TAG_ORDER = ["Sintético", "Semisintético", "Mineral"] as const;
+// Título de subsección por tipo de lubricante (campo tags).
 const TAG_TITLE: Record<string, string> = {
   "Sintético": "Sintéticos (Full)",
   "Semisintético": "Semisintéticos",
   "Mineral": "Minerales",
 };
 
-interface Lane {
-  title: string;
-  items: Product[];
+// Subgrupos por línea (campo group), preservando el orden de los datos.
+function lanesByGroup(items: Product[]): CatalogLane[] {
+  const order: string[] = [];
+  const map = new Map<string, Product[]>();
+  for (const p of items) {
+    if (!map.has(p.group)) {
+      map.set(p.group, []);
+      order.push(p.group);
+    }
+    map.get(p.group)!.push(p);
+  }
+  return order.map((g) => ({ title: g, products: map.get(g)! }));
 }
-interface GroupBlock {
-  group: string;
-  tagged: boolean;
-  lanes: Lane[];
-}
-interface CategorySection {
-  category: ProductCategory;
-  blocks: GroupBlock[];
+
+// Subsecciones por tipo (tags) en el orden indicado; nada se queda fuera.
+function lanesByTag(items: Product[], tagOrder: string[]): CatalogLane[] {
+  const lanes: CatalogLane[] = [];
+  const placed = new Set<Product>();
+  for (const tag of tagOrder) {
+    const ps = items.filter((p) => p.tags?.includes(tag));
+    if (ps.length) {
+      ps.forEach((p) => placed.add(p));
+      lanes.push({ title: TAG_TITLE[tag] ?? tag, products: ps });
+    }
+  }
+  const rest = items.filter((p) => !placed.has(p));
+  if (rest.length) lanes.push({ title: "Otros", products: rest });
+  return lanes;
 }
 
 /**
- * Separación clara: categoría → línea (group) → y, cuando los productos traen
- * tipo (tags, caso Mobil), cada tipo (Sintéticos Full / Semisintéticos /
- * Minerales) en su propia fila con subtítulo. Marcas sin tags (VP, BK3) usan
- * la línea directamente como carrusel. Se preserva el orden de los datos.
+ * Opciones (pantalla de entrada) por marca:
+ * - Mobil: "Gasolina" (líneas gasolina + moto, separado por tipo) y "Diesel"
+ *   (con el orden Minerales → Full → Semi). No son categorías: Mobil es toda
+ *   una categoría "lubricantes".
+ * - VP / BK3: cada categoría de la marca es una opción; dentro, subgrupos por
+ *   línea (group). BK3 tiene una sola opción → entra directo a sus productos.
  */
-function buildSections(products: Product[], categories: ProductCategory[]): CategorySection[] {
-  return categories
-    .map((category) => {
-      const inCategory = products.filter((p) => p.category === category);
-
-      const groupOrder: string[] = [];
-      const byGroup = new Map<string, Product[]>();
-      for (const p of inCategory) {
-        if (!byGroup.has(p.group)) {
-          byGroup.set(p.group, []);
-          groupOrder.push(p.group);
-        }
-        byGroup.get(p.group)!.push(p);
-      }
-
-      const blocks: GroupBlock[] = groupOrder.map((group) => {
-        const items = byGroup.get(group)!;
-        const tagged = items.some((p) => p.tags && p.tags.length > 0);
-        if (!tagged) return { group, tagged: false, lanes: [{ title: group, items }] };
-
-        const lanes: Lane[] = [];
-        const placed = new Set<Product>();
-        for (const tag of TAG_ORDER) {
-          const laneItems = items.filter((p) => p.tags?.includes(tag));
-          if (laneItems.length) {
-            laneItems.forEach((p) => placed.add(p));
-            lanes.push({ title: TAG_TITLE[tag], items: laneItems });
-          }
-        }
-        // Cualquier producto con un tag fuera del orden conocido no se pierde.
-        const rest = items.filter((p) => !placed.has(p));
-        if (rest.length) lanes.push({ title: group, items: rest });
-        return { group, tagged: true, lanes };
+function buildOptions(meta: ProductBrandMeta, products: Product[]): CatalogOption[] {
+  if (meta.id === "mobil") {
+    const gasolina = products.filter(
+      (p) => p.group === "Línea gasolina" || p.group === "Línea moto 2T y 4T",
+    );
+    const diesel = products.filter((p) => p.group === "Línea diesel");
+    const options: CatalogOption[] = [];
+    if (gasolina.length)
+      options.push({
+        id: "gasolina",
+        label: "Gasolina",
+        count: gasolina.length,
+        lanes: lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"]),
       });
+    if (diesel.length)
+      options.push({
+        id: "diesel",
+        label: "Diesel",
+        count: diesel.length,
+        lanes: lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético"]),
+      });
+    return options;
+  }
 
-      return { category, blocks };
+  return meta.categories
+    .map((category) => {
+      const items = products.filter((p) => p.category === category);
+      return {
+        id: category,
+        label: categoryLabels[category],
+        count: items.length,
+        lanes: lanesByGroup(items),
+      };
     })
-    .filter((c) => c.blocks.length > 0);
+    .filter((o) => o.lanes.length > 0);
 }
 
 export default async function BrandPage({ params }: { params: Params }) {
@@ -106,7 +120,7 @@ export default async function BrandPage({ params }: { params: Params }) {
   if (!meta) notFound();
 
   const products = getProductsByBrand(meta.id);
-  const sections = buildSections(products, meta.categories);
+  const options = buildOptions(meta, products);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
@@ -135,46 +149,7 @@ export default async function BrandPage({ params }: { params: Params }) {
         </div>
       </Reveal>
 
-      <div className="mt-14 space-y-20">
-        {sections.map(({ category, blocks }) => (
-          <section key={category}>
-            <Reveal>
-              <h2 className="mb-10 font-display text-2xl uppercase tracking-wide text-brand-text">
-                {categoryLabels[category]}
-              </h2>
-            </Reveal>
-            <div className="space-y-14">
-              {blocks.map((block) =>
-                block.tagged ? (
-                  <div key={block.group}>
-                    <Reveal>
-                      <h3 className="mb-7 flex items-center gap-3 font-display text-xl tracking-wide text-brand-navy">
-                        <span
-                          aria-hidden
-                          className="inline-block h-5 w-1.5 rounded-full"
-                          style={{ backgroundColor: meta.accent }}
-                        />
-                        {block.group}
-                      </h3>
-                    </Reveal>
-                    <div className="space-y-10 border-l border-black/[0.06] pl-4 sm:pl-6">
-                      {block.lanes.map((lane) => (
-                        <Reveal key={lane.title}>
-                          <ProductCarousel title={lane.title} products={lane.items} accent={meta.accent} />
-                        </Reveal>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <Reveal key={block.group}>
-                    <ProductCarousel title={block.group} products={block.lanes[0].items} accent={meta.accent} />
-                  </Reveal>
-                ),
-              )}
-            </div>
-          </section>
-        ))}
-      </div>
+      <BrandCatalog options={options} accent={meta.accent} />
     </div>
   );
 }

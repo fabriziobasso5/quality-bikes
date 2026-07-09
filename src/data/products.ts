@@ -9,7 +9,7 @@
 // Datos transcritos de las listas de precios oficiales (BK3, VP Racing, Mobil).
 
 export type ProductBrandId = "vp-racing" | "mobil" | "bk3";
-export type ProductCategory = "aditivos" | "gasolinas" | "lubricantes";
+export type ProductCategory = "aditivos" | "gasolinas" | "alcoholes" | "lubricantes";
 
 export interface ProductBrandMeta {
   id: ProductBrandId;
@@ -39,11 +39,12 @@ export interface Product {
 export const categoryLabels: Record<ProductCategory, string> = {
   aditivos: "Aditivos",
   gasolinas: "Gasolinas de competencia",
+  alcoholes: "Alcoholes",
   lubricantes: "Lubricantes",
 };
 
 export const productBrands: ProductBrandMeta[] = [
-  { id: "vp-racing", name: "VP Racing", tagline: "Aditivos y combustibles de competencia", logo: "/images/brands/vp-racing.png", accent: "#E4002B", accent2: "#003DA5", categories: ["aditivos", "gasolinas"] },
+  { id: "vp-racing", name: "VP Racing", tagline: "Aditivos y combustibles de competencia", logo: "/images/brands/vp-racing.png", accent: "#E4002B", accent2: "#003DA5", categories: ["aditivos", "gasolinas", "alcoholes"] },
   { id: "mobil", name: "Mobil", tagline: "Lubricantes sintéticos, semisintéticos y minerales", logo: "/images/brands/mobil-1.svg", accent: "#0033A0", accent2: "#ED1C24", categories: ["lubricantes"] },
   { id: "bk3", name: "BK3", tagline: "Elevadores de octanaje y cetano", logo: "/images/brands/bk3.png", accent: "#E30613", accent2: "#111111", categories: ["aditivos"] },
 ];
@@ -84,12 +85,12 @@ export const products: Product[] = [
   { slug: "vp-t4", brand: "vp-racing", name: "T4", category: "gasolinas", group: "Moto", groupSlug: "moto", summary: "98.6 oct, sin plomo, para moto.", highlights: ["98.6 oct", "Moto", "Sin plomo"] },
   { slug: "vp-t4-plus", brand: "vp-racing", name: "T4+", category: "gasolinas", group: "Moto", groupSlug: "moto", summary: "98.5 oct, sin plomo, +2% potencia.", highlights: ["98.5 oct", "+2% potencia", "Moto"] },
   { slug: "vp-mr12", brand: "vp-racing", name: "MR12", category: "gasolinas", group: "Moto", groupSlug: "moto", summary: "92.7 oct, con plomo, para moto.", highlights: ["92.7 oct", "Moto", "Con plomo"] },
-  { slug: "vp-x98", brand: "vp-racing", name: "X98", category: "gasolinas", group: "Ethanol", groupSlug: "ethanol", summary: "Ethanol 98%, 111.5 oct, sin plomo.", highlights: ["Ethanol 98%", "111.5 oct"] },
-  { slug: "vp-x85", brand: "vp-racing", name: "X85", category: "gasolinas", group: "Ethanol", groupSlug: "ethanol", summary: "Ethanol 85%, 101.6 oct.", highlights: ["Ethanol 85%", "101.6 oct"] },
-  { slug: "vp-x85v", brand: "vp-racing", name: "X85V", category: "gasolinas", group: "Ethanol", groupSlug: "ethanol", summary: "Ethanol 85% (Green), 101.6 oct.", highlights: ["Ethanol 85% Green", "101.6 oct"] },
-  { slug: "vp-c85", brand: "vp-racing", name: "C85", category: "gasolinas", group: "Ethanol", groupSlug: "ethanol", summary: "Ethanol, 96.3 oct, sin plomo.", highlights: ["Ethanol", "96.3 oct"] },
-  { slug: "vp-m1", brand: "vp-racing", name: "M1", category: "gasolinas", group: "Methanol", groupSlug: "methanol", summary: "Methanol puro, 101.6 oct.", highlights: ["Methanol puro", "101.6 oct"] },
-  { slug: "vp-nitro-25-9", brand: "vp-racing", name: "25% Nitro Race Car 9% Oil", category: "gasolinas", group: "Nitro", groupSlug: "nitro", summary: "Mezcla nitro para autos R/C, 25% nitro / 9% aceite.", highlights: ["25% nitro", "R/C car"] },
+  // ── VP RACING · Alcoholes (Ethanol y Methanol) ─────────────────────────
+  { slug: "vp-x98", brand: "vp-racing", name: "X98", category: "alcoholes", group: "Ethanol", groupSlug: "ethanol", summary: "Ethanol 98%, 111.5 oct, sin plomo.", highlights: ["Ethanol 98%", "111.5 oct"] },
+  { slug: "vp-x85", brand: "vp-racing", name: "X85", category: "alcoholes", group: "Ethanol", groupSlug: "ethanol", summary: "Ethanol 85%, 101.6 oct.", highlights: ["Ethanol 85%", "101.6 oct"] },
+  { slug: "vp-x85v", brand: "vp-racing", name: "X85V", category: "alcoholes", group: "Ethanol", groupSlug: "ethanol", summary: "Ethanol 85% (Green), 101.6 oct.", highlights: ["Ethanol 85% Green", "101.6 oct"] },
+  { slug: "vp-c85", brand: "vp-racing", name: "C85", category: "alcoholes", group: "Ethanol", groupSlug: "ethanol", summary: "Ethanol, 96.3 oct, sin plomo.", highlights: ["Ethanol", "96.3 oct"] },
+  { slug: "vp-m1", brand: "vp-racing", name: "M1", category: "alcoholes", group: "Methanol", groupSlug: "methanol", summary: "Methanol puro, 101.6 oct.", highlights: ["Methanol puro", "101.6 oct"] },
 
   // ── MOBIL · Lubricantes (group = línea; tags = tipo) ───────────────────
   { slug: "mobil-1-0w16", brand: "mobil", name: "Mobil 1 0W-16", category: "lubricantes", group: "Línea gasolina", groupSlug: "gasolina", tags: ["Sintético"], summary: "100% sintético 0W-16, hasta 10.000 millas. API SP.", highlights: ["0W-16", "Sintético", "API SP"], featured: true },

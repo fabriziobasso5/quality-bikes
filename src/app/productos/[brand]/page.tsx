@@ -71,17 +71,15 @@ function lanesByTag(items: Product[], tagOrder: string[]): CatalogLane[] {
 const laneCount = (lanes: CatalogLane[]) => lanes.reduce((n, l) => n + l.products.length, 0);
 const nodeCount = (children: CatalogNode[]) => children.reduce((n, c) => n + c.count, 0);
 
-const leaf = (id: string, label: string, bg: string, lanes: CatalogLane[]): CatalogNode => ({
+const leaf = (id: string, label: string, lanes: CatalogLane[]): CatalogNode => ({
   id,
   label,
-  bg,
   count: laneCount(lanes),
   lanes,
 });
-const branch = (id: string, label: string, bg: string, children: CatalogNode[]): CatalogNode => ({
+const branch = (id: string, label: string, children: CatalogNode[]): CatalogNode => ({
   id,
   label,
-  bg,
   count: nodeCount(children),
   children,
 });
@@ -99,8 +97,8 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     const gasolina = products.filter((p) => p.group === "Gasolina" || p.group === "Marino");
     const diesel = products.filter((p) => p.group === "Diesel");
     return [
-      leaf("gasolina", "Gasolina", "gasolina", lanesByGroup(gasolina)),
-      leaf("diesel", "Diesel", "diesel", lanesByGroup(diesel)),
+      leaf("gasolina", "Gasolina", lanesByGroup(gasolina)),
+      leaf("diesel", "Diesel", lanesByGroup(diesel)),
     ].filter((n) => n.count > 0);
   }
 
@@ -110,12 +108,12 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     const alcoholes = products.filter((p) => p.category === "alcoholes");
     const dieselAditivos = products.filter((p) => p.category === "aditivos" && p.group === "Diesel");
     return [
-      branch("gasolina", "Gasolina", "gasolina", [
-        leaf("combustibles", "Combustibles de competencia", "combustibles", lanesByGroup(combustibles)),
-        leaf("aditivos", "Aditivos", "aditivos", lanesByGroup(aditivos)),
-        leaf("alcoholes", "Alcoholes", "alcoholes", lanesByGroup(alcoholes)),
+      branch("gasolina", "Gasolina", [
+        leaf("combustibles", "Combustibles de competencia", lanesByGroup(combustibles)),
+        leaf("aditivos", "Aditivos", lanesByGroup(aditivos)),
+        leaf("alcoholes", "Alcoholes", lanesByGroup(alcoholes)),
       ].filter((n) => n.count > 0)),
-      leaf("diesel", "Diesel", "diesel", lanesByGroup(dieselAditivos)),
+      leaf("diesel", "Diesel", lanesByGroup(dieselAditivos)),
     ].filter((n) => n.count > 0);
   }
 
@@ -125,8 +123,8 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
   );
   const diesel = products.filter((p) => p.group === "Línea diesel");
   return [
-    leaf("gasolina", "Gasolina", "gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
-    leaf("diesel", "Diesel", "diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético"])),
+    leaf("gasolina", "Gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
+    leaf("diesel", "Diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético"])),
   ].filter((n) => n.count > 0);
 }
 

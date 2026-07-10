@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import MotoGallery from "@/components/MotoGallery";
+import OpenCatalogButton from "@/components/OpenCatalogButton";
 import MotoCard from "@/components/MotoCard";
 import QuoteForm from "@/components/QuoteForm";
 import Magnetic from "@/components/Magnetic";
@@ -44,9 +44,9 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
       <nav className="mb-8 text-xs tracking-wide text-brand-text/50 uppercase">
-        <Link href="/catalogo" className="hover:text-brand-red">
+        <OpenCatalogButton className="hover:text-brand-red">
           Catálogo
-        </Link>{" "}
+        </OpenCatalogButton>{" "}
         / {moto.brand} {moto.model}
       </nav>
 

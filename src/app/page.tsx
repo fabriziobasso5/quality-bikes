@@ -5,6 +5,7 @@ import BlueprintReveal from "@/components/BlueprintReveal";
 import Hero from "@/components/Hero";
 import MotoCover from "@/components/MotoCover";
 import Magnetic from "@/components/Magnetic";
+import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
 import { productBrands } from "@/data/products";
@@ -78,15 +79,13 @@ export default function Home() {
           ))}
         </RevealGroup>
 
-        {/* Acceso al catálogo completo (todas las motos sobre blanco) */}
+        {/* Acceso al catálogo completo: abre el mega-menú (todas las motos
+            sobre blanco) — el mismo panel que el nav y el hero. */}
         <Reveal className="mt-16 text-center">
           <Magnetic className="inline-block">
-            <Link
-              href="/catalogo"
-              className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-10 py-4 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
-            >
+            <OpenCatalogButton className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-10 py-4 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft">
               Ver todo el catálogo →
-            </Link>
+            </OpenCatalogButton>
           </Magnetic>
         </Reveal>
       </section>

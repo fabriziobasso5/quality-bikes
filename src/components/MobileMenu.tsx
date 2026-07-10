@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import BrandLogo from "./products/BrandLogo";
+import OpenCatalogButton from "./OpenCatalogButton";
 import { productBrands } from "@/data/products";
 
 const navItems = [
@@ -46,15 +47,15 @@ export default function MobileMenu() {
           data-testid="mobile-nav"
           className="absolute inset-x-0 top-full max-h-[calc(100svh-4.5rem)] overflow-y-auto border-b border-black/10 bg-brand-bg px-6 py-4 shadow-lg"
         >
-          {/* Catálogo = enlace directo a la única página del catálogo. */}
-          <Link
-            href="/catalogo"
-            onClick={closeAll}
+          {/* Catálogo = abre el MISMO mega-menú Ducati (panel blanco con todas
+              las motos) que en desktop; cierra antes el menú móvil. */}
+          <OpenCatalogButton
+            onOpen={closeAll}
             className="flex w-full items-center justify-between py-3 text-sm tracking-wide uppercase text-brand-text/80 transition hover:text-brand-red"
           >
             Catálogo
             <span className="text-brand-text/40">→</span>
-          </Link>
+          </OpenCatalogButton>
 
           <button
             onClick={() => setProductsOpen((v) => !v)}

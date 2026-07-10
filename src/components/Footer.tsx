@@ -1,18 +1,25 @@
 import Link from "next/link";
+import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { siteConfig, buildWhatsAppLink } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
+// Enlaces del footer distintos de "Catálogo" (ese abre el mega-menú, no navega).
 const navLinks = [
-  { href: "/catalogo", label: "Catálogo" },
   { href: "/productos", label: "Productos" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
 
-// Textura de fibra de carbono FORJADA (chips/vetas irregulares, no la tejida
-// cuadriculada): ruido fractal anisótropo en escala de grises, muy sutil.
+// Textura de FIBRA DE CARBONO FORJADA (forged carbon): astillas/vetas marmoladas
+// irregulares, NO la trama tejida cuadriculada. Se genera de forma procedural con
+// ruido fractal (feTurbulence) isótropo de baja frecuencia — que agrupa el ruido
+// en manchas tipo astilla — desaturado a gris y con una curva de contraste (tabla).
+// Acabado MATE: la tabla comprime todo el rango a grises CARBÓN (máx ~0.36), así
+// que la textura pinta directamente el marmoleado gris/carbón oscuro y basta un
+// blend normal sobre la base; no hay ningún fleck blanco brillante ni degradado,
+// y el logo claro + el texto se leen perfectamente.
 const FORGED_CARBON =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.013 0.11' numOctaves='4' seed='13' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E\")";
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='560'%3E%3Cfilter id='fc'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='table' tableValues='0 0.09 0.17 0.26 0.36'/%3E%3CfeFuncG type='table' tableValues='0 0.095 0.18 0.27 0.37'/%3E%3CfeFuncB type='table' tableValues='0 0.1 0.19 0.29 0.4'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fc)'/%3E%3C/svg%3E\")";
 
 // Instagram (outline, con el degradado de marca en el trazo).
 function InstagramIcon() {
@@ -63,17 +70,31 @@ export default function Footer() {
     "flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] transition hover:border-white/40 hover:bg-white/[0.06]";
 
   return (
-    <footer className="relative overflow-hidden bg-[#14171b] text-brand-bg">
-      {/* Vetas de carbono forjado — apenas visibles */}
+    // Base carbón MUY oscura: la legibilidad manda. La textura forjada va encima
+    // pero nunca aclara el fondo lo suficiente para estorbar al logo/el texto.
+    <footer className="relative overflow-hidden bg-[#0d0f11] text-brand-bg">
+      {/* Astillas de carbono forjado: la textura ya es carbón oscuro, así que va
+          en blend normal a alta opacidad — pinta el marmoleado gris/carbón sin
+          aclarar el fondo. Sin brillos ni degradados: acabado mate. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.14] mix-blend-soft-light"
-        style={{ backgroundImage: FORGED_CARBON, backgroundSize: "520px 520px" }}
+        className="pointer-events-none absolute inset-0 opacity-90"
+        style={{ backgroundImage: FORGED_CARBON, backgroundSize: "560px 560px" }}
       />
-      {/* Brillo tenue superior para dar profundidad */}
+      {/* Velo oscuro plano encima de la textura: asegura el contraste del texto
+          (prioridad legibilidad). Es un tinte, no un brillo. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.05] via-transparent to-black/30"
+        className="pointer-events-none absolute inset-0 bg-black/30"
+      />
+      {/* Viñeta sutil hacia los bordes para dar profundidad sin aclarar el centro. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(120% 85% at 50% 0%, transparent 45%, rgba(0,0,0,0.55) 100%)",
+        }}
       />
 
       <div className="relative mx-auto flex max-w-3xl flex-col items-center px-6 py-16 text-center sm:py-20">
@@ -87,6 +108,10 @@ export default function Footer() {
         />
 
         <nav className="mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2.5 text-[11px] tracking-[0.12em] uppercase sm:gap-x-7 sm:tracking-[0.2em]">
+          {/* Catálogo abre el MISMO mega-menú Ducati que el nav/hero/showroom. */}
+          <OpenCatalogButton className="text-brand-bg/70 uppercase transition hover:text-brand-bg">
+            Catálogo
+          </OpenCatalogButton>
           {navLinks.map((item) => (
             <Link
               key={item.href}

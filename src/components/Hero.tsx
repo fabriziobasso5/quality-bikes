@@ -2,9 +2,9 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import Magnetic from "@/components/Magnetic";
+import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
@@ -59,13 +59,10 @@ export default function Hero() {
         </h1>
         <div className="mt-10">
           <Magnetic className="inline-block">
-            {/* Enlace directo a la única página canónica del catálogo. */}
-            <Link
-              href="/catalogo"
-              className="inline-block rounded-full bg-brand-bg px-10 py-4 text-sm tracking-widest text-brand-navy uppercase transition hover:bg-brand-bg/90"
-            >
+            {/* Abre el mega-menú de catálogo (todas las motos sobre blanco). */}
+            <OpenCatalogButton className="inline-block rounded-full bg-brand-bg px-10 py-4 text-sm tracking-widest text-brand-navy uppercase transition hover:bg-brand-bg/90">
               Ver catálogo
-            </Link>
+            </OpenCatalogButton>
           </Magnetic>
         </div>
       </motion.div>

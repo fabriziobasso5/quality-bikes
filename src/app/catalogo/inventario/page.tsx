@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import InventoryBrandFilter from "@/components/InventoryBrandFilter";
+import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { Reveal } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
 
@@ -11,15 +11,15 @@ export const metadata: Metadata = {
 };
 
 // Página de inventario completo con filtro por marca. Solo se llega desde el
-// botón "Ver inventario completo"; Catálogo / Ver catálogo van a la vista de
-// todas las motos sobre blanco (/catalogo o el mega-menú).
+// botón "Ver inventario completo"; Catálogo / Ver catálogo abren el mega-menú
+// con todas las motos sobre blanco.
 export default function InventoryPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
       <nav className="mb-8 text-xs tracking-wide text-brand-text/50 uppercase">
-        <Link href="/catalogo" className="hover:text-brand-red">
+        <OpenCatalogButton className="hover:text-brand-red">
           Catálogo
-        </Link>{" "}
+        </OpenCatalogButton>{" "}
         / Inventario completo
       </nav>
 

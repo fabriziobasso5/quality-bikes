@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import BrandStats from "@/components/BrandStats";
+import BlueprintReveal from "@/components/BlueprintReveal";
 import Hero from "@/components/Hero";
-import Logo3D from "@/components/Logo3D";
 import MotoCover from "@/components/MotoCover";
 import Magnetic from "@/components/Magnetic";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
@@ -219,23 +219,10 @@ export default function Home() {
         </RevealGroup>
       </section>
 
-      {/* La pieza de la casa: la moto del isotipo girando, cierre visual de la
-          página — después de productos, justo antes del bloque de contacto */}
-      <section className="bg-brand-bg-soft">
-        <div className="mx-auto max-w-7xl px-6 py-24 text-center sm:py-28">
-          <Reveal>
-            <p className="text-xs tracking-[0.3em] text-brand-text/40 uppercase">
-              Quality Bikes · Venezuela
-            </p>
-          </Reveal>
-          <div className="mx-auto h-[340px] w-full max-w-2xl sm:h-[420px]">
-            <Logo3D />
-          </div>
-          <Reveal>
-            <p className="font-script text-3xl text-brand-navy sm:text-4xl">{siteConfig.slogan}</p>
-          </Reveal>
-        </div>
-      </section>
+      {/* La pieza de la casa: el plano técnico del isotipo se dibuja con el
+          scroll y se materializa en la Multistrada V4 real — cierre visual de
+          la página, después de productos y antes del bloque de contacto */}
+      <BlueprintReveal />
 
       {/* Cierre único: asesoría + ubicación + WhatsApp */}
       <section className="border-t border-black/5 bg-brand-bg-soft">

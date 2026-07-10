@@ -148,14 +148,18 @@ export default function Home() {
         </section>
       )}
 
-      {/* Productos en tienda: tres marcas, tres logos, nada más */}
-      <section className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
-        <Reveal>
-          <p className="text-center text-xs tracking-[0.3em] text-brand-text/40 uppercase">
-            También en tienda
-          </p>
-        </Reveal>
-        <RevealGroup className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-3">
+      {/* Productos en tienda: tres marcas, tres logos, nada más. Divisor
+          superior + eyebrow en rojo de marca para marcar que aquí empieza la
+          zona de tienda. */}
+      <section className="border-t border-black/10 bg-brand-bg-soft">
+        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
+          <Reveal className="text-center">
+            <span aria-hidden className="mx-auto mb-6 block h-px w-12 bg-brand-red" />
+            <p className="text-sm font-medium tracking-[0.3em] text-brand-red uppercase">
+              También en tienda
+            </p>
+          </Reveal>
+          <RevealGroup className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-3">
           {siteConfig.productsCarried.map((product, i) => {
             // productsCarried y productBrands describen las mismas tres casas en
             // el mismo orden (VP Racing, Mobil, BK3): el índice da el id de la
@@ -182,7 +186,8 @@ export default function Home() {
               </RevealItem>
             );
           })}
-        </RevealGroup>
+          </RevealGroup>
+        </div>
       </section>
 
       {/* La pieza de la casa: el plano técnico del isotipo se dibuja con el
@@ -238,17 +243,16 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* (c) Ubicación: título centrado + mapa interactivo a todo el ancho. */}
-      <section className="border-t border-black/5 bg-brand-bg-soft pt-20 sm:pt-24">
-        <Reveal>
-          <p className="px-6 text-center text-xs tracking-[0.3em] text-brand-red uppercase">
-            Visítanos
-          </p>
-          <h2 className="mt-3 px-6 text-center font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
+      {/* (c) Ubicación: encabezado centrado con padding vertical equilibrado
+          (mismo aire arriba y abajo) + mapa interactivo a todo el ancho. */}
+      <section className="border-t border-black/5 bg-brand-bg-soft">
+        <Reveal className="px-6 py-16 text-center sm:py-20">
+          <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Visítanos</p>
+          <h2 className="mt-3 font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
             Ubicación del showroom
           </h2>
         </Reveal>
-        <div className="mt-12 h-[500px] w-full">
+        <div className="h-[500px] w-full">
           <iframe
             src={siteConfig.contact.mapsEmbedUrl}
             className="h-full w-full border-0"

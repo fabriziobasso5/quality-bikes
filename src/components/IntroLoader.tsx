@@ -35,7 +35,7 @@ export default function IntroLoader() {
       {phase === "playing" && (
         <motion.div
           key="intro"
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-brand-bg"
+          className="pointer-events-none fixed inset-0 z-[100] flex items-center justify-center bg-brand-bg"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { duration: 0.15 } }}
           exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeInOut" } }}

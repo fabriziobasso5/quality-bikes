@@ -6,6 +6,7 @@ import Hero from "@/components/Hero";
 import MotoCover from "@/components/MotoCover";
 import Magnetic from "@/components/Magnetic";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
+import FeaturedArrivals from "@/components/FeaturedArrivals";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
 import { productBrands } from "@/data/products";
@@ -17,7 +18,7 @@ import { withBasePath } from "@/lib/base-path";
 // bloques de producto sobre blanco alternados con fotos lifestyle a sangre.
 export default function Home() {
   const inShowroom = motorcycles.filter((m) => m.availability === "en-stock");
-  const floating = motorcycles.find((m) => m.slug === "voge-ds-625x");
+  const upcoming = motorcycles.filter((m) => m.availability === "proximo-arribo");
 
   return (
     <>
@@ -112,52 +113,9 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* Producto flotante (estilo CAKE): una sola idea — la gama DS-X viene en camino */}
-      {floating && (
-        <section className="mx-auto max-w-5xl px-6 py-28 text-center sm:py-36">
-          <Reveal>
-            <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Próximo arribo</p>
-            <h2 className="mt-3 font-display text-4xl tracking-wide uppercase sm:text-6xl">
-              Voge DS 625X
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="relative mx-auto mt-10 max-w-2xl">
-              <Image
-                src={withBasePath(`/images/catalog/${floating.slug}.webp`)}
-                alt="Voge DS 625X"
-                width={1600}
-                height={1200}
-                sizes="(max-width: 640px) 100vw, 672px"
-                className="relative z-10 h-auto w-full"
-              />
-              {/* Sombra elíptica difusa bajo la moto: el truco CAKE de "flotar" */}
-              <div
-                aria-hidden
-                className="absolute bottom-[6%] left-1/2 h-8 w-3/4 -translate-x-1/2 rounded-[50%] bg-black/25 blur-xl"
-              />
-            </div>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <p className="mx-auto mt-8 max-w-md text-brand-text/70">
-              La gama dual sport de Voge llega a Caracas. Resérvala antes de que toque piso.
-            </p>
-            <div className="mt-8 flex items-center justify-center gap-10 font-mono text-sm text-brand-text/60">
-              <span>{floating.specs.power}</span>
-              <span aria-hidden className="text-brand-text/20">|</span>
-              <span>{floating.cc} cc</span>
-              <span aria-hidden className="text-brand-text/20">|</span>
-              <span>{floating.specs.weight}</span>
-            </div>
-            <Link
-              href={`/catalogo/${floating.slug}`}
-              className="link-underline mt-10 inline-block text-sm tracking-widest text-brand-navy uppercase"
-            >
-              Reservar →
-            </Link>
-          </Reveal>
-        </section>
-      )}
+      {/* Moto destacada rotativa (estilo CAKE): alterna cada ~5 s entre TODAS
+          las motos de próximo arribo — foto flotante, specs y "Reservar". */}
+      {upcoming.length > 0 && <FeaturedArrivals motos={upcoming} />}
 
       {/* Productos en tienda: tres marcas, tres logos, nada más. Divisor
           superior + eyebrow en rojo de marca para marcar que aquí empieza la

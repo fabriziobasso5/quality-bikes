@@ -12,14 +12,17 @@ const navLinks = [
 
 // Textura de FIBRA DE CARBONO FORJADA (forged carbon): astillas/vetas marmoladas
 // irregulares, NO la trama tejida cuadriculada. Se genera de forma procedural con
-// ruido fractal (feTurbulence) isótropo de baja frecuencia — que agrupa el ruido
-// en manchas tipo astilla — desaturado a gris y con una curva de contraste (tabla).
-// Acabado MATE: la tabla comprime todo el rango a grises CARBÓN (máx ~0.36), así
-// que la textura pinta directamente el marmoleado gris/carbón oscuro y basta un
-// blend normal sobre la base; no hay ningún fleck blanco brillante ni degradado,
-// y el logo claro + el texto se leen perfectamente.
+// ruido fractal (feTurbulence) de baja frecuencia — que agrupa el ruido en manchas
+// tipo astilla — desaturado a gris y con una curva de contraste (tabla) que comprime
+// todo el rango a grises CARBÓN (máx ~0.38).
+//
+// Es UNA sola imagen grande (1600×1000) que se aplica con `background-size: cover`
+// y `no-repeat`: al no repetirse el patrón NO hay costuras ni rayas entre baldosas;
+// cubre todo el ancho del footer de forma continua, igual en móvil y desktop.
+// Acabado MATE: pinta directamente el marmoleado oscuro (blend normal); sin flecks
+// blancos ni degradados, así el logo claro + el texto se leen perfectamente.
 const FORGED_CARBON =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='560'%3E%3Cfilter id='fc'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='table' tableValues='0 0.09 0.17 0.26 0.36'/%3E%3CfeFuncG type='table' tableValues='0 0.095 0.18 0.27 0.37'/%3E%3CfeFuncB type='table' tableValues='0 0.1 0.19 0.29 0.4'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fc)'/%3E%3C/svg%3E\")";
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1000'%3E%3Cfilter id='fc'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.009' numOctaves='5' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='table' tableValues='0 0.09 0.17 0.26 0.38'/%3E%3CfeFuncG type='table' tableValues='0 0.095 0.18 0.27 0.39'/%3E%3CfeFuncB type='table' tableValues='0 0.1 0.19 0.29 0.42'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fc)'/%3E%3C/svg%3E\")";
 
 // Instagram (outline, con el degradado de marca en el trazo).
 function InstagramIcon() {
@@ -79,7 +82,12 @@ export default function Footer() {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-90"
-        style={{ backgroundImage: FORGED_CARBON, backgroundSize: "560px 560px" }}
+        style={{
+          backgroundImage: FORGED_CARBON,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
       />
       {/* Velo oscuro plano encima de la textura: asegura el contraste del texto
           (prioridad legibilidad). Es un tinte, no un brillo. */}

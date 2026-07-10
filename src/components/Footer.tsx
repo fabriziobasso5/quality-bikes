@@ -29,36 +29,41 @@ function WhatsAppIcon() {
 }
 
 /**
- * Footer minimalista y aireado sobre fondo claro (coherente con el sitio):
- * logo, una línea de navegación, redes, una línea corta de contacto y el
- * copyright. Sin bloques densos ni color saturado — mucho espacio en negativo.
+ * Footer sobre fondo gris muy claro, con el logo grande y protagonista y todo
+ * centrado — pensado para verse perfectamente simétrico también en móvil
+ * (contacto apilado en líneas centradas, sin separadores que rompan al
+ * envolver). Aireado, elegante y coherente con el sitio.
  */
 export default function Footer() {
   const socialClass =
-    "flex h-10 w-10 items-center justify-center rounded-full border border-black/12 text-brand-text/45 transition hover:border-brand-navy hover:text-brand-navy";
+    "flex h-11 w-11 items-center justify-center rounded-full border border-black/12 text-brand-text/50 transition hover:border-brand-navy hover:text-brand-navy";
 
   return (
-    <footer className="border-t border-black/10 bg-brand-bg">
-      <div className="mx-auto flex max-w-4xl flex-col items-center px-6 py-20 text-center sm:py-24">
+    <footer className="border-t border-black/10 bg-brand-bg-soft">
+      <div className="mx-auto flex max-w-3xl flex-col items-center px-6 py-16 text-center sm:py-20">
+        {/* Logo grande, protagonista */}
         {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
         <img
           src={withBasePath("/assets/logo/quality-bikes-logo-color.svg")}
           alt={siteConfig.name}
-          className="h-9 w-auto"
+          className="h-16 w-auto max-w-full sm:h-20"
         />
 
-        <nav className="mt-9 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] tracking-[0.22em] uppercase">
-          {navLinks.map((item, i) => (
-            <span key={item.href} className="flex items-center gap-x-6">
-              {i > 0 && <span aria-hidden className="text-black/15">·</span>}
-              <Link href={item.href} className="text-brand-text/55 transition hover:text-brand-navy">
-                {item.label}
-              </Link>
-            </span>
+        {/* Sin separadores de punto: al envolver en móvil queda centrado y
+            balanceado (2+2), nunca con un punto huérfano al inicio de línea. */}
+        <nav className="mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2.5 text-[11px] tracking-[0.12em] uppercase sm:gap-x-7 sm:tracking-[0.2em]">
+          {navLinks.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-brand-text/60 transition hover:text-brand-navy"
+            >
+              {item.label}
+            </Link>
           ))}
         </nav>
 
-        <div className="mt-9 flex items-center gap-3">
+        <div className="mt-8 flex items-center justify-center gap-3">
           <a
             href={siteConfig.social.instagram}
             target="_blank"
@@ -79,19 +84,21 @@ export default function Footer() {
           </a>
         </div>
 
-        <p className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-brand-text/40">
+        {/* Contacto apilado y centrado: simétrico en cualquier ancho. */}
+        <div className="mt-8 flex flex-col items-center gap-1 text-xs text-brand-text/45">
           <span>{siteConfig.contact.address}</span>
-          <span aria-hidden className="text-black/15">·</span>
-          <a href={`tel:+${siteConfig.contact.whatsappNumber}`} className="transition hover:text-brand-navy">
-            {siteConfig.contact.whatsappDisplay}
-          </a>
-          <span aria-hidden className="text-black/15">·</span>
-          <a href={`mailto:${siteConfig.contact.email}`} className="transition hover:text-brand-navy">
-            {siteConfig.contact.email}
-          </a>
-        </p>
+          <span className="flex flex-wrap items-center justify-center gap-x-2">
+            <a href={`tel:+${siteConfig.contact.whatsappNumber}`} className="transition hover:text-brand-navy">
+              {siteConfig.contact.whatsappDisplay}
+            </a>
+            <span aria-hidden className="text-black/20">·</span>
+            <a href={`mailto:${siteConfig.contact.email}`} className="transition hover:text-brand-navy">
+              {siteConfig.contact.email}
+            </a>
+          </span>
+        </div>
 
-        <p className="mt-5 text-[11px] tracking-wide text-brand-text/30">
+        <p className="mt-8 text-[11px] tracking-wide text-brand-text/35">
           © {new Date().getFullYear()} {siteConfig.name}. Todos los derechos reservados.
         </p>
       </div>

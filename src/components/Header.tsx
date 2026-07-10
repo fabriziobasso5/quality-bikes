@@ -43,6 +43,16 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [openMenu]);
 
+  // Otros CTAs del sitio ("Ver catálogo" del hero, "Ver inventario") abren
+  // este mismo mega-menú de catálogo en desktop vía un evento global.
+  useEffect(() => {
+    function onOpenCatalog() {
+      setOpenMenu("catalogo");
+    }
+    window.addEventListener("qb:open-catalog", onOpenCatalog);
+    return () => window.removeEventListener("qb:open-catalog", onOpenCatalog);
+  }, []);
+
   function toggle(id: MenuId) {
     setOpenMenu((cur) => (cur === id ? null : id));
   }
@@ -100,12 +110,16 @@ export default function Header() {
           ))}
         </nav>
 
-        <Link
-          href="/catalogo"
+        {/* Abre el mega-menú de catálogo (mismo que el botón "Catálogo"),
+            en vez de ir a una página con filtros. Solo desktop. */}
+        <button
+          onClick={() => setOpenMenu("catalogo")}
+          aria-controls="mega-catalogo"
+          aria-expanded={openMenu === "catalogo"}
           className="hidden rounded-full bg-brand-navy px-5 py-2 text-xs tracking-widest uppercase text-brand-bg transition hover:bg-brand-navy-soft md:inline-block"
         >
           Ver inventario
-        </Link>
+        </button>
         <MobileMenu />
       </div>
 

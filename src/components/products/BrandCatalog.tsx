@@ -113,26 +113,39 @@ function OptionCard({
     <button
       type="button"
       onClick={onSelect}
-      className="group relative flex h-56 w-full flex-col justify-end overflow-hidden border border-black/10 bg-white p-6 text-left shadow-sm shadow-black/[0.03] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-xl hover:shadow-black/10"
+      className="group relative flex h-56 w-full flex-col justify-end overflow-hidden border border-black/10 text-left shadow-sm shadow-black/[0.03] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-xl hover:shadow-black/10"
     >
+      {/* Fondo: degradado sutil en el color de la categoría (arriba tinta, se
+          aclara hacia abajo donde va el texto) */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{ backgroundImage: `linear-gradient(135deg, ${accent}26 0%, ${accent}0f 46%, #ffffff 100%)` }}
+      />
+      {/* Patrón ligero de puntos en el accent, para textura */}
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-70"
+        style={{ backgroundImage: `radial-gradient(${accent}1f 1px, transparent 1.5px)`, backgroundSize: "13px 13px" }}
+      />
       {/* Barra de acento superior */}
       <span aria-hidden className="absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: accent }} />
-      {/* Marca de agua: ícono grande y tenue en la esquina, en el color de acento */}
+      {/* Ícono grande y presente como marca de agua, en el color de acento */}
       <Icon
         color={accent}
-        className="pointer-events-none absolute -right-5 -bottom-4 h-44 w-44 opacity-[0.10] transition-transform duration-500 group-hover:scale-110"
+        className="pointer-events-none absolute -right-4 -bottom-3 h-52 w-52 opacity-[0.18] transition-transform duration-500 group-hover:scale-110"
       />
 
-      <div className="relative">
+      <div className="relative p-6">
         <p className="font-display text-2xl uppercase tracking-wide text-brand-navy sm:text-3xl">
           {node.label}
         </p>
         <div className="mt-3 flex items-center justify-between gap-4">
-          <span className="text-[11px] tracking-widest text-brand-text/50 uppercase">
+          <span className="text-[11px] font-medium tracking-widest text-brand-text/55 uppercase">
             {node.count} {node.count === 1 ? "producto" : "productos"}
           </span>
           <span
-            className="text-sm font-medium tracking-wide uppercase transition"
+            className="text-sm font-semibold tracking-wide uppercase transition"
             style={{ color: accent }}
           >
             {isBranch ? "Ver opciones →" : "Ver productos →"}

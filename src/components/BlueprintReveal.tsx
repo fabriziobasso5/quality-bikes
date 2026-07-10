@@ -154,6 +154,30 @@ export default function BlueprintReveal() {
           ))}
         </div>
 
+        {/* Mismos datos técnicos en móvil/tablet (< lg), donde no hay espacio
+            para las columnas laterales: bloque centrado arriba, con la misma
+            ventana de aparición (no cambia el efecto, solo se vuelve visible y
+            responsive). */}
+        <div
+          style={{ opacity: `calc(${ramp(0.58, 0.72)} * 0.9)` }}
+          className="absolute inset-x-0 top-16 flex flex-col items-center gap-1.5 px-8 text-center lg:hidden sm:top-20"
+        >
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            {SPECS_LEFT.map((s) => (
+              <span key={s} className="font-mono text-[10px] tracking-[0.18em] text-white/45 uppercase">
+                {s}
+              </span>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            {SPECS_RIGHT.map((s) => (
+              <span key={s} className="font-mono text-[10px] tracking-[0.18em] text-white/45 uppercase">
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* Escenario central: silueta y moto real comparten la misma caja para
             que el crossfade quede registrado en el mismo punto */}
         <div className="relative aspect-[827/585] w-[min(88vw,780px)]">

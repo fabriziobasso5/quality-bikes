@@ -72,12 +72,24 @@ export default function MobileMenu() {
                   onClick={closeAll}
                   className="flex items-center gap-4 py-2.5"
                 >
-                  <MotoCover moto={moto} className="h-12 w-16 shrink-0 overflow-hidden" sizes="64px" />
+                  <div className="relative shrink-0">
+                    <MotoCover moto={moto} className="h-12 w-16 overflow-hidden" sizes="64px" />
+                    {moto.availability === "proximo-arribo" && (
+                      <span className="absolute -top-1 -left-1 rounded-full border border-brand-red/50 bg-white px-1.5 py-px text-[7px] tracking-[0.12em] text-brand-red uppercase shadow-sm shadow-black/10">
+                        Próx.
+                      </span>
+                    )}
+                  </div>
                   <div>
                     <p className="text-[10px] tracking-widest text-brand-text/50 uppercase">
                       {moto.brand}
                     </p>
                     <p className="font-display text-sm tracking-wide">{moto.model}</p>
+                    {moto.availability === "proximo-arribo" && (
+                      <span className="mt-0.5 inline-block text-[9px] tracking-[0.15em] text-brand-red uppercase">
+                        Próximo arribo
+                      </span>
+                    )}
                   </div>
                 </Link>
               ))}

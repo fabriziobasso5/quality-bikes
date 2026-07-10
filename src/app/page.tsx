@@ -148,27 +148,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* Lifestyle a sangre #2 — Triumph Tiger 900 Rally en acción off-road
-          (foto de prensa oficial, alta resolución). */}
-      <section className="relative h-[65vh] overflow-hidden">
-        <Image
-          src={withBasePath("/images/lifestyle/tiger-900-rally-action.webp")}
-          alt="Triumph Tiger 900 Rally derrapando sobre tierra en terreno desértico"
-          fill
-          sizes="100vw"
-          /* La moto/piloto están a la derecha del encuadre (~65%). En mobile
-             el recorte vertical se centra ahí para que la moto sea protagónica
-             y no solo la cola; en desktop la foto entra casi completa. */
-          className="object-cover object-[66%_45%] sm:object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-        <Reveal className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14">
-          <p className="max-w-md font-display text-3xl leading-snug tracking-wide text-white uppercase sm:text-4xl">
-            El próximo destino lo eliges tú
-          </p>
-        </Reveal>
-      </section>
-
       {/* Productos en tienda: tres marcas, tres logos, nada más */}
       <section className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
         <Reveal>
@@ -211,44 +190,72 @@ export default function Home() {
           la página, después de productos y antes del bloque de contacto */}
       <BlueprintReveal />
 
-      {/* Cierre único: asesoría + ubicación + WhatsApp */}
-      <section className="border-t border-black/5 bg-brand-bg-soft">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-14 px-6 py-24 sm:py-28 lg:grid-cols-2 lg:items-center">
-          <Reveal>
-            <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Visítanos</p>
-            <h2 className="mt-3 max-w-md font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
-              Te ayudamos a conseguir la moto de tus sueños
-            </h2>
-            <p className="mt-6 max-w-md text-brand-text/70">
-              Te acompañamos en todo el proceso, desde elegir el modelo correcto hasta la
-              entrega.
-            </p>
-            <div className="mt-8 space-y-1 text-sm text-brand-text/60">
-              <p>{siteConfig.contact.address}</p>
-              <p>{siteConfig.contact.hours}</p>
-            </div>
-            <div className="mt-10">
-              <Magnetic className="inline-block">
-                <a
-                  href={buildWhatsAppLink("Hola, quiero más información sobre Quality Bikes.")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block rounded-full bg-brand-navy px-10 py-4 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
-                >
-                  Escríbenos por WhatsApp
-                </a>
-              </Magnetic>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1} className="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-black/10">
-            <iframe
-              src={siteConfig.contact.mapsEmbedUrl}
-              className="h-full w-full"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Ubicación de Quality Bikes en Caracas"
-            />
-          </Reveal>
+      {/* (a) Invitación: bloque de texto extraído de la antigua sección de
+          ubicación, ahora protagonista y centrado, con el CTA de WhatsApp. */}
+      <section className="mx-auto max-w-3xl px-6 py-24 text-center sm:py-28">
+        <Reveal>
+          <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Visítanos</p>
+          <h2 className="mt-3 font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
+            Te ayudamos a conseguir la moto de tus sueños
+          </h2>
+          <p className="mx-auto mt-6 max-w-md text-brand-text/70">
+            Te acompañamos en todo el proceso, desde elegir el modelo correcto hasta la
+            entrega.
+          </p>
+          <div className="mt-10">
+            <Magnetic className="inline-block">
+              <a
+                href={buildWhatsAppLink("Hola, quiero más información sobre Quality Bikes.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-full bg-brand-navy px-10 py-4 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
+              >
+                Escríbenos por WhatsApp
+              </a>
+            </Magnetic>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* (b) Lifestyle a sangre — Triumph Tiger 900 Rally en acción off-road
+          (movida aquí desde antes de "También en tienda"). */}
+      <section className="relative h-[65vh] overflow-hidden">
+        <Image
+          src={withBasePath("/images/lifestyle/tiger-900-rally-action.webp")}
+          alt="Triumph Tiger 900 Rally derrapando sobre tierra en terreno desértico"
+          fill
+          sizes="100vw"
+          /* La moto/piloto están a la derecha del encuadre (~65%). En mobile
+             el recorte vertical se centra ahí para que la moto sea protagónica
+             y no solo la cola; en desktop la foto entra casi completa. */
+          className="object-cover object-[66%_45%] sm:object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        <Reveal className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14">
+          <p className="max-w-md font-display text-3xl leading-snug tracking-wide text-white uppercase sm:text-4xl">
+            El próximo destino lo eliges tú
+          </p>
+        </Reveal>
+      </section>
+
+      {/* (c) Ubicación: título centrado + mapa interactivo a todo el ancho. */}
+      <section className="border-t border-black/5 bg-brand-bg-soft pt-20 sm:pt-24">
+        <Reveal>
+          <p className="px-6 text-center text-xs tracking-[0.3em] text-brand-red uppercase">
+            Visítanos
+          </p>
+          <h2 className="mt-3 px-6 text-center font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
+            Ubicación del showroom
+          </h2>
+        </Reveal>
+        <div className="mt-12 h-[500px] w-full">
+          <iframe
+            src={siteConfig.contact.mapsEmbedUrl}
+            className="h-full w-full border-0"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Ubicación de Quality Bikes en Caracas"
+          />
         </div>
       </section>
     </>

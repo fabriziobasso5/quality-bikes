@@ -13,28 +13,17 @@ const HOLD_MS = 1700;
  * spinner. Deliberately client-only and non-blocking: content renders and
  * stays interactive underneath. On a fast load (the normal case) this fades
  * in near-instantly over the hero; on a slow connection the user just sees
- * the site — content never waits for a decoration. Shows once per session,
- * never under prefers-reduced-motion.
+ * the site — content never waits for a decoration. Plays on every page load /
+ * refresh (no once-per-session gate), never under prefers-reduced-motion.
  */
 export default function IntroLoader() {
   const [phase, setPhase] = useState<"idle" | "playing" | "done">("idle");
 
   useEffect(() => {
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem("qb-intro-seen") === "1";
-    } catch {
-      /* private mode: treat as unseen */
-    }
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (seen || reduced) {
+    if (reduced) {
       setPhase("done");
       return;
-    }
-    try {
-      sessionStorage.setItem("qb-intro-seen", "1");
-    } catch {
-      /* ignore */
     }
     setPhase("playing");
     const t = setTimeout(() => setPhase("done"), HOLD_MS);

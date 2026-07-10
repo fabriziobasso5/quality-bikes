@@ -176,7 +176,7 @@ export default function Home() {
             También en tienda
           </p>
         </Reveal>
-        <RevealGroup className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-12 sm:grid-cols-3">
+        <RevealGroup className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-3">
           {siteConfig.productsCarried.map((product, i) => {
             // productsCarried y productBrands describen las mismas tres casas en
             // el mismo orden (VP Racing, Mobil, BK3): el índice da el id de la
@@ -185,31 +185,18 @@ export default function Home() {
             return (
               <RevealItem key={product.name} className="text-center">
                 <Link href={brandId ? `/productos/${brandId}` : "/productos"} className="group block">
-                  <div className="flex h-16 flex-col items-center justify-center">
-                    {product.logo ? (
-                      /* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */
-                      <img
-                        src={withBasePath(product.logo)}
-                        alt={product.name}
-                        className="max-h-14 w-auto max-w-[150px] object-contain transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      /* Marca tipográfica de la casa (BK3): wordmark + sublabel,
-                         misma altura de bloque que los logos vecinos. */
-                      <div className="flex flex-col items-center transition-transform duration-500 group-hover:scale-105">
-                        <span className="font-display text-4xl font-bold leading-none tracking-wide text-brand-navy">
-                          {product.name}
-                        </span>
-                        {product.sublabel && (
-                          <span className="mt-1.5 text-[10px] tracking-[0.22em] text-brand-text/50 uppercase">
-                            {product.sublabel}
-                          </span>
-                        )}
-                      </div>
-                    )}
+                  {/* Placas idénticas: el logo se maximiza dentro del mismo
+                      marco en las tres marcas, así se ven simétricos en tamaño. */}
+                  <div className="flex h-28 items-center justify-center overflow-hidden rounded-2xl border border-black/10 bg-white px-7 shadow-sm shadow-black/[0.04] transition duration-300 group-hover:-translate-y-1 group-hover:border-black/20 group-hover:shadow-lg group-hover:shadow-black/10">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */}
+                    <img
+                      src={withBasePath(product.logo)}
+                      alt={product.name}
+                      className="max-h-16 w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                    />
                   </div>
                   <p className="mt-4 text-sm text-brand-text/50">{product.description}</p>
-                  <p className="link-underline mt-3 inline-block text-xs tracking-widest text-brand-navy uppercase">
+                  <p className="link-underline mt-2 inline-block text-xs tracking-widest text-brand-navy uppercase">
                     Ver productos →
                   </p>
                 </Link>

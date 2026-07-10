@@ -43,7 +43,7 @@ export const siteConfig = {
     {
       name: "BK3",
       description: "Elevadores de octanaje",
-      logo: null,
+      logo: "/images/brands/bk3.png",
       sublabel: "Potenciador de octanaje",
     },
   ],

@@ -77,6 +77,18 @@ export default function Home() {
             </RevealItem>
           ))}
         </RevealGroup>
+
+        {/* Acceso al catálogo completo (todas las motos sobre blanco) */}
+        <Reveal className="mt-16 text-center">
+          <Magnetic className="inline-block">
+            <Link
+              href="/catalogo"
+              className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-10 py-4 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
+            >
+              Ver todo el catálogo →
+            </Link>
+          </Magnetic>
+        </Reveal>
       </section>
 
       {/* Franja de datos de marca: respira entre el showroom y el lifestyle */}

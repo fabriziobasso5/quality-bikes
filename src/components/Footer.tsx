@@ -44,9 +44,9 @@ export default function Footer() {
         {/* Logo grande, protagonista */}
         {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
         <img
-          src={withBasePath("/assets/logo/quality-bikes-logo-color.svg")}
+          src={withBasePath("/assets/logo/quality-bikes-logo-venezuela.svg")}
           alt={siteConfig.name}
-          className="h-16 w-auto max-w-full sm:h-20"
+          className="h-20 w-auto max-w-full sm:h-24"
         />
 
         {/* Sin separadores de punto: al envolver en móvil queda centrado y

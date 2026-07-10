@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import MotoCard from "@/components/MotoCard";
+import Magnetic from "@/components/Magnetic";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
 
@@ -20,6 +22,16 @@ export default function CatalogPage() {
           Todo nuestro inventario multimarca. Los precios se manejan por asesoría directa —
           escríbenos para conocer disponibilidad y valor.
         </p>
+        <div className="mt-8">
+          <Magnetic className="inline-block">
+            <Link
+              href="/catalogo/inventario"
+              className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-8 py-3.5 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
+            >
+              Ver inventario completo →
+            </Link>
+          </Magnetic>
+        </div>
       </Reveal>
 
       <RevealGroup className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

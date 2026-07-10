@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import MobileMenu from "./MobileMenu";
 import MotoCover from "./MotoCover";
 import BrandLogo from "./products/BrandLogo";
-import { motorcycles, categories } from "@/data/motorcycles";
+import { motorcycles } from "@/data/motorcycles";
 import { productBrands, categoryLabels } from "@/data/products";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
@@ -72,9 +72,9 @@ export default function Header() {
           />
           {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
           <img
-            src={withBasePath("/assets/logo/quality-bikes-logo-color.svg")}
+            src={withBasePath("/assets/logo/quality-bikes-logo-venezuela.svg")}
             alt={siteConfig.name}
-            className="hidden h-11 w-auto md:block"
+            className="hidden h-14 w-auto md:block"
           />
         </a>
 
@@ -110,16 +110,6 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Abre el mega-menú de catálogo (mismo que el botón "Catálogo"),
-            en vez de ir a una página con filtros. Solo desktop. */}
-        <button
-          onClick={() => setOpenMenu("catalogo")}
-          aria-controls="mega-catalogo"
-          aria-expanded={openMenu === "catalogo"}
-          className="hidden rounded-full bg-brand-navy px-5 py-2 text-xs tracking-widest uppercase text-brand-bg transition hover:bg-brand-navy-soft md:inline-block"
-        >
-          Ver inventario
-        </button>
         <MobileMenu />
       </div>
 
@@ -172,25 +162,13 @@ export default function Header() {
                       </Link>
                     ))}
                   </div>
-                  <div className="mt-8 flex items-center justify-between border-t border-black/10 pt-5 text-sm">
-                    <div className="flex gap-8">
-                      {categories.map((cat) => (
-                        <Link
-                          key={cat.value}
-                          href={`/catalogo?category=${cat.value}`}
-                          onClick={() => setOpenMenu(null)}
-                          className="link-underline tracking-wide text-brand-text/60 uppercase hover:text-brand-navy"
-                        >
-                          {cat.label}
-                        </Link>
-                      ))}
-                    </div>
+                  <div className="mt-8 flex justify-center border-t border-black/10 pt-6">
                     <Link
-                      href="/catalogo"
+                      href="/catalogo/inventario"
                       onClick={() => setOpenMenu(null)}
-                      className="link-underline tracking-wide text-brand-navy uppercase"
+                      className="rounded-full bg-brand-navy px-8 py-3 text-xs tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
                     >
-                      Ver catálogo completo →
+                      Ver inventario completo →
                     </Link>
                   </div>
                 </div>

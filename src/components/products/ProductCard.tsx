@@ -8,8 +8,8 @@ import type { Product } from "@/data/products";
 /**
  * Tarjeta de producto = vista final (ya no enlaza a otra pantalla). Muestra
  * imagen/placeholder, nombre, descripción corta, datos clave como chips y un
- * botón "+" para añadir al pedido. Si hay presentaciones, un mini-selector de
- * tamaño precede al "+". Conserva TiltCard + hover-zoom. Nunca hay precios.
+ * botón "+" para añadir al pedido. Un mini-selector de presentación (venta por
+ * caja, nunca suelto) precede al "+". Hover-zoom sutil. Nunca hay precios.
  */
 export default function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
@@ -59,10 +59,14 @@ export default function ProductCard({ product }: { product: Product }) {
             </div>
           )}
 
-          {/* Selector de tamaño (si aplica) + botón añadir, anclados abajo. */}
+          {/* Selector de presentación (si aplica) + botón añadir, anclados
+              abajo. Ningún producto se vende suelto: solo por caja/presentación. */}
           <div className="mt-auto pt-5">
             {presentations.length > 0 && (
               <div className="mb-3">
+                <p className="mb-2 text-[10px] font-medium tracking-[0.12em] text-brand-navy/60 uppercase">
+                  Presentación · venta por caja
+                </p>
                 <div className="flex flex-wrap gap-1.5">
                   {presentations.map((p) => (
                     <button

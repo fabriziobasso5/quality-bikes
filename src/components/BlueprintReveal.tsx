@@ -75,14 +75,23 @@ export default function BlueprintReveal() {
     if (raf.current == null) raf.current = requestAnimationFrame(step);
   });
 
-  // Estado inicial correcto al montar a mitad de página (deep-link, reload) y
+  // Estado inicial correcto al montar a mitad de página (deep-link, reload),
+  // medición del header sticky (para encuadrar la lámina justo debajo) y
   // limpieza del rAF pendiente al desmontar.
   useEffect(() => {
     const v = reduce ? 1 : scrollYProgress.get();
     target.current = v;
     current.current = v;
     stageRef.current?.style.setProperty("--bp", String(v));
+    const measure = () =>
+      stageRef.current?.style.setProperty(
+        "--qbh",
+        `${document.querySelector("header")?.offsetHeight ?? 0}px`
+      );
+    measure();
+    window.addEventListener("resize", measure);
     return () => {
+      window.removeEventListener("resize", measure);
       if (raf.current != null) cancelAnimationFrame(raf.current);
     };
   }, [reduce, scrollYProgress]);
@@ -95,7 +104,10 @@ export default function BlueprintReveal() {
       <div
         ref={stageRef}
         style={{ "--bp": 0 } as React.CSSProperties}
-        className={`${reduce ? "relative" : "sticky top-0"} flex h-svh w-full flex-col items-center justify-center overflow-hidden bg-brand-navy`}
+        /* Fija bajo el header sticky (altura medida en --qbh): al engancharse
+           el pin, la lámina completa — rótulo arriba, cajetín abajo — queda
+           contenida en el viewport en todos los breakpoints */
+        className={`${reduce ? "relative h-svh" : "sticky top-[var(--qbh,76px)] h-[calc(100svh-var(--qbh,76px))]"} flex w-full flex-col items-center justify-center overflow-hidden bg-brand-navy`}
       >
         {/* Anochecer: entra con la moto — cielo que cae a negro azulado y un
             resplandor cálido de horizonte hacia donde apunta el faro */}
@@ -258,17 +270,38 @@ export default function BlueprintReveal() {
             />
           </div>
 
-          {/* Encendido: halo del faro, haz ámbar hacia la derecha y charco de
-              luz en el piso. El haz cruza más allá de la caja (el overflow del
-              escenario lo recorta limpio). */}
+          {/* Encendido: solo capas de luz sobre el render (la moto y el fondo
+              no se tocan). Cada fuente lleva corona suave + núcleo caliente;
+              los dos haces delanteros convergen a lo lejos y el bajo baña el
+              piso. mix-blend-screen suma luz sobre el navy como bloom real, y
+              el conjunto "respira" con un latido sutil (qb-breathe). */}
           <div aria-hidden style={{ opacity: ramp(0.62, 0.76) }} className="absolute inset-0">
-            <div className="absolute left-[74%] top-[20%] h-[13%] w-[9%] animate-pulse rounded-full bg-orange-300/70 blur-xl" />
-            <div className="absolute left-[66%] top-[52%] h-[9%] w-[6%] rounded-full bg-orange-400/60 blur-lg" />
-            {/* Haz principal del faro: horizontal, abriéndose a la derecha */}
-            <div className="absolute left-[78%] top-[12%] h-[32%] w-[70vw] bg-gradient-to-r from-orange-400/50 via-orange-400/15 to-transparent blur-md [clip-path:polygon(0_46%,100%_2%,100%_98%,0_54%)]" />
-            {/* Haz secundario de la Denali del crash bar */}
-            <div className="absolute left-[70%] top-[48%] h-[16%] w-[40vw] bg-gradient-to-r from-orange-500/30 to-transparent blur-lg [clip-path:polygon(0_42%,100%_10%,100%_90%,0_58%)]" />
-            <div className="absolute -right-[24%] bottom-0 h-[12%] w-[70%] rounded-[50%] bg-orange-400/20 blur-2xl" />
+            <div className="absolute inset-0 animate-[qb-breathe_4.5s_ease-in-out_infinite] motion-reduce:animate-none">
+              {/* Bloom ambiental cálido alrededor del frontal */}
+              <div className="absolute left-[56%] top-[6%] h-[64%] w-[54%] bg-[radial-gradient(ellipse_at_42%_32%,rgba(255,176,80,0.15),transparent_65%)] blur-2xl" />
+
+              {/* Faro principal: corona + núcleo casi blanco */}
+              <div className="absolute left-[75%] top-[15.5%] h-[13%] w-[10%] rounded-full bg-orange-300/60 blur-xl" />
+              <div className="absolute left-[77.5%] top-[18.5%] h-[7.5%] w-[5%] rounded-full bg-amber-100/80 blur-md" />
+              {/* Haz principal: manto amplio + núcleo denso, con caída leve */}
+              <div className="absolute left-[79%] top-[5%] h-[36%] w-[72vw] origin-left rotate-[1.5deg] mix-blend-screen bg-gradient-to-r from-orange-400/35 via-orange-400/12 to-transparent blur-xl [clip-path:polygon(0_44%,100%_0,100%_100%,0_56%)]" />
+              <div className="absolute left-[79%] top-[13%] h-[20%] w-[72vw] origin-left rotate-[1.5deg] mix-blend-screen bg-gradient-to-r from-amber-200/60 via-orange-300/20 to-transparent blur-md [clip-path:polygon(0_45%,100%_14%,100%_86%,0_55%)]" />
+
+              {/* Denali del crash bar: corona + núcleo, y haz bajo que cae al
+                  piso cruzándose con el principal */}
+              <div className="absolute left-[67%] top-[46.5%] h-[11%] w-[7%] rounded-full bg-orange-400/60 blur-lg" />
+              <div className="absolute left-[68.8%] top-[49%] h-[6%] w-[3.6%] rounded-full bg-amber-100/70 blur-sm" />
+              <div className="absolute left-[71%] top-[44%] h-[18%] w-[55vw] origin-left rotate-[5deg] mix-blend-screen bg-gradient-to-r from-orange-500/35 via-orange-400/12 to-transparent blur-lg [clip-path:polygon(0_38%,100%_0,100%_100%,0_62%)]" />
+
+              {/* Charco de luz en el piso: mancha amplia + punto caliente donde
+                  aterriza el haz bajo */}
+              <div className="absolute -right-[26%] bottom-[-4%] h-[22%] w-[95%] mix-blend-screen bg-[radial-gradient(ellipse_at_center,rgba(255,170,70,0.42),rgba(255,150,50,0.14)_55%,transparent_78%)] blur-xl" />
+              <div className="absolute right-[2%] bottom-[-1%] h-[10%] w-[44%] mix-blend-screen bg-[radial-gradient(ellipse_at_center,rgba(255,205,120,0.5),transparent_70%)] blur-lg" />
+
+              {/* Luz trasera: glow rojo premium — halo difuso + núcleo vivo */}
+              <div className="absolute left-[1.5%] top-[25%] h-[14%] w-[9%] rounded-full bg-red-500/35 blur-xl" />
+              <div className="absolute left-[4%] top-[29%] h-[7%] w-[4%] rounded-full bg-red-400/70 blur-md" />
+            </div>
           </div>
 
           {/* Sombra elíptica bajo la moto: la ancla al "piso" */}
@@ -290,11 +323,13 @@ export default function BlueprintReveal() {
           {siteConfig.slogan}
         </p>
 
-        {/* Pista de scroll: solo al inicio de la fase plano */}
+        {/* Pista de scroll: solo al inicio de la fase plano. bottom-20 en
+            móvil: a bottom-6 chocaría con el cajetín, que en 390px cruza el
+            centro; el eslogan no coexiste (sale en bp 0.8). */}
         {!reduce && (
           <p
             style={{ opacity: fade(0, 0.06) }}
-            className="absolute bottom-6 font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase"
+            className="absolute bottom-20 font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase sm:bottom-6"
           >
             ↓ Scroll
           </p>

@@ -104,3 +104,15 @@ body::after {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Latido sutil de las capas de luz del BlueprintReveal: respiración lenta,
+   nunca por debajo de ~86% para que no se lea como parpadeo/fallo. */
+@keyframes qb-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.86;
+  }
+}

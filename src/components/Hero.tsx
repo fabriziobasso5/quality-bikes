@@ -59,17 +59,9 @@ export default function Hero() {
         </h1>
         <div className="mt-10">
           <Magnetic className="inline-block">
-            {/* En desktop abre el mega-menú de catálogo (todas las motos sobre
-                blanco); en móvil, donde ese panel no existe, cae al grid de
-                /catalogo (navegación por defecto del enlace). */}
+            {/* Enlace directo a la única página canónica del catálogo. */}
             <Link
               href="/catalogo"
-              onClick={(e) => {
-                if (window.matchMedia("(min-width: 768px)").matches) {
-                  e.preventDefault();
-                  window.dispatchEvent(new CustomEvent("qb:open-catalog"));
-                }
-              }}
               className="inline-block rounded-full bg-brand-bg px-10 py-4 text-sm tracking-widest text-brand-navy uppercase transition hover:bg-brand-bg/90"
             >
               Ver catálogo

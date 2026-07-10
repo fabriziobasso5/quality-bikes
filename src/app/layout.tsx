@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import InstagramFloat from "@/components/InstagramFloat";
 import { CartProvider } from "@/components/cart/CartContext";
 import CartFloat from "@/components/cart/CartFloat";
 import MotionProvider from "@/components/MotionProvider";
@@ -94,6 +95,7 @@ export default function RootLayout({
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
+            <InstagramFloat />
             <WhatsAppFloat />
             <CartFloat />
             <CustomCursor />

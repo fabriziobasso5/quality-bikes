@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import MotoCover from "./MotoCover";
 import BrandLogo from "./products/BrandLogo";
-import { motorcycles } from "@/data/motorcycles";
 import { productBrands } from "@/data/products";
 
 const navItems = [
@@ -13,18 +11,16 @@ const navItems = [
 ];
 
 /**
- * Mobile counterpart of the mega menu: "Catálogo" expands in place into a
- * clean tappable list of every bike (thumbnail + brand + model), mirroring
- * the desktop panel without hover dependence.
+ * Menú móvil: "Catálogo" enlaza directo a la página del catálogo; "Productos"
+ * expande la lista de marcas. Sin panel desplegable de motos (unificado a la
+ * única página de catálogo).
  */
 export default function MobileMenu() {
   const [open, setOpen] = useState(false);
-  const [catalogOpen, setCatalogOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
 
   function closeAll() {
     setOpen(false);
-    setCatalogOpen(false);
     setProductsOpen(false);
   }
 
@@ -50,58 +46,15 @@ export default function MobileMenu() {
           data-testid="mobile-nav"
           className="absolute inset-x-0 top-full max-h-[calc(100svh-4.5rem)] overflow-y-auto border-b border-black/10 bg-brand-bg px-6 py-4 shadow-lg"
         >
-          <button
-            onClick={() => setCatalogOpen((v) => !v)}
-            aria-expanded={catalogOpen}
-            className="flex w-full items-center justify-between py-3 text-sm tracking-wide uppercase text-brand-text/80"
+          {/* Catálogo = enlace directo a la única página del catálogo. */}
+          <Link
+            href="/catalogo"
+            onClick={closeAll}
+            className="flex w-full items-center justify-between py-3 text-sm tracking-wide uppercase text-brand-text/80 transition hover:text-brand-red"
           >
             Catálogo
-            <span
-              className={`text-brand-text/40 transition-transform duration-200 ${catalogOpen ? "rotate-90" : ""}`}
-            >
-              →
-            </span>
-          </button>
-
-          {catalogOpen && (
-            <div className="mb-2 border-l border-black/10 pl-4">
-              {motorcycles.map((moto) => (
-                <Link
-                  key={moto.slug}
-                  href={`/catalogo/${moto.slug}`}
-                  onClick={closeAll}
-                  className="flex items-center gap-4 py-2.5"
-                >
-                  <div className="relative shrink-0">
-                    <MotoCover moto={moto} className="h-12 w-16 overflow-hidden" sizes="64px" />
-                    {moto.availability === "proximo-arribo" && (
-                      <span className="absolute -top-1 -left-1 rounded-full border border-brand-red/50 bg-white px-1.5 py-px text-[7px] tracking-[0.12em] text-brand-red uppercase shadow-sm shadow-black/10">
-                        Próx.
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-[10px] tracking-widest text-brand-text/50 uppercase">
-                      {moto.brand}
-                    </p>
-                    <p className="font-display text-sm tracking-wide">{moto.model}</p>
-                    {moto.availability === "proximo-arribo" && (
-                      <span className="mt-0.5 inline-block text-[9px] tracking-[0.15em] text-brand-red uppercase">
-                        Próximo arribo
-                      </span>
-                    )}
-                  </div>
-                </Link>
-              ))}
-              <Link
-                href="/catalogo"
-                onClick={closeAll}
-                className="block py-3 text-sm tracking-wide text-brand-navy uppercase"
-              >
-                Ver catálogo completo →
-              </Link>
-            </div>
-          )}
+            <span className="text-brand-text/40">→</span>
+          </Link>
 
           <button
             onClick={() => setProductsOpen((v) => !v)}

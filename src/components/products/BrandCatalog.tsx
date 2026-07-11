@@ -24,52 +24,56 @@ const fade = {
   transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const },
 };
 
-/* ── Íconos de línea temáticos (marca de agua de cada tipo) ─────────────── */
-type IconProps = { color: string; className?: string };
-const svg = (color: string) => ({
+/* ── Íconos de línea temáticos por categoría ────────────────────────────── */
+type IconProps = { color: string; className?: string; strokeWidth?: number };
+const svg = (color: string, strokeWidth = 1.6) => ({
   fill: "none" as const,
   stroke: color,
-  strokeWidth: 1.6,
+  strokeWidth,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
 });
 
-// Surtidor de gasolina.
-const PumpIcon = ({ color, className }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color)}>
+// Surtidor / pistola de combustible (gasolina).
+const PumpIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
     <path d="M11 43V11a4 4 0 0 1 4-4h9a4 4 0 0 1 4 4v32" />
     <path d="M7 43h26" />
     <rect x="15" y="13" width="9" height="8" rx="1" />
     <path d="M28 17h4l5 5v13a3 3 0 0 0 6 0V15l-5-5" />
   </svg>
 );
-// Camión (diesel).
-const TruckIcon = ({ color, className }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color)}>
+// Camión cisterna (diesel).
+const TruckIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
     <rect x="4" y="14" width="21" height="18" rx="1" />
     <path d="M25 20h8l7 7v5H25z" />
     <circle cx="13" cy="36" r="3.2" />
     <circle cx="33" cy="36" r="3.2" />
   </svg>
 );
-// Bandera a cuadros (competencia).
-const FlagIcon = ({ color, className }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color)}>
-    <path d="M12 6v36" />
-    <path d="M12 9h26v17H12z" />
-    <path d="M12 17.5h26M20.7 9v17M29.3 9v17" />
+// Bidón de competencia con bandera a cuadros (combustibles de competencia).
+const RaceCanIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    {/* bidón */}
+    <path d="M12 16h18a2 2 0 0 1 2 2v22a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V18a2 2 0 0 1 2-2z" />
+    <path d="M17 16v-3a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3" />
+    {/* mástil + bandera a cuadros */}
+    <path d="M35 8v18" />
+    <path d="M35 9h9v9h-9z" />
+    <path d="M35 13.5h9M39.5 9v9" />
   </svg>
 );
-// Botella con "+" (aditivos).
-const BottlePlusIcon = ({ color, className }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color)}>
+// Botella de aditivo con gota "+" (aditivos).
+const BottlePlusIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
     <path d="M19 6h10v6l4 5v21a4 4 0 0 1-4 4H19a4 4 0 0 1-4-4V17l4-5z" />
     <path d="M24 24v10M19 29h10" />
   </svg>
 );
-// Molécula (alcoholes).
-const MoleculeIcon = ({ color, className }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color)}>
+// Matraz / molécula de etanol (alcoholes).
+const MoleculeIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
     <circle cx="13" cy="16" r="4" />
     <circle cx="32" cy="11" r="4" />
     <circle cx="26" cy="34" r="4" />
@@ -82,7 +86,7 @@ const MoleculeIcon = ({ color, className }: IconProps) => (
 const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => React.ReactElement }> = {
   gasolina: { accent: "#D9480F", Icon: PumpIcon },
   diesel: { accent: "#455A64", Icon: TruckIcon },
-  combustibles: { accent: "#C81E2B", Icon: FlagIcon },
+  combustibles: { accent: "#C81E2B", Icon: RaceCanIcon },
   aditivos: { accent: "#0F8A7E", Icon: BottlePlusIcon },
   alcoholes: { accent: "#6D28D9", Icon: MoleculeIcon },
 };
@@ -92,10 +96,13 @@ function optionStyle(id: string, fallbackAccent: string) {
 }
 
 /**
- * Tarjeta de opción minimalista y muy legible: tarjeta clara con un color de
- * acento por tipo, barra de acento superior, un ícono de línea grande y sutil
- * como marca de agua en una esquina, título en azul marino, contador en gris y
- * CTA en el color de acento. Hover = leve elevación + zoom (como MotoCard).
+ * Tarjeta de opción moderna y legible: el ÍCONO es protagonista — un chip
+ * sólido en el color de la categoría con el ícono en blanco, grande y
+ * reconocible, para identificar al instante de qué trata (surtidor = gasolina,
+ * camión = diesel, bidón+bandera = competencia, botella "+" = aditivos,
+ * molécula = alcoholes). Detrás, el mismo ícono ampliado como marca de agua da
+ * profundidad. Color de acento por categoría, buen contraste y CTA claro.
+ * Hover = leve elevación + zoom del ícono (como MotoCard).
  */
 function OptionCard({
   node,
@@ -113,30 +120,39 @@ function OptionCard({
     <button
       type="button"
       onClick={onSelect}
-      className="group relative flex h-56 w-full flex-col justify-end overflow-hidden border border-black/10 text-left shadow-sm shadow-black/[0.03] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-xl hover:shadow-black/10"
+      className="group relative flex h-60 w-full flex-col justify-between overflow-hidden rounded-2xl border border-black/10 bg-white text-left shadow-sm shadow-black/[0.03] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-xl hover:shadow-black/10"
     >
-      {/* Fondo: degradado sutil en el color de la categoría (arriba tinta, se
-          aclara hacia abajo donde va el texto) */}
+      {/* Fondo: degradado sutil en el color de la categoría (tinte arriba, se
+          aclara hacia el texto) */}
       <div
         aria-hidden
         className="absolute inset-0"
-        style={{ backgroundImage: `linear-gradient(135deg, ${accent}26 0%, ${accent}0f 46%, #ffffff 100%)` }}
+        style={{ backgroundImage: `linear-gradient(150deg, ${accent}1f 0%, ${accent}0a 40%, #ffffff 100%)` }}
       />
       {/* Patrón ligero de puntos en el accent, para textura */}
       <div
         aria-hidden
-        className="absolute inset-0 opacity-70"
-        style={{ backgroundImage: `radial-gradient(${accent}1f 1px, transparent 1.5px)`, backgroundSize: "13px 13px" }}
+        className="absolute inset-0 opacity-60"
+        style={{ backgroundImage: `radial-gradient(${accent}1a 1px, transparent 1.5px)`, backgroundSize: "14px 14px" }}
       />
-      {/* Barra de acento superior */}
-      <span aria-hidden className="absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: accent }} />
-      {/* Ícono grande y presente como marca de agua, en el color de acento */}
+      {/* Marca de agua: el mismo ícono ampliado detrás, muy sutil */}
       <Icon
         color={accent}
-        className="pointer-events-none absolute -right-4 -bottom-3 h-52 w-52 opacity-[0.18] transition-transform duration-500 group-hover:scale-110"
+        className="pointer-events-none absolute -right-5 -bottom-5 h-48 w-48 opacity-[0.08] transition-transform duration-500 group-hover:scale-110"
       />
 
-      <div className="relative p-6">
+      {/* Chip protagonista con el ícono en blanco: identifica la categoría */}
+      <div className="relative p-6 pb-0">
+        <span
+          aria-hidden
+          className="flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg transition-transform duration-500 group-hover:scale-105"
+          style={{ backgroundColor: accent, boxShadow: `0 10px 24px -8px ${accent}80` }}
+        >
+          <Icon color="#ffffff" strokeWidth={2.2} className="h-9 w-9" />
+        </span>
+      </div>
+
+      <div className="relative p-6 pt-4">
         <p className="font-display text-2xl uppercase tracking-wide text-brand-navy sm:text-3xl">
           {node.label}
         </p>

@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
+import { withBasePath } from "@/lib/base-path";
 
 export const metadata: Metadata = {
   title: "Nosotros",
-  description: `Conoce la historia y el equipo detrás de ${siteConfig.name}, el concesionario de motos premium en Caracas.`,
+  description: `Conoce la historia detrás de ${siteConfig.name}: de Moto Accesorios Baró (1977) al showroom de alta gama en el este de Caracas.`,
 };
 
-// Depurado a lo real: las secciones de equipo y showroom salieron del sitio
-// hasta que existan fotos reales (placeholder gris ≠ contenido). Cuando el
-// cliente entregue material, se reincorporan aquí con el mismo lenguaje
-// editorial del home.
+// Historia real de la casa (1977 → hoy). Redacción editorial sobre los hechos
+// entregados por el cliente; la imagen es una toma lifestyle en alta calidad ya
+// presente en el repo (se reemplazará por una foto real del showroom cuando la
+// haya).
 export default function NosotrosPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-24 sm:py-32">
@@ -21,24 +23,45 @@ export default function NosotrosPage() {
         </h1>
         <p className="font-script mt-4 text-3xl text-brand-navy">{siteConfig.slogan}</p>
       </Reveal>
-      <Reveal delay={0.1}>
-        <p className="mt-10 max-w-2xl text-lg leading-relaxed text-brand-text/70">
-          Quality Bikes abrió sus puertas hace 4 años, pero nuestro equipo trae consigo
-          más de 40 años de experiencia en la industria de venta de motocicletas en
-          Venezuela. Esa trayectoria es la que nos permite ofrecer una curaduría
-          rigurosa, asesoría experta y un respaldo postventa que protege tu inversión a
-          largo plazo. Somos multimarca: BMW, Ducati, Honda, Yamaha, Suzuki, Kawasaki y
-          Voge, con especial atención a los modelos más buscados de cada una — como la
-          BMW R 1250 GS Adventure, nuestra más vendida, junto a la Honda Africa Twin, la
-          Ducati Multistrada, la Yamaha Ténéré, la Suzuki DR650 y la Kawasaki KLR 650 ABS.
-        </p>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-brand-text/70">
-          Formamos parte del mismo grupo que Moto Accesorios Baro, nuestra otra tienda
-          — en funcionamiento desde hace décadas — especializada en motos económicas y
-          de baja cilindrada. Quality Bikes nace como su extensión natural hacia el
-          segmento premium.
-        </p>
-      </Reveal>
+
+      <div className="mt-14 grid grid-cols-1 gap-12 lg:grid-cols-5 lg:items-start lg:gap-16">
+        <Reveal delay={0.1} className="lg:col-span-3">
+          <p className="text-lg leading-relaxed text-brand-text/70">
+            Nuestra historia arranca en <span className="text-brand-navy">1977</span> con{" "}
+            <span className="text-brand-navy">Moto Accesorios Baró</span>, la primera tienda de
+            motos de la familia. Fuimos distribuidores oficiales de Yamaha hasta 2006 y hoy
+            seguimos siendo distribuidores de Suzuki.
+          </p>
+          <p className="mt-6 text-lg leading-relaxed text-brand-text/70">
+            En <span className="text-brand-navy">2022</span> abrimos{" "}
+            <span className="text-brand-navy">Quality Bikes Venezuela</span> para llevar al este
+            de Caracas un showroom de motos de alta gama. Empezamos trayendo unidades nuevas
+            desde Estados Unidos —la BMW R 1250 GS Adventure, la BMW F 850 GS Adventure y la
+            Honda Africa Twin Adventure Sports— y, moto a moto, fuimos dando forma a este
+            showroom.
+          </p>
+          <p className="mt-6 text-lg leading-relaxed text-brand-text/70">
+            Hoy, con más de <span className="text-brand-navy">49 años en el mundo motero y
+            contando</span>, seguimos con la misma pasión: mucho más que solo motos.
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.2} className="lg:col-span-2">
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-lg shadow-black/10">
+            <Image
+              src={withBasePath("/images/lifestyle/bmw-r1300-gsa-scenic.webp")}
+              alt="BMW GS Adventure en un mirador de montaña — el espíritu de Quality Bikes"
+              fill
+              sizes="(max-width: 1024px) 100vw, 40vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          </div>
+          <p className="mt-3 text-center text-xs tracking-[0.2em] text-brand-text/40 uppercase">
+            Caracas · Venezuela · desde 1977
+          </p>
+        </Reveal>
+      </div>
     </div>
   );
 }

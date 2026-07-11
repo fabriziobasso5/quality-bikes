@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import BackLink from "@/components/BackLink";
 import BrandLogo from "@/components/products/BrandLogo";
 import BrandCatalog, { type CatalogLane, type CatalogNode } from "@/components/products/BrandCatalog";
 import { Reveal } from "@/components/Reveal";
@@ -138,6 +139,7 @@ export default async function BrandPage({ params }: { params: Params }) {
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
+      <BackLink fallbackHref="/productos" className="mb-6" />
       <nav className="mb-8 text-xs tracking-wide text-brand-text/50 uppercase">
         <Link href="/productos" className="hover:text-brand-red">
           Productos

@@ -55,7 +55,7 @@ export default function Hero() {
         </p>
         <p className="font-script mt-3 text-4xl sm:text-5xl">{siteConfig.slogan}</p>
         <h1 className="mt-5 max-w-3xl font-display text-4xl leading-tight tracking-wide uppercase sm:text-6xl">
-          Más de 40 años en el mundo motero
+          49 años en el mundo motero y contando
         </h1>
         <div className="mt-10">
           <Magnetic className="inline-block">

@@ -10,20 +10,6 @@ const navLinks = [
   { href: "/contacto", label: "Contacto" },
 ];
 
-// Textura de FIBRA DE CARBONO FORJADA (forged carbon): astillas/vetas marmoladas
-// irregulares, NO la trama tejida cuadriculada. Se genera de forma procedural con
-// ruido fractal (feTurbulence) de baja frecuencia — que agrupa el ruido en manchas
-// tipo astilla — desaturado a gris y con una curva de contraste (tabla) que comprime
-// todo el rango a grises CARBÓN (máx ~0.38).
-//
-// Es UNA sola imagen grande (1600×1000) que se aplica con `background-size: cover`
-// y `no-repeat`: al no repetirse el patrón NO hay costuras ni rayas entre baldosas;
-// cubre todo el ancho del footer de forma continua, igual en móvil y desktop.
-// Acabado MATE: pinta directamente el marmoleado oscuro (blend normal); sin flecks
-// blancos ni degradados, así el logo claro + el texto se leen perfectamente.
-const FORGED_CARBON =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1000'%3E%3Cfilter id='fc'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.009' numOctaves='5' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='table' tableValues='0 0.09 0.17 0.26 0.38'/%3E%3CfeFuncG type='table' tableValues='0 0.095 0.18 0.27 0.39'/%3E%3CfeFuncB type='table' tableValues='0 0.1 0.19 0.29 0.42'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fc)'/%3E%3C/svg%3E\")";
-
 // Instagram (outline, con el degradado de marca en el trazo).
 function InstagramIcon() {
   return (
@@ -76,24 +62,24 @@ export default function Footer() {
     // Base carbón MUY oscura: la legibilidad manda. La textura forjada va encima
     // pero nunca aclara el fondo lo suficiente para estorbar al logo/el texto.
     <footer className="relative overflow-hidden bg-[#0d0f11] text-brand-bg">
-      {/* Astillas de carbono forjado: la textura ya es carbón oscuro, así que va
-          en blend normal a alta opacidad — pinta el marmoleado gris/carbón sin
-          aclarar el fondo. Sin brillos ni degradados: acabado mate. */}
+      {/* Fibra de carbono forjada: foto real de la textura, UNA sola imagen con
+          background-size: cover y no-repeat → sin costuras ni rayas. Cubre todo
+          el ancho del footer, igual en móvil y desktop. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-90"
+        className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage: FORGED_CARBON,
+          backgroundImage: `url("${withBasePath("/images/carbono-forjado.jpg")}")`,
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
         }}
       />
-      {/* Velo oscuro plano encima de la textura: asegura el contraste del texto
-          (prioridad legibilidad). Es un tinte, no un brillo. */}
+      {/* Velo oscuro semitransparente encima de la textura: asegura el contraste
+          del logo claro y el texto. Es un tinte mate, no un brillo. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-black/30"
+        className="pointer-events-none absolute inset-0 bg-black/55"
       />
       {/* Viñeta sutil hacia los bordes para dar profundidad sin aclarar el centro. */}
       <div

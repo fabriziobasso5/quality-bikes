@@ -165,8 +165,9 @@ export default function Home() {
       <BlueprintReveal />
 
       {/* (a) Invitación: bloque de texto extraído de la antigua sección de
-          ubicación, ahora protagonista y centrado, con el CTA de WhatsApp. */}
-      <section className="mx-auto max-w-3xl px-6 py-24 text-center sm:py-28">
+          ubicación, ahora protagonista y centrado. Compacto — menos aire
+          arriba/abajo para acercarlo al plano y al mapa. */}
+      <section className="mx-auto max-w-3xl px-6 py-12 text-center sm:py-14">
         <Reveal>
           <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Visítanos</p>
           <h2 className="mt-3 font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
@@ -176,18 +177,6 @@ export default function Home() {
             Te acompañamos en todo el proceso, desde elegir el modelo correcto hasta la
             entrega.
           </p>
-          <div className="mt-10">
-            <Magnetic className="inline-block">
-              <a
-                href={buildWhatsAppLink("Hola, quiero más información sobre Quality Bikes.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block rounded-full bg-brand-navy px-10 py-4 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
-              >
-                Escríbenos por WhatsApp
-              </a>
-            </Magnetic>
-          </div>
         </Reveal>
       </section>
 
@@ -212,23 +201,51 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* (c) Ubicación: encabezado centrado con padding vertical equilibrado
-          (mismo aire arriba y abajo) + mapa interactivo a todo el ancho. */}
+      {/* (c) Ubicación: encabezado compacto + mapa a todo el ancho con una
+          tarjeta flotante de datos clave (overlay en desktop, apilada en
+          mobile para no tapar el pin). */}
       <section className="border-t border-black/5 bg-brand-bg-soft">
-        <Reveal className="px-6 py-16 text-center sm:py-20">
+        <Reveal className="px-6 py-10 text-center sm:py-12">
           <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Visítanos</p>
           <h2 className="mt-3 font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
             Ubicación del showroom
           </h2>
         </Reveal>
-        <div className="h-[500px] w-full">
-          <iframe
-            src={siteConfig.contact.mapsEmbedUrl}
-            className="h-full w-full border-0"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Ubicación de Quality Bikes en Caracas"
-          />
+        <div className="relative">
+          <div className="h-[500px] w-full">
+            <iframe
+              src={siteConfig.contact.mapsEmbedUrl}
+              className="h-full w-full border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Ubicación de Quality Bikes en Caracas"
+            />
+          </div>
+          {/* Tarjeta de datos: overlay flotante en desktop; en mobile fluye
+              debajo del mapa (static) para no ocultar la ubicación. */}
+          <div className="static m-6 sm:absolute sm:bottom-8 sm:left-8 sm:m-0 sm:max-w-xs">
+            <div className="rounded-2xl border border-black/10 bg-white/95 p-6 shadow-xl shadow-black/10 backdrop-blur-sm">
+              <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Quality Bikes</p>
+              <dl className="mt-4 space-y-3 text-sm text-brand-text/80">
+                <div>
+                  <dt className="text-xs tracking-widest text-brand-text/50 uppercase">Dirección</dt>
+                  <dd className="mt-1">C. Comercio, Caracas 1080, Miranda</dd>
+                </div>
+                <div>
+                  <dt className="text-xs tracking-widest text-brand-text/50 uppercase">Horario</dt>
+                  <dd className="mt-1">Lun–Vie · 8:00 am – 5:00 pm</dd>
+                </div>
+              </dl>
+              <a
+                href={buildWhatsAppLink("Hola, quiero más información sobre Quality Bikes.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-brand-navy px-6 py-3 text-xs tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
+              >
+                Escríbenos por WhatsApp
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </>

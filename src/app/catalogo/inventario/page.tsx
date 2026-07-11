@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BackLink from "@/components/BackLink";
 import InventoryBrandFilter from "@/components/InventoryBrandFilter";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { Reveal } from "@/components/Reveal";
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 export default function InventoryPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
+      <BackLink fallbackHref="/" className="mb-6" />
       <nav className="mb-8 text-xs tracking-wide text-brand-text/50 uppercase">
         <OpenCatalogButton className="hover:text-brand-red">
           Catálogo

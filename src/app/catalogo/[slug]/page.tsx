@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import BackLink from "@/components/BackLink";
 import MotoGallery from "@/components/MotoGallery";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
 import MotoCard from "@/components/MotoCard";
@@ -43,6 +44,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
+      <BackLink fallbackHref="/catalogo/inventario" className="mb-6" />
       <nav className="mb-8 text-xs tracking-wide text-brand-text/50 uppercase">
         <OpenCatalogButton className="hover:text-brand-red">
           Catálogo

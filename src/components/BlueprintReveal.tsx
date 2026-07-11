@@ -280,18 +280,21 @@ export default function BlueprintReveal() {
               {/* Bloom ambiental cálido alrededor del frontal */}
               <div className="absolute left-[56%] top-[6%] h-[64%] w-[54%] bg-[radial-gradient(ellipse_at_42%_32%,rgba(255,176,80,0.15),transparent_65%)] blur-2xl" />
 
-              {/* Faro principal: corona sobre la óptica */}
-              <div className="absolute left-[76%] top-[16%] h-[13%] w-[9%] animate-pulse rounded-full bg-orange-300/70 blur-xl" />
-              {/* Haz principal: una sola capa horizontal (como la versión
-                  original), con el vértice clavado en la óptica (80.5%, 22%)
-                  para que la luz nazca del faro y no flote junto a él */}
-              <div className="absolute left-[80.5%] top-[6%] h-[32%] w-[70vw] mix-blend-screen bg-gradient-to-r from-orange-400/50 via-orange-400/15 to-transparent blur-md [clip-path:polygon(0_46%,100%_2%,100%_98%,0_54%)]" />
+              {/* Faro principal: corona sobre la óptica. El aro ámbar del
+                  faro está en el píxel (1305, 292) del asset 1600x1066 →
+                  (81.6%, 28.7%) de la caja (imagen object-contain con
+                  letterbox de 16px): todo el grupo se ancla a ese punto. */}
+              <div className="absolute left-[77.5%] top-[22.5%] h-[13%] w-[9%] animate-pulse rounded-full bg-orange-300/70 blur-xl" />
+              {/* Haz principal: una sola capa horizontal con el vértice
+                  clavado en la óptica, para que la luz nazca del faro */}
+              <div className="absolute left-[81%] top-[12.5%] h-[32%] w-[70vw] mix-blend-screen bg-gradient-to-r from-orange-400/50 via-orange-400/15 to-transparent blur-md [clip-path:polygon(0_46%,100%_2%,100%_98%,0_54%)]" />
 
-              {/* Denali del crash bar: corona + núcleo, y haz bajo que cae al
-                  piso cruzándose con el principal */}
-              <div className="absolute left-[67%] top-[46.5%] h-[11%] w-[7%] rounded-full bg-orange-400/60 blur-lg" />
-              <div className="absolute left-[68.8%] top-[49%] h-[6%] w-[3.6%] rounded-full bg-amber-100/70 blur-sm" />
-              <div className="absolute left-[71%] top-[44%] h-[18%] w-[55vw] origin-left rotate-[5deg] mix-blend-screen bg-gradient-to-r from-orange-500/35 via-orange-400/12 to-transparent blur-lg [clip-path:polygon(0_38%,100%_0,100%_100%,0_62%)]" />
+              {/* Denali del crash bar — óptica medida en (1120, 610) del
+                  asset → (70%, 56.5%) de la caja: corona + núcleo, y haz bajo
+                  que cae al piso cruzándose con el principal */}
+              <div className="absolute left-[66.5%] top-[51%] h-[11%] w-[7%] rounded-full bg-orange-400/60 blur-lg" />
+              <div className="absolute left-[68.2%] top-[53.5%] h-[6%] w-[3.6%] rounded-full bg-amber-100/70 blur-sm" />
+              <div className="absolute left-[70.5%] top-[48%] h-[18%] w-[55vw] origin-left rotate-[5deg] mix-blend-screen bg-gradient-to-r from-orange-500/35 via-orange-400/12 to-transparent blur-lg [clip-path:polygon(0_38%,100%_0,100%_100%,0_62%)]" />
 
               {/* Charco de luz en el piso: mancha amplia + punto caliente donde
                   aterriza el haz bajo */}

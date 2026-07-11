@@ -280,12 +280,12 @@ export default function BlueprintReveal() {
               {/* Bloom ambiental cálido alrededor del frontal */}
               <div className="absolute left-[56%] top-[6%] h-[64%] w-[54%] bg-[radial-gradient(ellipse_at_42%_32%,rgba(255,176,80,0.15),transparent_65%)] blur-2xl" />
 
-              {/* Faro principal: corona + núcleo casi blanco */}
-              <div className="absolute left-[75%] top-[15.5%] h-[13%] w-[10%] rounded-full bg-orange-300/60 blur-xl" />
-              <div className="absolute left-[77.5%] top-[18.5%] h-[7.5%] w-[5%] rounded-full bg-amber-100/80 blur-md" />
-              {/* Haz principal: manto amplio + núcleo denso, con caída leve */}
-              <div className="absolute left-[79%] top-[5%] h-[36%] w-[72vw] origin-left rotate-[1.5deg] mix-blend-screen bg-gradient-to-r from-orange-400/35 via-orange-400/12 to-transparent blur-xl [clip-path:polygon(0_44%,100%_0,100%_100%,0_56%)]" />
-              <div className="absolute left-[79%] top-[13%] h-[20%] w-[72vw] origin-left rotate-[1.5deg] mix-blend-screen bg-gradient-to-r from-amber-200/60 via-orange-300/20 to-transparent blur-md [clip-path:polygon(0_45%,100%_14%,100%_86%,0_55%)]" />
+              {/* Faro principal: corona sobre la óptica */}
+              <div className="absolute left-[76%] top-[16%] h-[13%] w-[9%] animate-pulse rounded-full bg-orange-300/70 blur-xl" />
+              {/* Haz principal: una sola capa horizontal (como la versión
+                  original), con el vértice clavado en la óptica (80.5%, 22%)
+                  para que la luz nazca del faro y no flote junto a él */}
+              <div className="absolute left-[80.5%] top-[6%] h-[32%] w-[70vw] mix-blend-screen bg-gradient-to-r from-orange-400/50 via-orange-400/15 to-transparent blur-md [clip-path:polygon(0_46%,100%_2%,100%_98%,0_54%)]" />
 
               {/* Denali del crash bar: corona + núcleo, y haz bajo que cae al
                   piso cruzándose con el principal */}

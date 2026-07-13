@@ -134,16 +134,17 @@ const VP_ADITIVOS_CLASICOS = [
 /**
  * Árbol de navegación in-page por marca.
  * - BK3: Gasolina (octane boosters + performance marine) y Diesel (cetanium).
- * - VP Racing: 10 tarjetas planas — Gasolina de competencia, Aditivos
- *   (clásicos), Alcoholes, Refrigerantes, Aerosoles, Power Wash y Sprays,
- *   Frenos, Cuidado del tanque, Accesorios (bidones/mangueras) y Motores a
- *   Diesel.
- *   "Motores a Diesel" agrupa tanto los aditivos con group "Diesel" como
- *   cualquier producto de Cuidado del tanque marcado tags:["Diesel"] (hoy,
- *   Diesel Armor) — así ese producto no vive bajo Gasolina.
- * - Mobil: Gasolina, Diesel (separados por tipo: Min → Full → Semi), Moto
- *   (2T y 4T, sección propia) y las líneas adicionales (Transmisiones,
- *   Industrial, Grasas, Especialidades).
+ * - VP Racing: 6 tarjetas planas, en este orden — Combustibles de
+ *   Competencia (gasolinas + alcoholes de carrera), Motores a Diesel
+ *   (aditivos diesel + Diesel Armor), Aditivos (clásicos), Fluidos y
+ *   Refrigerantes (refrigerantes + líquido de frenos), Limpieza y Detailing
+ *   (aerosoles + power wash) y Accesorios (cuidado del tanque + bidones).
+ *   Diesel Armor vive en "Cuidado del tanque" pero está tags:["Diesel"]:
+ *   se saca de ahí y se suma a "Motores a Diesel", no a "Accesorios".
+ * - Mobil: 5 tarjetas, en este orden — Moto (2T y 4T), Motores a Gasolina,
+ *   Motores a Diesel (incluye el refrigerante Delvac Extended Life, antes en
+ *   "Especialidades"), Transmisiones e Industrial (incluye la grasa
+ *   Mobilgrease XHP 222, antes en "Grasas").
  * - Falken: 3 tarjetas de primer nivel — Azenis y Ziex van directo a su
  *   lista de productos; WildPeak abre un 2do nivel con 3 sub-opciones
  *   (A/T, M/T, R/T) tomadas del campo "subgroup".
@@ -159,36 +160,34 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
   }
 
   if (meta.id === "vp-racing") {
-    const combustibles = products.filter((p) => p.category === "gasolinas");
+    const combustibles = products.filter(
+      (p) => p.category === "gasolinas" || p.category === "alcoholes",
+    );
     const aditivos = products.filter(
       (p) => p.category === "aditivos" && VP_ADITIVOS_CLASICOS.includes(p.group),
     );
-    const alcoholes = products.filter((p) => p.category === "alcoholes");
-    const refrigerantes = products.filter((p) => p.group === "Refrigerantes");
-    const aerosoles = products.filter((p) => p.group === "Aerosoles");
-    const powerWash = products.filter((p) => p.group === "Power Wash y Sprays");
-    const frenos = products.filter((p) => p.group === "Frenos");
+    const fluidos = products.filter((p) => p.group === "Refrigerantes" || p.group === "Frenos");
+    const limpieza = products.filter(
+      (p) => p.group === "Aerosoles" || p.group === "Power Wash y Sprays",
+    );
     // Diesel Armor vive en "Cuidado del tanque" pero está tagueado Diesel:
     // se saca de aquí y se suma al filtro top-level de Diesel más abajo.
     const cuidadoTanque = products.filter(
       (p) => p.group === "Cuidado del tanque" && !p.tags?.includes("Diesel"),
     );
-    const accesorios = products.filter((p) => p.group === "Accesorios");
+    const bidones = products.filter((p) => p.group === "Accesorios");
+    const accesorios = [...cuidadoTanque, ...bidones];
     const dieselTanque = products.filter(
       (p) => p.group === "Cuidado del tanque" && p.tags?.includes("Diesel"),
     );
     const dieselAditivos = products.filter((p) => p.category === "aditivos" && p.group === "Diesel");
     return [
-      leaf("combustibles", "Gasolina de competencia", lanesByGroup(combustibles)),
-      leaf("aditivos", "Aditivos", lanesByGroup(aditivos)),
-      leaf("alcoholes", "Alcoholes", lanesByGroup(alcoholes)),
-      leaf("refrigerantes", "Refrigerantes", lanesByGroup(refrigerantes)),
-      leaf("aerosoles", "Aerosoles", lanesByGroup(aerosoles)),
-      leaf("power-wash", "Power Wash y Sprays", lanesByGroup(powerWash)),
-      leaf("frenos", "Frenos", lanesByGroup(frenos)),
-      leaf("cuidado-tanque", "Cuidado del tanque", lanesByGroup(cuidadoTanque)),
-      leaf("accesorios", "Accesorios", lanesByGroup(accesorios)),
+      leaf("combustibles", "Combustibles de Competencia", lanesByGroup(combustibles)),
       leaf("diesel", "Motores a Diesel", lanesByGroup([...dieselAditivos, ...dieselTanque])),
+      leaf("aditivos", "Aditivos", lanesByGroup(aditivos)),
+      leaf("fluidos", "Fluidos y Refrigerantes", lanesByGroup(fluidos)),
+      leaf("limpieza", "Limpieza y Detailing", lanesByGroup(limpieza)),
+      leaf("accesorios", "Accesorios", lanesByGroup(accesorios)),
     ].filter((n) => n.count > 0);
   }
 
@@ -203,22 +202,23 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     ].filter((n) => n.count > 0);
   }
 
-  // Mobil
+  // Mobil — "Línea especialidades" (Delvac Extended Life) se suma a Diesel;
+  // "Línea grasas" (Mobilgrease XHP 222) se suma a Industrial.
   const gasolina = products.filter((p) => p.group === "Línea gasolina");
-  const diesel = products.filter((p) => p.group === "Línea diesel");
+  const diesel = products.filter(
+    (p) => p.group === "Línea diesel" || p.group === "Línea especialidades",
+  );
   const moto = products.filter((p) => p.group === "Línea moto 2T y 4T");
   const transmisiones = products.filter((p) => p.group === "Línea transmisiones");
-  const industrial = products.filter((p) => p.group === "Línea industrial");
-  const grasas = products.filter((p) => p.group === "Línea grasas");
-  const especialidades = products.filter((p) => p.group === "Línea especialidades");
+  const industrial = products.filter(
+    (p) => p.group === "Línea industrial" || p.group === "Línea grasas",
+  );
   return [
-    leaf("gasolina", "Gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
-    leaf("diesel", "Diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético"])),
     leaf("moto", "Moto", lanesByTag(moto, ["Semisintético", "Mineral"])),
+    leaf("gasolina", "Motores a Gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
+    leaf("diesel", "Motores a Diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético", "Refrigerante"])),
     leaf("transmisiones", "Transmisiones", lanesByGroup(transmisiones)),
     leaf("industrial", "Industrial", lanesByGroup(industrial)),
-    leaf("grasas", "Grasas", lanesByGroup(grasas)),
-    leaf("especialidades", "Especialidades", lanesByGroup(especialidades)),
   ].filter((n) => n.count > 0);
 }
 

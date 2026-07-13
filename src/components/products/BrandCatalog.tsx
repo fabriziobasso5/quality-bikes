@@ -71,16 +71,6 @@ const BottlePlusIcon = ({ color, className, strokeWidth }: IconProps) => (
     <path d="M24 24v10M19 29h10" />
   </svg>
 );
-// Matraz / molécula de etanol (alcoholes).
-const MoleculeIcon = ({ color, className, strokeWidth }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
-    <circle cx="13" cy="16" r="4" />
-    <circle cx="32" cy="11" r="4" />
-    <circle cx="26" cy="34" r="4" />
-    <circle cx="37" cy="30" r="3" />
-    <path d="M16.5 18.4 23 31M16.8 14 28.2 12M31 14.5 27 30.5M29.5 33l4.7-1.6" />
-  </svg>
-);
 // Rin y caucho con banda de rodadura (familias Falken).
 const TireIcon = ({ color, className, strokeWidth }: IconProps) => (
   <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
@@ -89,34 +79,13 @@ const TireIcon = ({ color, className, strokeWidth }: IconProps) => (
     <path d="M24 3v10M24 35v10M3 24h10M35 24h10M9.3 9.3l7.1 7.1M31.6 31.6l7.1 7.1M38.7 9.3l-7.1 7.1M16.4 31.6l-7.1 7.1" />
   </svg>
 );
-// Copo de nieve (refrigerantes).
-const SnowflakeIcon = ({ color, className, strokeWidth }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
-    <path d="M24 4v40M6.5 14l35 20M6.5 34l35-20" />
-    <path d="M24 4l-5 5M24 4l5 5M24 44l-5-5M24 44l5-5" />
-    <path d="M6.5 14l7-1.2M6.5 14l3.2 6.2M41.5 34l-7 1.2M41.5 34l-3.2-6.2" />
-    <path d="M41.5 14l-7-1.2M41.5 14l-3.2 6.2M6.5 34l7 1.2M6.5 34l3.2-6.2" />
-  </svg>
-);
-// Bote de spray con nube de rocío (aerosoles y sprays).
+// Bote de spray con nube de rocío (limpieza y detailing).
 const SprayIcon = ({ color, className, strokeWidth }: IconProps) => (
   <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
     <rect x="13" y="18" width="17" height="26" rx="2.5" />
     <path d="M17 18v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4" />
     <path d="M22 8h4" />
     <path d="M30 11h5M32 15h6M31 7h4" />
-  </svg>
-);
-// Disco de freno ventilado (frenos).
-const BrakeDiscIcon = ({ color, className, strokeWidth }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
-    <circle cx="24" cy="24" r="18" />
-    <circle cx="24" cy="24" r="6" />
-    <path d="M24 12v6M24 30v6M12 24h6M30 24h6" />
-    <circle cx="24" cy="12" r="1.5" fill={color} />
-    <circle cx="24" cy="36" r="1.5" fill={color} />
-    <circle cx="12" cy="24" r="1.5" fill={color} />
-    <circle cx="36" cy="24" r="1.5" fill={color} />
   </svg>
 );
 // Lata de combustible (accesorios: bidones, mangueras, cuidado del tanque).
@@ -157,17 +126,11 @@ const FactoryIcon = ({ color, className, strokeWidth }: IconProps) => (
     <circle cx="9.5" cy="9.5" r="1.5" fill={color} />
   </svg>
 );
-// Gota de grasa (grasas).
+// Gota (fluidos y refrigerantes).
 const DropIcon = ({ color, className, strokeWidth }: IconProps) => (
   <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
     <path d="M24 6c8 10 13 17.5 13 24.5a13 13 0 1 1-26 0C11 23.5 16 16 24 6z" />
     <path d="M18 30.5a6 6 0 0 0 6 6" />
-  </svg>
-);
-// Estrella (especialidades).
-const StarIcon = ({ color, className, strokeWidth }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)} strokeLinejoin="round">
-    <path d="M24 5l5.5 12.2L42 19l-9 9.2L35 42l-11-6.5L13 42l2-13.8L6 19l12.5-1.8L24 5z" />
   </svg>
 );
 // Bandera a cuadros (Azenis: deportivo / competencia).
@@ -198,22 +161,6 @@ const MountainIcon = ({ color, className, strokeWidth }: IconProps) => (
     <path d="M14 30l4-5 4 5M32 24l-3 4" />
   </svg>
 );
-// Escudo con check (cuidado del tanque: protección).
-const ShieldTankIcon = ({ color, className, strokeWidth }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
-    <path d="M24 5 8 11v12c0 11 7 18 16 20 9-2 16-9 16-20V11z" />
-    <path d="M17 24l5 5 9-10" />
-  </svg>
-);
-// Manguera enroscada con gota (power wash y sprays).
-const HoseIcon = ({ color, className, strokeWidth }: IconProps) => (
-  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
-    <path d="M6 14a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6 6 6 0 0 0 6 6h4a6 6 0 0 1 6 6" />
-    <circle cx="34" cy="30" r="4" fill={color} fillOpacity="0.18" />
-    <path d="M34 25c0 3-4 5.5-4 9a4 4 0 1 0 8 0c0-3.5-4-6-4-9z" />
-  </svg>
-);
-
 // Paleta reducida para las tarjetas nuevas — coherente con la estética de
 // marca (navy, rojo, taupe, grafito), en vez de un color distinto por
 // categoría. Las categorías "clásicas" (gasolina/diesel/combustibles/
@@ -228,9 +175,7 @@ const EARTH = "#4A4630"; // grafito/tierra — familia WildPeak
 const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => React.ReactElement }> = {
   gasolina: { accent: "#D9480F", Icon: PumpIcon },
   diesel: { accent: "#455A64", Icon: TruckIcon },
-  combustibles: { accent: "#C81E2B", Icon: RaceCanIcon },
   aditivos: { accent: "#0F8A7E", Icon: BottlePlusIcon },
-  alcoholes: { accent: "#6D28D9", Icon: MoleculeIcon },
   // Falken — 3 familias de primer nivel, cada una con su propio acento
   // dentro de la paleta del sitio (deportivo / touring / todo terreno).
   azenis: { accent: RED, Icon: ChequeredFlagIcon },
@@ -240,19 +185,17 @@ const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => Re
   at: { accent: EARTH, Icon: TireIcon },
   mt: { accent: EARTH, Icon: TireIcon },
   rt: { accent: EARTH, Icon: TireIcon },
-  // VP Racing — secciones nuevas.
-  refrigerantes: { accent: NAVY, Icon: SnowflakeIcon },
-  aerosoles: { accent: TAUPE, Icon: SprayIcon },
-  "power-wash": { accent: NAVY, Icon: HoseIcon },
-  frenos: { accent: GRAPHITE, Icon: BrakeDiscIcon },
-  "cuidado-tanque": { accent: RED, Icon: ShieldTankIcon },
-  accesorios: { accent: TAUPE, Icon: JerryCanIcon },
+  // VP Racing — 6 divisores: combustibles (racing) en rojo, fluidos técnicos
+  // en navy, limpieza/detailing en taupe, accesorios en grafito. "aditivos"
+  // y "diesel" (arriba) se quedan con su estilo de siempre.
+  combustibles: { accent: RED, Icon: RaceCanIcon },
+  fluidos: { accent: NAVY, Icon: DropIcon },
+  limpieza: { accent: TAUPE, Icon: SprayIcon },
+  accesorios: { accent: GRAPHITE, Icon: JerryCanIcon },
   // Mobil — secciones nuevas / restauradas.
   moto: { accent: NAVY, Icon: HelmetIcon },
   transmisiones: { accent: GRAPHITE, Icon: GearIcon },
   industrial: { accent: TAUPE, Icon: FactoryIcon },
-  grasas: { accent: NAVY, Icon: DropIcon },
-  especialidades: { accent: RED, Icon: StarIcon },
 };
 
 function optionStyle(id: string, fallbackAccent: string) {
@@ -263,8 +206,8 @@ function optionStyle(id: string, fallbackAccent: string) {
  * Tarjeta de opción moderna y legible: el ÍCONO es protagonista — un chip
  * sólido en el color de la categoría con el ícono en blanco, grande y
  * reconocible, para identificar al instante de qué trata (surtidor = gasolina,
- * camión = diesel, bidón+bandera = competencia, botella "+" = aditivos,
- * molécula = alcoholes). Detrás, el mismo ícono ampliado como marca de agua da
+ * camión = diesel, bidón+bandera = combustibles de competencia, botella "+" =
+ * aditivos). Detrás, el mismo ícono ampliado como marca de agua da
  * profundidad. Color de acento por categoría, buen contraste y CTA claro.
  * Hover = leve elevación + zoom del ícono (como MotoCard).
  */

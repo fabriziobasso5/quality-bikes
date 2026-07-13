@@ -89,6 +89,87 @@ const TireIcon = ({ color, className, strokeWidth }: IconProps) => (
     <path d="M24 3v10M24 35v10M3 24h10M35 24h10M9.3 9.3l7.1 7.1M31.6 31.6l7.1 7.1M38.7 9.3l-7.1 7.1M16.4 31.6l-7.1 7.1" />
   </svg>
 );
+// Copo de nieve (refrigerantes).
+const SnowflakeIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M24 4v40M6.5 14l35 20M6.5 34l35-20" />
+    <path d="M24 4l-5 5M24 4l5 5M24 44l-5-5M24 44l5-5" />
+    <path d="M6.5 14l7-1.2M6.5 14l3.2 6.2M41.5 34l-7 1.2M41.5 34l-3.2-6.2" />
+    <path d="M41.5 14l-7-1.2M41.5 14l-3.2 6.2M6.5 34l7 1.2M6.5 34l3.2-6.2" />
+  </svg>
+);
+// Bote de spray con nube de rocío (aerosoles y sprays).
+const SprayIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <rect x="13" y="18" width="17" height="26" rx="2.5" />
+    <path d="M17 18v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4" />
+    <path d="M22 8h4" />
+    <path d="M30 11h5M32 15h6M31 7h4" />
+  </svg>
+);
+// Disco de freno ventilado (frenos).
+const BrakeDiscIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <circle cx="24" cy="24" r="18" />
+    <circle cx="24" cy="24" r="6" />
+    <path d="M24 12v6M24 30v6M12 24h6M30 24h6" />
+    <circle cx="24" cy="12" r="1.5" fill={color} />
+    <circle cx="24" cy="36" r="1.5" fill={color} />
+    <circle cx="12" cy="24" r="1.5" fill={color} />
+    <circle cx="36" cy="24" r="1.5" fill={color} />
+  </svg>
+);
+// Lata de combustible (accesorios: bidones, mangueras, cuidado del tanque).
+const JerryCanIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M10 18h28a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V20a2 2 0 0 1 2-2z" />
+    <path d="M19 18v-6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v6" />
+    <path d="M21 10h6" />
+    <rect x="15" y="27" width="18" height="8" opacity="0.16" fill={color} />
+    <path d="M20 27v8M28 27v8" />
+  </svg>
+);
+// Casco de moto (línea Moto de Mobil).
+const HelmetIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M7 30a17 17 0 0 1 34 0v4a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4v-4z" />
+    <path d="M7 30h34" />
+    <path d="M28 30v6a4 4 0 0 1-8 0v-6" />
+  </svg>
+);
+// Engranaje (transmisiones).
+const GearIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <circle cx="24" cy="24" r="9" />
+    <circle cx="24" cy="24" r="3" />
+    <path
+      d="M24 5.5v6M24 36.5v6M5.5 24h6M36.5 24h6M11 11l4.2 4.2M32.8 32.8l4.2 4.2M37 11l-4.2 4.2M15.2 32.8l-4.2 4.2"
+      strokeWidth={(strokeWidth ?? 1.6) + 1.4}
+    />
+  </svg>
+);
+// Fábrica (industrial).
+const FactoryIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M6 42V22l10 7v-7l10 7v-7l10 7V42z" />
+    <path d="M6 42h32" />
+    <path d="M30 22v-8h5v5" />
+    <circle cx="9.5" cy="9.5" r="1.5" fill={color} />
+  </svg>
+);
+// Gota de grasa (grasas).
+const DropIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M24 6c8 10 13 17.5 13 24.5a13 13 0 1 1-26 0C11 23.5 16 16 24 6z" />
+    <path d="M18 30.5a6 6 0 0 0 6 6" />
+  </svg>
+);
+// Estrella (especialidades).
+const StarIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)} strokeLinejoin="round">
+    <path d="M24 5l5.5 12.2L42 19l-9 9.2L35 42l-11-6.5L13 42l2-13.8L6 19l12.5-1.8L24 5z" />
+  </svg>
+);
 
 // Diseño por tipo de opción (keyed por node.id, que es estable entre marcas).
 const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => React.ReactElement }> = {
@@ -103,6 +184,17 @@ const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => Re
   "wildpeak-at": { accent: "#0033A0", Icon: TireIcon },
   "wildpeak-mt": { accent: "#0033A0", Icon: TireIcon },
   "wildpeak-rt": { accent: "#0033A0", Icon: TireIcon },
+  // Secciones nuevas VP Racing.
+  refrigerantes: { accent: "#0891B2", Icon: SnowflakeIcon },
+  aerosoles: { accent: "#DB2777", Icon: SprayIcon },
+  frenos: { accent: "#1F2937", Icon: BrakeDiscIcon },
+  accesorios: { accent: "#7C2D12", Icon: JerryCanIcon },
+  // Secciones nuevas / restauradas Mobil.
+  moto: { accent: "#1D4ED8", Icon: HelmetIcon },
+  transmisiones: { accent: "#475569", Icon: GearIcon },
+  industrial: { accent: "#78716C", Icon: FactoryIcon },
+  grasas: { accent: "#CA8A04", Icon: DropIcon },
+  especialidades: { accent: "#B45309", Icon: StarIcon },
 };
 
 function optionStyle(id: string, fallbackAccent: string) {

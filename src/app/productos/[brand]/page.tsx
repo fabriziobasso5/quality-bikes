@@ -70,19 +70,12 @@ function lanesByTag(items: Product[], tagOrder: string[]): CatalogLane[] {
 }
 
 const laneCount = (lanes: CatalogLane[]) => lanes.reduce((n, l) => n + l.products.length, 0);
-const nodeCount = (children: CatalogNode[]) => children.reduce((n, c) => n + c.count, 0);
 
 const leaf = (id: string, label: string, lanes: CatalogLane[]): CatalogNode => ({
   id,
   label,
   count: laneCount(lanes),
   lanes,
-});
-const branch = (id: string, label: string, children: CatalogNode[]): CatalogNode => ({
-  id,
-  label,
-  count: nodeCount(children),
-  children,
 });
 
 // Una opción por valor único de "group", en el orden en que aparecen los
@@ -103,14 +96,27 @@ function leavesByGroup(items: Product[]): CatalogNode[] {
   return order.map((g) => leaf(slugs.get(g)!, g, lanesByGroup(map.get(g)!)));
 }
 
+// Grupos "de siempre" de la categoría aditivos de VP (elevadores, potencia,
+// limpiadores, estabilizadores). Todo lo demás que sea category "aditivos"
+// (refrigerantes, aerosoles, frenos, accesorios) tiene su propia sección.
+const VP_ADITIVOS_CLASICOS = [
+  "Elevador de octanaje",
+  "Mejorador de potencia",
+  "Limpiador de combustible",
+  "Estabilizador",
+];
+
 /**
- * Árbol de navegación anidada por marca (cambio de vista in-page):
- * - BK3: 1 nivel, 2 opciones — Gasolina (octane boosters + performance marine)
- *   y Diesel (cetanium).
- * - VP Racing: 2 niveles — Gasolina (→ Combustibles de competencia / Aditivos /
- *   Alcoholes) y Diesel (aditivos diesel, hoja directa).
- * - Mobil: Gasolina, Diesel (separados por tipo: Min → Full → Semi) y las
- *   líneas adicionales (Transmisiones, Industrial, Grasas, Especialidades).
+ * Árbol de navegación in-page por marca: una opción (tarjeta) por sección,
+ * cada una hoja con sus carriles de producto (campo "group"). Sin niveles
+ * anidados — todas las marcas quedan al mismo nivel de navegación.
+ * - BK3: Gasolina (octane boosters + performance marine) y Diesel (cetanium).
+ * - VP Racing: Gasolina de competencia, Aditivos (clásicos), Alcoholes,
+ *   Refrigerantes, Aerosoles y Sprays, Frenos, Accesorios (cuidado del
+ *   tanque + bidones) y Diesel (aditivos diesel).
+ * - Mobil: Gasolina, Diesel (separados por tipo: Min → Full → Semi), Moto
+ *   (2T y 4T, sección propia) y las líneas adicionales (Transmisiones,
+ *   Industrial, Grasas, Especialidades).
  * - Falken: SIN Gasolina/Diesel — una opción por FAMILIA de caucho (Azenis,
  *   Ziex, WildPeak A/T, WildPeak M/T, WildPeak R/T), tomada directo del campo
  *   "group" de cada producto.
@@ -127,16 +133,28 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
 
   if (meta.id === "vp-racing") {
     const combustibles = products.filter((p) => p.category === "gasolinas");
-    const aditivos = products.filter((p) => p.category === "aditivos" && p.group !== "Diesel");
+    const aditivos = products.filter(
+      (p) => p.category === "aditivos" && VP_ADITIVOS_CLASICOS.includes(p.group),
+    );
     const alcoholes = products.filter((p) => p.category === "alcoholes");
-    const dieselAditivos = products.filter((p) => p.category === "aditivos" && p.group === "Diesel");
+    const refrigerantes = products.filter((p) => p.group === "Refrigerantes");
+    const aerosoles = products.filter(
+      (p) => p.group === "Aerosoles" || p.group === "Power Wash y Sprays",
+    );
+    const frenos = products.filter((p) => p.group === "Frenos");
+    const accesorios = products.filter(
+      (p) => p.group === "Cuidado del tanque" || p.group === "Bidones y accesorios",
+    );
+    const diesel = products.filter((p) => p.category === "aditivos" && p.group === "Diesel");
     return [
-      branch("gasolina", "Gasolina", [
-        leaf("combustibles", "Combustibles de competencia", lanesByGroup(combustibles)),
-        leaf("aditivos", "Aditivos", lanesByGroup(aditivos)),
-        leaf("alcoholes", "Alcoholes", lanesByGroup(alcoholes)),
-      ].filter((n) => n.count > 0)),
-      leaf("diesel", "Diesel", lanesByGroup(dieselAditivos)),
+      leaf("combustibles", "Gasolina de competencia", lanesByGroup(combustibles)),
+      leaf("aditivos", "Aditivos", lanesByGroup(aditivos)),
+      leaf("alcoholes", "Alcoholes", lanesByGroup(alcoholes)),
+      leaf("refrigerantes", "Refrigerantes", lanesByGroup(refrigerantes)),
+      leaf("aerosoles", "Aerosoles y Sprays", lanesByGroup(aerosoles)),
+      leaf("frenos", "Frenos", lanesByGroup(frenos)),
+      leaf("accesorios", "Accesorios", lanesByGroup(accesorios)),
+      leaf("diesel", "Diesel", lanesByGroup(diesel)),
     ].filter((n) => n.count > 0);
   }
 
@@ -145,10 +163,9 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
   }
 
   // Mobil
-  const gasolina = products.filter(
-    (p) => p.group === "Línea gasolina" || p.group === "Línea moto 2T y 4T",
-  );
+  const gasolina = products.filter((p) => p.group === "Línea gasolina");
   const diesel = products.filter((p) => p.group === "Línea diesel");
+  const moto = products.filter((p) => p.group === "Línea moto 2T y 4T");
   const transmisiones = products.filter((p) => p.group === "Línea transmisiones");
   const industrial = products.filter((p) => p.group === "Línea industrial");
   const grasas = products.filter((p) => p.group === "Línea grasas");
@@ -156,6 +173,7 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
   return [
     leaf("gasolina", "Gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
     leaf("diesel", "Diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético"])),
+    leaf("moto", "Moto", lanesByTag(moto, ["Semisintético", "Mineral"])),
     leaf("transmisiones", "Transmisiones", lanesByGroup(transmisiones)),
     leaf("industrial", "Industrial", lanesByGroup(industrial)),
     leaf("grasas", "Grasas", lanesByGroup(grasas)),

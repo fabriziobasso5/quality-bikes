@@ -77,6 +77,13 @@ const leaf = (id: string, label: string, lanes: CatalogLane[]): CatalogNode => (
   count: laneCount(lanes),
   lanes,
 });
+const nodeCount = (children: CatalogNode[]) => children.reduce((n, c) => n + c.count, 0);
+const branch = (id: string, label: string, children: CatalogNode[]): CatalogNode => ({
+  id,
+  label,
+  count: nodeCount(children),
+  children,
+});
 
 // Una opción por valor único de "group", en el orden en que aparecen los
 // datos — cada familia es su propia hoja con un único carril (mismo patrón
@@ -96,6 +103,24 @@ function leavesByGroup(items: Product[]): CatalogNode[] {
   return order.map((g) => leaf(slugs.get(g)!, g, lanesByGroup(map.get(g)!)));
 }
 
+// Segundo nivel de Falken WildPeak: una opción por "subgroup" (A/T, M/T,
+// R/T), en el orden en que aparecen los datos.
+function leavesBySubgroup(items: Product[]): CatalogNode[] {
+  const order: string[] = [];
+  const map = new Map<string, Product[]>();
+  const slugs = new Map<string, string>();
+  for (const p of items) {
+    const label = p.subgroupLabel ?? p.subgroup ?? "Otros";
+    if (!map.has(label)) {
+      map.set(label, []);
+      order.push(label);
+      slugs.set(label, p.subgroupSlug ?? label.toLowerCase());
+    }
+    map.get(label)!.push(p);
+  }
+  return order.map((label) => leaf(slugs.get(label)!, label, [{ title: label, products: map.get(label)! }]));
+}
+
 // Grupos "de siempre" de la categoría aditivos de VP (elevadores, potencia,
 // limpiadores, estabilizadores). Todo lo demás que sea category "aditivos"
 // (refrigerantes, aerosoles, frenos, accesorios) tiene su propia sección.
@@ -107,19 +132,21 @@ const VP_ADITIVOS_CLASICOS = [
 ];
 
 /**
- * Árbol de navegación in-page por marca: una opción (tarjeta) por sección,
- * cada una hoja con sus carriles de producto (campo "group"). Sin niveles
- * anidados — todas las marcas quedan al mismo nivel de navegación.
+ * Árbol de navegación in-page por marca.
  * - BK3: Gasolina (octane boosters + performance marine) y Diesel (cetanium).
- * - VP Racing: Gasolina de competencia, Aditivos (clásicos), Alcoholes,
- *   Refrigerantes, Aerosoles y Sprays, Frenos, Accesorios (cuidado del
- *   tanque + bidones) y Diesel (aditivos diesel).
+ * - VP Racing: 10 tarjetas planas — Gasolina de competencia, Aditivos
+ *   (clásicos), Alcoholes, Refrigerantes, Aerosoles, Power Wash y Sprays,
+ *   Frenos, Cuidado del tanque, Accesorios (bidones/mangueras) y Motores a
+ *   Diesel.
+ *   "Motores a Diesel" agrupa tanto los aditivos con group "Diesel" como
+ *   cualquier producto de Cuidado del tanque marcado tags:["Diesel"] (hoy,
+ *   Diesel Armor) — así ese producto no vive bajo Gasolina.
  * - Mobil: Gasolina, Diesel (separados por tipo: Min → Full → Semi), Moto
  *   (2T y 4T, sección propia) y las líneas adicionales (Transmisiones,
  *   Industrial, Grasas, Especialidades).
- * - Falken: SIN Gasolina/Diesel — una opción por FAMILIA de caucho (Azenis,
- *   Ziex, WildPeak A/T, WildPeak M/T, WildPeak R/T), tomada directo del campo
- *   "group" de cada producto.
+ * - Falken: 3 tarjetas de primer nivel — Azenis y Ziex van directo a su
+ *   lista de productos; WildPeak abre un 2do nivel con 3 sub-opciones
+ *   (A/T, M/T, R/T) tomadas del campo "subgroup".
  */
 function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] {
   if (meta.id === "bk3") {
@@ -138,28 +165,42 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     );
     const alcoholes = products.filter((p) => p.category === "alcoholes");
     const refrigerantes = products.filter((p) => p.group === "Refrigerantes");
-    const aerosoles = products.filter(
-      (p) => p.group === "Aerosoles" || p.group === "Power Wash y Sprays",
-    );
+    const aerosoles = products.filter((p) => p.group === "Aerosoles");
+    const powerWash = products.filter((p) => p.group === "Power Wash y Sprays");
     const frenos = products.filter((p) => p.group === "Frenos");
-    const accesorios = products.filter(
-      (p) => p.group === "Cuidado del tanque" || p.group === "Bidones y accesorios",
+    // Diesel Armor vive en "Cuidado del tanque" pero está tagueado Diesel:
+    // se saca de aquí y se suma al filtro top-level de Diesel más abajo.
+    const cuidadoTanque = products.filter(
+      (p) => p.group === "Cuidado del tanque" && !p.tags?.includes("Diesel"),
     );
-    const diesel = products.filter((p) => p.category === "aditivos" && p.group === "Diesel");
+    const accesorios = products.filter((p) => p.group === "Accesorios");
+    const dieselTanque = products.filter(
+      (p) => p.group === "Cuidado del tanque" && p.tags?.includes("Diesel"),
+    );
+    const dieselAditivos = products.filter((p) => p.category === "aditivos" && p.group === "Diesel");
     return [
       leaf("combustibles", "Gasolina de competencia", lanesByGroup(combustibles)),
       leaf("aditivos", "Aditivos", lanesByGroup(aditivos)),
       leaf("alcoholes", "Alcoholes", lanesByGroup(alcoholes)),
       leaf("refrigerantes", "Refrigerantes", lanesByGroup(refrigerantes)),
-      leaf("aerosoles", "Aerosoles y Sprays", lanesByGroup(aerosoles)),
+      leaf("aerosoles", "Aerosoles", lanesByGroup(aerosoles)),
+      leaf("power-wash", "Power Wash y Sprays", lanesByGroup(powerWash)),
       leaf("frenos", "Frenos", lanesByGroup(frenos)),
+      leaf("cuidado-tanque", "Cuidado del tanque", lanesByGroup(cuidadoTanque)),
       leaf("accesorios", "Accesorios", lanesByGroup(accesorios)),
-      leaf("diesel", "Diesel", lanesByGroup(diesel)),
+      leaf("diesel", "Motores a Diesel", lanesByGroup([...dieselAditivos, ...dieselTanque])),
     ].filter((n) => n.count > 0);
   }
 
   if (meta.id === "falken") {
-    return leavesByGroup(products).filter((n) => n.count > 0);
+    const azenis = products.filter((p) => p.group === "Azenis");
+    const ziex = products.filter((p) => p.group === "Ziex");
+    const wildpeak = products.filter((p) => p.group === "WildPeak");
+    return [
+      leaf("azenis", "Azenis", lanesByGroup(azenis)),
+      leaf("ziex", "Ziex", lanesByGroup(ziex)),
+      branch("wildpeak", "WildPeak", leavesBySubgroup(wildpeak)),
+    ].filter((n) => n.count > 0);
   }
 
   // Mobil

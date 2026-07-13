@@ -170,6 +170,59 @@ const StarIcon = ({ color, className, strokeWidth }: IconProps) => (
     <path d="M24 5l5.5 12.2L42 19l-9 9.2L35 42l-11-6.5L13 42l2-13.8L6 19l12.5-1.8L24 5z" />
   </svg>
 );
+// Bandera a cuadros (Azenis: deportivo / competencia).
+const ChequeredFlagIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M12 4v40" />
+    <path d="M12 6h24v18H12V6z" />
+    <rect x="12" y="6" width="6" height="6" fill={color} />
+    <rect x="24" y="6" width="6" height="6" fill={color} />
+    <rect x="18" y="12" width="6" height="6" fill={color} />
+    <rect x="30" y="12" width="6" height="6" fill={color} />
+    <rect x="12" y="18" width="6" height="6" fill={color} />
+    <rect x="24" y="18" width="6" height="6" fill={color} />
+  </svg>
+);
+// Carretera en perspectiva (Ziex: touring / confort).
+const RoadIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M18 6 8 42" />
+    <path d="M30 6l10 36" />
+    <path d="M24 10v4M24 20v4M24 30v4" />
+  </svg>
+);
+// Cordillera (WildPeak: todo terreno).
+const MountainIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M4 38 18 14l8 10 6-8 12 22z" />
+    <path d="M14 30l4-5 4 5M32 24l-3 4" />
+  </svg>
+);
+// Escudo con check (cuidado del tanque: protección).
+const ShieldTankIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M24 5 8 11v12c0 11 7 18 16 20 9-2 16-9 16-20V11z" />
+    <path d="M17 24l5 5 9-10" />
+  </svg>
+);
+// Manguera enroscada con gota (power wash y sprays).
+const HoseIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <path d="M6 14a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6 6 6 0 0 0 6 6h4a6 6 0 0 1 6 6" />
+    <circle cx="34" cy="30" r="4" fill={color} fillOpacity="0.18" />
+    <path d="M34 25c0 3-4 5.5-4 9a4 4 0 1 0 8 0c0-3.5-4-6-4-9z" />
+  </svg>
+);
+
+// Paleta reducida para las tarjetas nuevas — coherente con la estética de
+// marca (navy, rojo, taupe, grafito), en vez de un color distinto por
+// categoría. Las categorías "clásicas" (gasolina/diesel/combustibles/
+// aditivos/alcoholes) no se tocan: son anteriores a este ajuste.
+const NAVY = "#003462";
+const RED = "#D51C29";
+const TAUPE = "#A79F9D";
+const GRAPHITE = "#3F3B36";
+const EARTH = "#4A4630"; // grafito/tierra — familia WildPeak
 
 // Diseño por tipo de opción (keyed por node.id, que es estable entre marcas).
 const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => React.ReactElement }> = {
@@ -178,23 +231,28 @@ const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => Re
   combustibles: { accent: "#C81E2B", Icon: RaceCanIcon },
   aditivos: { accent: "#0F8A7E", Icon: BottlePlusIcon },
   alcoholes: { accent: "#6D28D9", Icon: MoleculeIcon },
-  // Familias Falken: mismo ícono de caucho, acento de la marca.
-  azenis: { accent: "#0033A0", Icon: TireIcon },
-  ziex: { accent: "#0033A0", Icon: TireIcon },
-  "wildpeak-at": { accent: "#0033A0", Icon: TireIcon },
-  "wildpeak-mt": { accent: "#0033A0", Icon: TireIcon },
-  "wildpeak-rt": { accent: "#0033A0", Icon: TireIcon },
-  // Secciones nuevas VP Racing.
-  refrigerantes: { accent: "#0891B2", Icon: SnowflakeIcon },
-  aerosoles: { accent: "#DB2777", Icon: SprayIcon },
-  frenos: { accent: "#1F2937", Icon: BrakeDiscIcon },
-  accesorios: { accent: "#7C2D12", Icon: JerryCanIcon },
-  // Secciones nuevas / restauradas Mobil.
-  moto: { accent: "#1D4ED8", Icon: HelmetIcon },
-  transmisiones: { accent: "#475569", Icon: GearIcon },
-  industrial: { accent: "#78716C", Icon: FactoryIcon },
-  grasas: { accent: "#CA8A04", Icon: DropIcon },
-  especialidades: { accent: "#B45309", Icon: StarIcon },
+  // Falken — 3 familias de primer nivel, cada una con su propio acento
+  // dentro de la paleta del sitio (deportivo / touring / todo terreno).
+  azenis: { accent: RED, Icon: ChequeredFlagIcon },
+  ziex: { accent: NAVY, Icon: RoadIcon },
+  wildpeak: { accent: EARTH, Icon: MountainIcon },
+  // WildPeak — 2do nivel (A/T, M/T, R/T): mismo acento tierra, ícono de rin.
+  at: { accent: EARTH, Icon: TireIcon },
+  mt: { accent: EARTH, Icon: TireIcon },
+  rt: { accent: EARTH, Icon: TireIcon },
+  // VP Racing — secciones nuevas.
+  refrigerantes: { accent: NAVY, Icon: SnowflakeIcon },
+  aerosoles: { accent: TAUPE, Icon: SprayIcon },
+  "power-wash": { accent: NAVY, Icon: HoseIcon },
+  frenos: { accent: GRAPHITE, Icon: BrakeDiscIcon },
+  "cuidado-tanque": { accent: RED, Icon: ShieldTankIcon },
+  accesorios: { accent: TAUPE, Icon: JerryCanIcon },
+  // Mobil — secciones nuevas / restauradas.
+  moto: { accent: NAVY, Icon: HelmetIcon },
+  transmisiones: { accent: GRAPHITE, Icon: GearIcon },
+  industrial: { accent: TAUPE, Icon: FactoryIcon },
+  grasas: { accent: NAVY, Icon: DropIcon },
+  especialidades: { accent: RED, Icon: StarIcon },
 };
 
 function optionStyle(id: string, fallbackAccent: string) {

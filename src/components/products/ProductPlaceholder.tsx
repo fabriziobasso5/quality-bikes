@@ -1,9 +1,9 @@
 import type { ProductCategory } from "@/data/products";
 
 /**
- * Marcador de posición para productos sin foto (VP Racing, Mobil). Tarjeta
- * sólida y premium: degradado sutil en el accent de la marca, barra de color,
- * silueta de envase definida y sombra suave — nada desteñido ni vacío.
+ * Marcador de posición para productos sin foto. Tarjeta sólida y premium:
+ * degradado sutil en el accent de la marca, barra de color, silueta definida
+ * (envase o caucho según categoría) y sombra suave — nada desteñido ni vacío.
  */
 function Silhouette({ category, color }: { category: ProductCategory; color: string }) {
   const stroke = { fill: "none", stroke: color, strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
@@ -26,6 +26,17 @@ function Silhouette({ category, color }: { category: ProductCategory; color: str
         <path {...stroke} d="M16 16h26a4 4 0 0 1 4 4v30a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V20a4 4 0 0 1 4-4z" />
         <rect x="20" y="34" width="22" height="12" {...band} />
         <path {...stroke} d="M25 11h12v5H25zM46 26h5v10h-5" />
+      </svg>
+    );
+  }
+  if (category === "llantas") {
+    // Caucho: rin + banda de rodadura.
+    return (
+      <svg viewBox="0 0 64 64" className="h-24 w-24 drop-shadow-sm" aria-hidden="true">
+        <circle cx="32" cy="32" r="24" {...stroke} />
+        <circle cx="32" cy="32" r="24" {...band} />
+        <circle cx="32" cy="32" r="9" {...stroke} />
+        <path {...stroke} d="M32 4v10M32 50v10M4 32h10M50 32h10M12.4 12.4l7.1 7.1M44.5 44.5l7.1 7.1M51.6 12.4l-7.1 7.1M19.5 44.5l-7.1 7.1" />
       </svg>
     );
   }

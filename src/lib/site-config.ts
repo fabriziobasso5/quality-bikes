@@ -23,10 +23,12 @@ export const siteConfig = {
   // Concesionario multimarca — sin orden de énfasis por marca. Son marcas
   // que la casa vende o ha vendido, no representaciones oficiales.
   brandsRepresented: ["BMW", "Ducati", "Honda", "Yamaha", "Suzuki", "Kawasaki", "Triumph", "Voge"],
-  // Productos complementarios en tienda física (lubricantes/racing), no
-  // motocicletas. BK3 se presenta como marca tipográfica de la casa (logo:
+  // Productos complementarios en tienda física (lubricantes/racing/llantas),
+  // no motocicletas. BK3 se presenta como marca tipográfica de la casa (logo:
   // null + sublabel): decisión de diseño — el arte oficial del distribuidor
   // no convive con la estética minimalista del sitio.
+  // Mismo orden que productBrands en data/products.ts (VP Racing, Mobil, BK3,
+  // Falken): el índice de cada tarjeta se usa para resolver su ruta.
   productsCarried: [
     {
       name: "VP Racing",
@@ -45,6 +47,12 @@ export const siteConfig = {
       description: "Elevadores de octanaje",
       logo: "/images/brands/bk3.png",
       sublabel: "Potenciador de octanaje",
+    },
+    {
+      name: "Falken",
+      description: "Llantas de alto rendimiento para todo terreno",
+      logo: "/images/brands/falken.png",
+      sublabel: null,
     },
   ],
 } as const;

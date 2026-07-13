@@ -16,7 +16,7 @@ const navItems = [
  * Menú móvil = versión móvil del mega-menú. La hamburguesa despliega un panel
  * con Catálogo, Productos, Nosotros y Contacto. "Catálogo" y "Productos" se
  * expanden EN SITIO (acordeón) mostrando, respectivamente, todas las motos y
- * las 3 marcas — sin depender del overlay de escritorio, así funciona bien en
+ * las marcas — sin depender del overlay de escritorio, así funciona bien en
  * teléfono. "Nosotros" y "Contacto" navegan a sus páginas.
  */
 export default function MobileMenu() {
@@ -109,7 +109,7 @@ export default function MobileMenu() {
             </div>
           )}
 
-          {/* Productos — mega-menú móvil: las 3 marcas. */}
+          {/* Productos — mega-menú móvil: las marcas. */}
           <button
             type="button"
             onClick={() => setProductsOpen((v) => !v)}

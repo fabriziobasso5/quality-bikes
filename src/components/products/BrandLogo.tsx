@@ -2,9 +2,10 @@ import { withBasePath } from "@/lib/base-path";
 import type { ProductBrandMeta } from "@/data/products";
 
 /**
- * Logo de marca en alta resolución y a un tamaño consistente entre las tres
- * casas (mismo alto visual, centrado, object-contain). Pensado para mostrarse
- * sobre fondo claro. VP Racing y Mobil tienen archivo; BK3 usa su PNG limpio.
+ * Logo de marca en alta resolución y a un tamaño consistente entre las casas
+ * (mismo alto visual, centrado, object-contain). Pensado para mostrarse sobre
+ * fondo claro. Cada marca tiene su archivo (PNG o SVG) recortado sin aire de
+ * sobra, para que el alto fijo del contenedor dé un tamaño visual parejo.
  * Si faltara el archivo, cae a un wordmark tipográfico.
  */
 export default function BrandLogo({

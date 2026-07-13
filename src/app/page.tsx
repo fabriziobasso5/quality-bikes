@@ -117,9 +117,9 @@ export default function Home() {
           las motos de próximo arribo — foto flotante, specs y "Reservar". */}
       {upcoming.length > 0 && <FeaturedArrivals motos={upcoming} />}
 
-      {/* Productos en tienda: tres marcas, tres logos, nada más. Divisor
-          superior + eyebrow en rojo de marca para marcar que aquí empieza la
-          zona de tienda. */}
+      {/* Productos en tienda: marcas complementarias, mismos logos en placas
+          idénticas. Divisor superior + eyebrow en rojo de marca para marcar
+          que aquí empieza la zona de tienda. */}
       <section className="border-t border-black/10 bg-brand-bg-soft">
         <div className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
           <Reveal className="text-center">
@@ -128,17 +128,17 @@ export default function Home() {
               También en tienda
             </p>
           </Reveal>
-          <RevealGroup className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-3">
+          <RevealGroup className="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {siteConfig.productsCarried.map((product, i) => {
-            // productsCarried y productBrands describen las mismas tres casas en
-            // el mismo orden (VP Racing, Mobil, BK3): el índice da el id de la
-            // ruta. (Asunción: si se reordena una lista, reordenar la otra.)
+            // productsCarried y productBrands describen las mismas casas en el
+            // mismo orden (VP Racing, Mobil, BK3, Falken): el índice da el id
+            // de la ruta. (Asunción: si se reordena una lista, reordenar la otra.)
             const brandId = productBrands[i]?.id;
             return (
               <RevealItem key={product.name} className="text-center">
                 <Link href={brandId ? `/productos/${brandId}` : "/productos"} className="group block">
                   {/* Placas idénticas: el logo se maximiza dentro del mismo
-                      marco en las tres marcas, así se ven simétricos en tamaño. */}
+                      marco en todas las marcas, así se ven simétricos en tamaño. */}
                   <div className="flex h-28 items-center justify-center overflow-hidden rounded-2xl border border-black/10 bg-white px-7 shadow-sm shadow-black/[0.04] transition duration-300 group-hover:-translate-y-1 group-hover:border-black/20 group-hover:shadow-lg group-hover:shadow-black/10">
                     {/* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */}
                     <img

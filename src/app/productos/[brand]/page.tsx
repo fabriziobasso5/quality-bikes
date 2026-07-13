@@ -19,7 +19,7 @@ export function generateStaticParams() {
   return productBrands.map((b) => ({ brand: b.id }));
 }
 
-// Export estático: solo se sirven las tres marcas de generateStaticParams.
+// Export estático: solo se sirven las marcas de generateStaticParams.
 export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
@@ -85,13 +85,35 @@ const branch = (id: string, label: string, children: CatalogNode[]): CatalogNode
   children,
 });
 
+// Una opción por valor único de "group", en el orden en que aparecen los
+// datos — cada familia es su propia hoja con un único carril (mismo patrón
+// que ya usan las líneas nuevas de Mobil).
+function leavesByGroup(items: Product[]): CatalogNode[] {
+  const order: string[] = [];
+  const map = new Map<string, Product[]>();
+  const slugs = new Map<string, string>();
+  for (const p of items) {
+    if (!map.has(p.group)) {
+      map.set(p.group, []);
+      order.push(p.group);
+      slugs.set(p.group, p.groupSlug);
+    }
+    map.get(p.group)!.push(p);
+  }
+  return order.map((g) => leaf(slugs.get(g)!, g, lanesByGroup(map.get(g)!)));
+}
+
 /**
  * Árbol de navegación anidada por marca (cambio de vista in-page):
  * - BK3: 1 nivel, 2 opciones — Gasolina (octane boosters + performance marine)
  *   y Diesel (cetanium).
  * - VP Racing: 2 niveles — Gasolina (→ Combustibles de competencia / Aditivos /
  *   Alcoholes) y Diesel (aditivos diesel, hoja directa).
- * - Mobil: Gasolina y Diesel, separado por tipo (Diesel: Min → Full → Semi).
+ * - Mobil: Gasolina, Diesel (separados por tipo: Min → Full → Semi) y las
+ *   líneas adicionales (Transmisiones, Industrial, Grasas, Especialidades).
+ * - Falken: SIN Gasolina/Diesel — una opción por FAMILIA de caucho (Azenis,
+ *   Ziex, WildPeak A/T, WildPeak M/T, WildPeak R/T), tomada directo del campo
+ *   "group" de cada producto.
  */
 function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] {
   if (meta.id === "bk3") {
@@ -118,14 +140,26 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     ].filter((n) => n.count > 0);
   }
 
+  if (meta.id === "falken") {
+    return leavesByGroup(products).filter((n) => n.count > 0);
+  }
+
   // Mobil
   const gasolina = products.filter(
     (p) => p.group === "Línea gasolina" || p.group === "Línea moto 2T y 4T",
   );
   const diesel = products.filter((p) => p.group === "Línea diesel");
+  const transmisiones = products.filter((p) => p.group === "Línea transmisiones");
+  const industrial = products.filter((p) => p.group === "Línea industrial");
+  const grasas = products.filter((p) => p.group === "Línea grasas");
+  const especialidades = products.filter((p) => p.group === "Línea especialidades");
   return [
     leaf("gasolina", "Gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
     leaf("diesel", "Diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético"])),
+    leaf("transmisiones", "Transmisiones", lanesByGroup(transmisiones)),
+    leaf("industrial", "Industrial", lanesByGroup(industrial)),
+    leaf("grasas", "Grasas", lanesByGroup(grasas)),
+    leaf("especialidades", "Especialidades", lanesByGroup(especialidades)),
   ].filter((n) => n.count > 0);
 }
 

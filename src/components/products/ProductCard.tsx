@@ -16,6 +16,8 @@ export default function ProductCard({ product }: { product: Product }) {
   const presentations = product.presentations ?? [];
   const [size, setSize] = useState<string | null>(presentations[0] ?? null);
   const [justAdded, setJustAdded] = useState(false);
+  const presentationLabel =
+    product.category === "llantas" ? "Medida disponible" : "Presentación · venta por caja";
 
   useEffect(() => {
     if (!justAdded) return;
@@ -65,7 +67,7 @@ export default function ProductCard({ product }: { product: Product }) {
             {presentations.length > 0 && (
               <div className="mb-3">
                 <p className="mb-2 text-[10px] font-medium tracking-[0.12em] text-brand-navy/60 uppercase">
-                  Presentación · venta por caja
+                  {presentationLabel}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {presentations.map((p) => (

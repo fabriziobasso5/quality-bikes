@@ -81,6 +81,14 @@ const MoleculeIcon = ({ color, className, strokeWidth }: IconProps) => (
     <path d="M16.5 18.4 23 31M16.8 14 28.2 12M31 14.5 27 30.5M29.5 33l4.7-1.6" />
   </svg>
 );
+// Rin y caucho con banda de rodadura (familias Falken).
+const TireIcon = ({ color, className, strokeWidth }: IconProps) => (
+  <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
+    <circle cx="24" cy="24" r="18" />
+    <circle cx="24" cy="24" r="7" />
+    <path d="M24 3v10M24 35v10M3 24h10M35 24h10M9.3 9.3l7.1 7.1M31.6 31.6l7.1 7.1M38.7 9.3l-7.1 7.1M16.4 31.6l-7.1 7.1" />
+  </svg>
+);
 
 // Diseño por tipo de opción (keyed por node.id, que es estable entre marcas).
 const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => React.ReactElement }> = {
@@ -89,6 +97,12 @@ const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => Re
   combustibles: { accent: "#C81E2B", Icon: RaceCanIcon },
   aditivos: { accent: "#0F8A7E", Icon: BottlePlusIcon },
   alcoholes: { accent: "#6D28D9", Icon: MoleculeIcon },
+  // Familias Falken: mismo ícono de caucho, acento de la marca.
+  azenis: { accent: "#0033A0", Icon: TireIcon },
+  ziex: { accent: "#0033A0", Icon: TireIcon },
+  "wildpeak-at": { accent: "#0033A0", Icon: TireIcon },
+  "wildpeak-mt": { accent: "#0033A0", Icon: TireIcon },
+  "wildpeak-rt": { accent: "#0033A0", Icon: TireIcon },
 };
 
 function optionStyle(id: string, fallbackAccent: string) {

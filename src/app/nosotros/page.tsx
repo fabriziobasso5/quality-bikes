@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
@@ -10,9 +9,11 @@ export const metadata: Metadata = {
 };
 
 // Historia real de la casa (1977 → hoy). Redacción editorial sobre los hechos
-// entregados por el cliente; la imagen es una toma lifestyle en alta calidad ya
-// presente en el repo (se reemplazará por una foto real del showroom cuando la
-// haya).
+// entregados por el cliente. El panel ya no usa foto: las únicas fotos
+// lifestyle en alta calidad del repo ya están en uso en el home (Hero +
+// "Ideal para todo terreno"), así que aquí va un tratamiento de marca
+// (degradado navy + silueta del isotipo) hasta que haya una foto propia del
+// showroom.
 export default function NosotrosPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-24 sm:py-32">
@@ -47,15 +48,40 @@ export default function NosotrosPage() {
         </Reveal>
 
         <Reveal delay={0.2} className="lg:col-span-2">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-lg shadow-black/10">
-            <Image
-              src={withBasePath("/images/lifestyle/bmw-r1300-gsa-scenic.webp")}
-              alt="BMW GS Adventure en un mirador de montaña — el espíritu de Quality Bikes"
-              fill
-              sizes="(max-width: 1024px) 100vw, 40vw"
-              className="object-cover"
+          <div
+            className="relative flex aspect-[4/5] w-full items-end overflow-hidden rounded-2xl shadow-lg shadow-black/10"
+            style={{
+              backgroundImage:
+                "linear-gradient(160deg, #003462 0%, #04223d 55%, #0a1420 100%)",
+            }}
+          >
+            {/* Silueta del isotipo a gran escala, sangrada por el borde
+                superior: motivo de marca en vez de una foto repetida. */}
+            {/* eslint-disable-next-line @next/next/no-img-element -- silueta de marca, dimensiones intrínsecas variables */}
+            <img
+              src={withBasePath("/assets/logo/quality-bikes-moto-silueta.svg")}
+              alt=""
+              aria-hidden
+              className="pointer-events-none absolute -top-[6%] -right-[22%] w-[105%] max-w-none opacity-[0.16]"
+              style={{ filter: "brightness(0) invert(1)" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background: "radial-gradient(120% 70% at 100% 0%, rgba(255,255,255,0.12) 0%, transparent 55%)",
+              }}
+            />
+            {/* Velo hacia abajo: asegura contraste del texto sobre la silueta. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#040d18] via-[#040d18]/10 to-transparent"
+            />
+            <div className="relative w-full px-8 pb-10 text-center sm:pb-12">
+              <p className="font-script text-3xl text-brand-bg/90 sm:text-4xl">{siteConfig.slogan}</p>
+              <span aria-hidden className="mx-auto mt-6 block h-px w-12 bg-brand-bg/30" />
+              <p className="mt-6 text-xs tracking-[0.3em] text-brand-bg/50 uppercase">Desde 1977</p>
+            </div>
           </div>
           <p className="mt-3 text-center text-xs tracking-[0.2em] text-brand-text/40 uppercase">
             Caracas · Venezuela · desde 1977

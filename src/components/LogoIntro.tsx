@@ -45,6 +45,10 @@ export default function LogoIntro() {
         // queda en el DOM — desmontarlo fuerza un repaint de viewport
         // completo y Chrome re-registra el LCP en ese instante, arruinando
         // la métrica aunque la página pintó en el primer frame.
+        // La animación CSS de la fase 1 (fill: both) pisa los transforms
+        // inline de GSAP — se neutraliza al despegar (mismo estado visual:
+        // scale 1 / opacity 1, sin salto).
+        gsap.set(mark, { animation: "none" });
         const tl = gsap.timeline();
         if (headerLogo) {
           gsap.set(headerLogo, { autoAlpha: 0 });
@@ -54,7 +58,9 @@ export default function LogoIntro() {
           const x = target.left + (markRect.width * scale) / 2 - window.innerWidth / 2;
           const y = target.top + target.height / 2 - window.innerHeight / 2;
           tl.to(mark, { x, y, scale, duration: 0.6, ease: "power4.inOut" }, 0)
-            .to("#qb-intro-glow", { autoAlpha: 0, duration: 0.4, ease: "power2.in" }, 0.1)
+            // El velo blanco se disuelve mientras el isotipo vuela: al llegar
+            // al header, la página ya está a la vista
+            .to(overlay, { backgroundColor: "rgba(255,255,255,0)", duration: 0.45, ease: "power2.in" }, 0.05)
             .to(headerLogo, { autoAlpha: 1, duration: 0.1, ease: "none" }, 0.5)
             .to(mark, { autoAlpha: 0, duration: 0.1, ease: "none" }, 0.5)
             .set(headerLogo, { clearProps: "all" });
@@ -77,17 +83,11 @@ export default function LogoIntro() {
     <div
       id="qb-intro"
       aria-hidden
-      // Sin velo de pantalla completa: cualquier capa que tape el viewport
-      // hace que Chrome descarte la moto como candidato LCP y el métrico
-      // queda atado al fin de la intro. El isotipo flota sobre el hero con
-      // un glow suave (semi-transparente, no oclusivo) para separarse.
-      className="pointer-events-none fixed inset-0 z-[100] flex items-center justify-center"
+      // Pantalla de carga: velo blanco completo bajo el isotipo (pedido del
+      // cliente). GSAP lo disuelve durante el vuelo; el nodo nunca se
+      // desmonta (queda transparente e inerte) para no re-registrar el LCP.
+      className="pointer-events-none fixed inset-0 z-[100] flex items-center justify-center bg-white"
     >
-      <div
-        id="qb-intro-glow"
-        aria-hidden
-        className="absolute h-[420px] w-[420px] rounded-full bg-white/80 blur-3xl [animation:qb-intro-in_0.4s_cubic-bezier(0.33,1,0.68,1)_both]"
-      />
       {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca */}
       <img
         id="qb-intro-mark"

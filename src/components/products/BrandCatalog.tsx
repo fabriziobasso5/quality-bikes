@@ -203,21 +203,27 @@ function optionStyle(id: string, fallbackAccent: string) {
 }
 
 /**
- * Tarjeta de opción moderna y legible: el ÍCONO es protagonista — un chip
- * sólido en el color de la categoría con el ícono en blanco, grande y
- * reconocible, para identificar al instante de qué trata (surtidor = gasolina,
- * camión = diesel, bidón+bandera = combustibles de competencia, botella "+" =
- * aditivos). Detrás, el mismo ícono ampliado como marca de agua da
- * profundidad. Color de acento por categoría, buen contraste y CTA claro.
- * Hover = leve elevación + zoom del ícono (como MotoCard).
+ * Tarjeta de opción — el ÍCONO es protagonista — un chip sólido en el color
+ * de la categoría con el ícono en blanco, grande y reconocible, para
+ * identificar al instante de qué trata (surtidor = gasolina, camión =
+ * diesel, bidón+bandera = combustibles de competencia, botella "+" =
+ * aditivos). Detrás, el mismo ícono a gran escala sangra el borde inferior
+ * como marca de agua editorial, con un resplandor radial del acento detrás
+ * para dar profundidad (en vez de una foto por categoría, que no existe
+ * para agrupaciones abstractas como "Accesorios"). Al hover: el ícono y el
+ * chip escalan y rotan levemente, el borde vira hacia el acento y un filo
+ * de color crece al pie — mismo lenguaje que BrandCard en /productos, para
+ * que toda la sección de tienda se sienta de una sola pieza.
  */
 function OptionCard({
   node,
   brandAccent,
+  index,
   onSelect,
 }: {
   node: CatalogNode;
   brandAccent: string;
+  index: number;
   onSelect: () => void;
 }) {
   const { accent, Icon } = optionStyle(node.id, brandAccent);
@@ -227,33 +233,43 @@ function OptionCard({
     <button
       type="button"
       onClick={onSelect}
-      className="group relative flex h-60 w-full flex-col justify-between overflow-hidden rounded-2xl border border-black/10 bg-white text-left shadow-sm shadow-black/[0.03] transition duration-300 hover:-translate-y-1 hover:border-black/20 hover:shadow-xl hover:shadow-black/10"
+      style={{ "--accent": accent } as React.CSSProperties}
+      className="group relative flex h-60 w-full flex-col justify-between overflow-hidden rounded-2xl border border-black/10 bg-white text-left shadow-sm shadow-black/[0.03] transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-[color:var(--accent)]/40 hover:shadow-xl hover:shadow-black/10"
     >
       {/* Fondo: degradado sutil en el color de la categoría (tinte arriba, se
           aclara hacia el texto) */}
       <div
         aria-hidden
-        className="absolute inset-0"
-        style={{ backgroundImage: `linear-gradient(150deg, ${accent}1f 0%, ${accent}0a 40%, #ffffff 100%)` }}
+        className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-80"
+        style={{ backgroundImage: `linear-gradient(150deg, ${accent}22 0%, ${accent}0a 45%, #ffffff 100%)` }}
       />
-      {/* Patrón ligero de puntos en el accent, para textura */}
+      {/* Resplandor radial detrás del ícono grande: sustituye a una foto de
+          fondo (no hay una por categoría) dando profundidad y color propio. */}
       <div
         aria-hidden
-        className="absolute inset-0 opacity-60"
-        style={{ backgroundImage: `radial-gradient(${accent}1a 1px, transparent 1.5px)`, backgroundSize: "14px 14px" }}
+        className="pointer-events-none absolute -right-12 bottom-0 h-56 w-56 rounded-full opacity-40 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
+        style={{ backgroundColor: `${accent}40` }}
       />
-      {/* Marca de agua: el mismo ícono ampliado detrás, muy sutil */}
+      {/* Marca de agua: el mismo ícono a gran escala, sangrando la esquina. */}
       <Icon
         color={accent}
-        className="pointer-events-none absolute -right-5 -bottom-5 h-48 w-48 opacity-[0.08] transition-transform duration-500 group-hover:scale-110"
+        className="pointer-events-none absolute -right-8 -bottom-8 h-52 w-52 opacity-[0.09] transition-transform duration-700 ease-out group-hover:-rotate-3 group-hover:scale-110 group-hover:opacity-[0.16]"
       />
+
+      {/* Número de orden — detalle editorial discreto, esquina superior. */}
+      <span
+        aria-hidden
+        className="absolute top-5 right-6 font-mono text-[11px] tracking-[0.2em] text-brand-text/25"
+      >
+        {String(index + 1).padStart(2, "0")}
+      </span>
 
       {/* Chip protagonista con el ícono en blanco: identifica la categoría */}
       <div className="relative p-6 pb-0">
         <span
           aria-hidden
-          className="flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg transition-transform duration-500 group-hover:scale-105"
-          style={{ backgroundColor: accent, boxShadow: `0 10px 24px -8px ${accent}80` }}
+          className="flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg transition-all duration-500 ease-out group-hover:-rotate-3 group-hover:scale-110"
+          style={{ backgroundColor: accent, boxShadow: `0 12px 28px -8px ${accent}90` }}
         >
           <Icon color="#ffffff" strokeWidth={2.2} className="h-9 w-9" />
         </span>
@@ -268,13 +284,24 @@ function OptionCard({
             {node.count} {node.count === 1 ? "producto" : "productos"}
           </span>
           <span
-            className="text-sm font-semibold tracking-wide uppercase transition"
+            className="flex items-center gap-1.5 text-sm font-semibold tracking-wide uppercase"
             style={{ color: accent }}
           >
-            {isBranch ? "Ver opciones →" : "Ver productos →"}
+            {isBranch ? "Ver opciones" : "Ver productos"}
+            <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
           </span>
         </div>
       </div>
+
+      {/* Filo de color al pie: crece de izquierda a derecha al hover, mismo
+          gesto que BrandCard en /productos. */}
+      <span
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100"
+        style={{ backgroundColor: accent }}
+      />
     </button>
   );
 }
@@ -350,11 +377,12 @@ export default function BrandCatalog({
           <ProductLanes lanes={leaf.lanes!} accent={leafAccent} />
         ) : (
           <RevealGroup className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {(options ?? []).map((node) => (
+            {(options ?? []).map((node, index) => (
               <RevealItem key={node.id} className="h-full">
                 <OptionCard
                   node={node}
                   brandAccent={accent}
+                  index={index}
                   onSelect={() => setPath((p) => [...p, node.id])}
                 />
               </RevealItem>

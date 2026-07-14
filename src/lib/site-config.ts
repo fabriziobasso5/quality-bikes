@@ -23,7 +23,7 @@ export const siteConfig = {
   // Concesionario multimarca — sin orden de énfasis por marca. Son marcas
   // que la casa vende o ha vendido, no representaciones oficiales.
   brandsRepresented: ["BMW", "Ducati", "Honda", "Yamaha", "Suzuki", "Kawasaki", "Triumph", "Voge"],
-  // Productos complementarios en tienda física (lubricantes/racing/llantas),
+  // Productos complementarios en tienda física (lubricantes/racing/cauchos),
   // no motocicletas. BK3 se presenta como marca tipográfica de la casa (logo:
   // null + sublabel): decisión de diseño — el arte oficial del distribuidor
   // no convive con la estética minimalista del sitio.
@@ -50,7 +50,7 @@ export const siteConfig = {
     },
     {
       name: "Falken",
-      description: "Llantas de alto rendimiento para todo terreno",
+      description: "Cauchos de alto rendimiento para todo terreno",
       logo: "/images/brands/falken.png",
       sublabel: null,
     },

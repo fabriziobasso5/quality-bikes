@@ -44,14 +44,14 @@ export const categoryLabels: Record<ProductCategory, string> = {
   gasolinas: "Gasolinas de competencia",
   alcoholes: "Alcoholes",
   lubricantes: "Lubricantes",
-  llantas: "Llantas",
+  llantas: "Cauchos",
 };
 
 export const productBrands: ProductBrandMeta[] = [
-  { id: "vp-racing", name: "VP Racing", tagline: "Aditivos y combustibles de competencia", logo: "/images/brands/vp-racing.png", accent: "#E4002B", accent2: "#003DA5", categories: ["aditivos", "gasolinas", "alcoholes"] },
-  { id: "mobil", name: "Mobil", tagline: "Lubricantes sintéticos, semisintéticos y minerales", logo: "/images/brands/mobil-1.svg", accent: "#0033A0", accent2: "#ED1C24", categories: ["lubricantes"] },
-  { id: "bk3", name: "BK3", tagline: "Elevadores de octanaje y cetano", logo: "/images/brands/bk3.png", accent: "#E30613", accent2: "#111111", categories: ["aditivos"] },
-  { id: "falken", name: "Falken", tagline: "Cauchos de alto rendimiento para todo terreno", logo: "/images/brands/falken.png", accent: "#0033A0", accent2: "#E4032E", categories: ["llantas"] },
+  { id: "vp-racing", name: "VP Racing", tagline: "Combustibles, aditivos, fluidos y detailing de competencia", logo: "/images/brands/vp-racing.png", accent: "#E4002B", accent2: "#003DA5", categories: ["aditivos", "gasolinas", "alcoholes"] },
+  { id: "mobil", name: "Mobil", tagline: "Lubricantes para moto, auto, transmisión e industria", logo: "/images/brands/mobil-1.svg", accent: "#0033A0", accent2: "#ED1C24", categories: ["lubricantes"] },
+  { id: "bk3", name: "BK3", tagline: "Elevadores de octanaje, cetano y tratamiento marino", logo: "/images/brands/bk3.png", accent: "#E30613", accent2: "#111111", categories: ["aditivos"] },
+  { id: "falken", name: "Falken", tagline: "Cauchos deportivos, de touring y todo terreno", logo: "/images/brands/falken.png", accent: "#0033A0", accent2: "#E4032E", categories: ["llantas"] },
 ];
 
 export const products: Product[] = [
@@ -121,7 +121,6 @@ export const products: Product[] = [
   { slug: "vp-powerwash-super-concentrado", brand: "vp-racing", name: "PowerWash Super Concentrado", category: "aditivos", group: "Power Wash y Sprays", groupSlug: "power-wash", summary: "Jabón limpiador de suciedad y barro, súper concentrado.", highlights: ["Súper concentrado", "Suciedad y barro"], presentations: ["Caja de 4 × 1 Gal", "Paila de 5 Gal"], image: "/images/products/vp-racing/vp-powerwash-super-concentrado.webp" },
 
   // ── VP RACING · Frenos ──────────────────────────────────────────────────
-  { slug: "vp-street-legal-dot4", brand: "vp-racing", name: "Street Legal Syntetic DOT 4 Brake Fluid", category: "aditivos", group: "Frenos", groupSlug: "frenos", summary: "Líquido de frenos sintético DOT 4.", highlights: ["DOT 4", "Sintético"], presentations: ["Caja de 12 × 12 oz"], image: "/images/products/vp-racing/vp-street-legal-dot4.webp" },
   { slug: "vp-622-full-synthetic-brake-fluid", brand: "vp-racing", name: "622 Full Synthetic Brake Fluid", category: "aditivos", group: "Frenos", groupSlug: "frenos", summary: "Líquido de frenos sintético de alta temperatura para competencia profesional.", highlights: ["Alta temperatura", "Uso profesional"], presentations: ["Caja de 12 × 16.6 oz"], image: "/images/products/vp-racing/vp-622-full-synthetic-brake-fluid.webp" },
 
   // ── VP RACING · Cuidado del tanque ───────────────────────────────────────
@@ -208,8 +207,8 @@ export const products: Product[] = [
   { slug: "falken-wildpeak-at3w", brand: "falken", name: "WildPeak AT3W", category: "llantas", group: "WildPeak", groupSlug: "wildpeak", subgroup: "A/T", subgroupSlug: "at", subgroupLabel: "A/T", tags: ["Todo terreno"], summary: "El todo terreno más versátil de la línea WildPeak; para camionetas y SUV.", highlights: ["Todo terreno", "Camionetas y SUV", "Alta tracción"], presentations: ["31X10.50R15LT", "235/70R16", "P245/75R16", "LT245/75R16", "245/70R16", "255/70R16", "LT265/75R16", "265/70R16", "LT285/75R16", "LT305/70R16", "245/75R17", "245/65R17", "265/65R17", "265/70R17", "P285/70R17", "265/60R18", "265/65R18", "275/65R18", "L275/65R18", "LT285/65R18", "LT265/60R20", "275/55R20", "275/60R20", "LT285/55R20"], featured: true, image: "/images/products/falken/falken-wildpeak-at3w.webp" },
   { slug: "falken-wildpeak-at4w", brand: "falken", name: "WildPeak AT4W", category: "llantas", group: "WildPeak", groupSlug: "wildpeak", subgroup: "A/T", subgroupSlug: "at", subgroupLabel: "A/T", tags: ["Todo terreno"], summary: "Generación más reciente de la línea A/T; mayor durabilidad y agarre en todo tipo de terreno.", highlights: ["Todo terreno", "Nueva generación", "Mayor durabilidad"], presentations: ["265/75R16", "LT285/75R16", "LT315/75R16", "265/70R17", "LT275/70R17", "P285/70R17", "265/65R18", "LT275/70R18", "275/65R18", "285/65R18", "265/60R20", "285/55R20"], image: "/images/products/falken/falken-wildpeak-at4w.webp" },
   { slug: "falken-wildpeak-at-trail", brand: "falken", name: "WildPeak AT Trail", category: "llantas", group: "WildPeak", groupSlug: "wildpeak", subgroup: "A/T", subgroupSlug: "at", subgroupLabel: "A/T", tags: ["Todo terreno", "Crossover / SUV"], summary: "Versión todo terreno pensada para crossover y SUV urbanos con vocación aventurera.", highlights: ["Todo terreno", "Crossover / SUV"], presentations: ["225/65R17", "255/50R20", "265/50R20"], image: "/images/products/falken/falken-wildpeak-at-trail.webp" },
-  { slug: "falken-wildpeak-mt01", brand: "falken", name: "WildPeak MT01", category: "llantas", group: "WildPeak", groupSlug: "wildpeak", subgroup: "M/T", subgroupSlug: "mt", subgroupLabel: "M/T", tags: ["Barro / Mud terrain"], summary: "Caucho para barro extremo, máxima tracción fuera de carretera.", highlights: ["Mud terrain", "Máxima tracción", "Uso extremo"], presentations: ["31X10.50R15LT", "LT265/75R16", "LT285/75R16", "LT315/75R16", "35X12.50R17LT", "37X1250R17", "35X12.50R18LT", "LT265/70R17"], featured: true, image: "/images/products/falken/falken-wildpeak-mt01.webp" },
   { slug: "falken-wildpeak-rt01", brand: "falken", name: "WildPeak RT01", category: "llantas", group: "WildPeak", groupSlug: "wildpeak", subgroup: "R/T", subgroupSlug: "rt", subgroupLabel: "R/T", tags: ["Rugged terrain"], summary: "Punto medio entre A/T y M/T: agresivo fuera de carretera sin sacrificar el manejo en asfalto.", highlights: ["Rugged terrain", "Agresivo y versátil"], presentations: ["LT265/75R16", "LT265/70R17", "LT275/65R18", "L285/65R18", "LT265/60R20", "LT305/55R20"], image: "/images/products/falken/falken-wildpeak-rt01.webp" },
+  { slug: "falken-wildpeak-mt01", brand: "falken", name: "WildPeak MT01", category: "llantas", group: "WildPeak", groupSlug: "wildpeak", subgroup: "M/T", subgroupSlug: "mt", subgroupLabel: "M/T", tags: ["Barro / Mud terrain"], summary: "Caucho para barro extremo, máxima tracción fuera de carretera.", highlights: ["Mud terrain", "Máxima tracción", "Uso extremo"], presentations: ["31X10.50R15LT", "LT265/75R16", "LT285/75R16", "LT315/75R16", "35X12.50R17LT", "37X1250R17", "35X12.50R18LT", "LT265/70R17"], featured: true, image: "/images/products/falken/falken-wildpeak-mt01.webp" },
 ];
 
 export const getProductBrand = (id: string) => productBrands.find((b) => b.id === id);

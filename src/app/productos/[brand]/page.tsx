@@ -133,7 +133,9 @@ const VP_ADITIVOS_CLASICOS = [
 
 /**
  * Árbol de navegación in-page por marca.
- * - BK3: Gasolina (octane boosters + performance marine) y Diesel (cetanium).
+ * - BK3: Motores a Gasolina (octane boosters + performance marine) y
+ *   Motores a Diesel (cetanium) — mismos ids "gasolina"/"diesel" de siempre,
+ *   solo cambia el label mostrado.
  * - VP Racing: 6 tarjetas planas, en este orden — Combustibles de
  *   Competencia (gasolinas + alcoholes de carrera), Motores a Diesel
  *   (aditivos diesel + Diesel Armor), Aditivos (clásicos), Fluidos y
@@ -141,21 +143,22 @@ const VP_ADITIVOS_CLASICOS = [
  *   (aerosoles + power wash) y Accesorios (cuidado del tanque + bidones).
  *   Diesel Armor vive en "Cuidado del tanque" pero está tags:["Diesel"]:
  *   se saca de ahí y se suma a "Motores a Diesel", no a "Accesorios".
- * - Mobil: 5 tarjetas, en este orden — Moto (2T y 4T), Motores a Gasolina,
- *   Motores a Diesel (incluye el refrigerante Delvac Extended Life, antes en
- *   "Especialidades"), Transmisiones e Industrial (incluye la grasa
- *   Mobilgrease XHP 222, antes en "Grasas").
- * - Falken: 3 tarjetas de primer nivel — Azenis y Ziex van directo a su
- *   lista de productos; WildPeak abre un 2do nivel con 3 sub-opciones
- *   (A/T, M/T, R/T) tomadas del campo "subgroup".
+ * - Mobil: 5 tarjetas, en este orden — Motores a Gasolina, Motores a Diesel
+ *   (incluye el refrigerante Delvac Extended Life, antes en
+ *   "Especialidades"), Motos (2T y 4T), Transmisiones e Industrial (incluye
+ *   la grasa Mobilgrease XHP 222, antes en "Grasas").
+ * - Falken: 3 tarjetas de primer nivel, en este orden — WildPeak (abre un
+ *   2do nivel con 3 sub-opciones A/T, R/T, M/T, tomadas del campo
+ *   "subgroup" en ese orden), Ziex y Azenis (van directo a su lista de
+ *   productos).
  */
 function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] {
   if (meta.id === "bk3") {
     const gasolina = products.filter((p) => p.group === "Gasolina" || p.group === "Marino");
     const diesel = products.filter((p) => p.group === "Diesel");
     return [
-      leaf("gasolina", "Gasolina", lanesByGroup(gasolina)),
-      leaf("diesel", "Diesel", lanesByGroup(diesel)),
+      leaf("gasolina", "Motores a Gasolina", lanesByGroup(gasolina)),
+      leaf("diesel", "Motores a Diesel", lanesByGroup(diesel)),
     ].filter((n) => n.count > 0);
   }
 
@@ -196,9 +199,9 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     const ziex = products.filter((p) => p.group === "Ziex");
     const wildpeak = products.filter((p) => p.group === "WildPeak");
     return [
-      leaf("azenis", "Azenis", lanesByGroup(azenis)),
-      leaf("ziex", "Ziex", lanesByGroup(ziex)),
       branch("wildpeak", "WildPeak", leavesBySubgroup(wildpeak)),
+      leaf("ziex", "Ziex", lanesByGroup(ziex)),
+      leaf("azenis", "Azenis", lanesByGroup(azenis)),
     ].filter((n) => n.count > 0);
   }
 
@@ -214,9 +217,9 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     (p) => p.group === "Línea industrial" || p.group === "Línea grasas",
   );
   return [
-    leaf("moto", "Moto", lanesByTag(moto, ["Semisintético", "Mineral"])),
     leaf("gasolina", "Motores a Gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
     leaf("diesel", "Motores a Diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético", "Refrigerante"])),
+    leaf("moto", "Motos", lanesByTag(moto, ["Semisintético", "Mineral"])),
     leaf("transmisiones", "Transmisiones", lanesByGroup(transmisiones)),
     leaf("industrial", "Industrial", lanesByGroup(industrial)),
   ].filter((n) => n.count > 0);

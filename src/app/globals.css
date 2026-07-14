@@ -105,6 +105,22 @@ body::after {
   display: none;
 }
 
+/*
+  Isotipo QB en 3D del hero: balanceo lento en perspectiva (nunca gira de
+  perfil — siempre legible). La capa trasera del componente hace de
+  "extrusión" y este keyframe mueve el conjunto. Bajo reduced-motion el
+  componente lo apaga con motion-reduce:animate-none.
+*/
+@keyframes qb-logo-3d {
+  0%,
+  100% {
+    transform: rotateY(-16deg) rotateX(7deg);
+  }
+  50% {
+    transform: rotateY(16deg) rotateX(-5deg);
+  }
+}
+
 /* Latido sutil de las capas de luz del BlueprintReveal: respiración lenta,
    nunca por debajo de ~86% para que no se lea como parpadeo/fallo. */
 @keyframes qb-breathe {

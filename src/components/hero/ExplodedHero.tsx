@@ -284,29 +284,41 @@ export default function ExplodedHero() {
     >
       <div
         ref={stageRef}
-        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-[#e9ecef] motion-reduce:static motion-reduce:h-svh"
+        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-[#d3d8dd] motion-reduce:static motion-reduce:h-svh"
       >
-        {/* Retícula de plano técnico en navy sobre papel gris — la misma
-            trama (menor 24px / mayor 120px) del BlueprintReveal navy */}
+        {/* Fondo liso gris (sin plano técnico): solo un degradé vertical muy
+            sutil + viñeta para que la moto se despegue del fondo */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,52,98,0.055)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,52,98,0.055)_1px,transparent_1px),linear-gradient(to_right,rgba(0,52,98,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,52,98,0.1)_1px,transparent_1px)] bg-[size:24px_24px,24px_24px,120px_120px,120px_120px]"
+          className="absolute inset-0 bg-[linear-gradient(180deg,#dde1e5_0%,#d3d8dd_45%,#c6ccd2_100%)]"
         />
-        {/* Viñeta suave para que las esquinas caigan y el centro respire */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_52%,rgba(0,30,60,0.08)_100%)]"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(10,25,45,0.14)_100%)]"
         />
 
-        {/* Marco del plano + cajetín (idéntico lenguaje del cierre navy) */}
-        <div aria-hidden className="absolute inset-4 border border-brand-navy/15 sm:inset-6" />
-        <div className="absolute right-6 bottom-6 hidden border border-brand-navy/15 bg-[#e9ecef]/85 px-4 py-2 text-right sm:block">
-          <p className="font-mono text-[9px] tracking-[0.2em] text-brand-navy/55 uppercase sm:text-[10px]">
-            Plano N.º 002 · QB-GSA-1300
-          </p>
-          <p className="font-mono text-[9px] tracking-[0.2em] text-brand-navy/35 uppercase sm:text-[10px]">
-            Despiece · Esc 1:1 · Caracas, Venezuela
-          </p>
+        {/* Isotipo QB en 3D — marca de la casa, arriba a la izquierda.
+            Balanceo lento (qb-logo-3d) con capa trasera como extrusión. */}
+        {/* hidden sm:block: en mobile el header ya muestra este mismo
+            isotipo justo arriba — evitamos el doble logo apilado */}
+        <div
+          aria-hidden
+          className="absolute top-5 left-5 z-20 hidden [perspective:600px] sm:top-8 sm:left-8 sm:block"
+        >
+          <div className="[animation:qb-logo-3d_9s_ease-in-out_infinite] [transform-style:preserve-3d] motion-reduce:animate-none">
+            {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca */}
+            <img
+              src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
+              alt=""
+              className="absolute inset-0 h-12 w-auto brightness-[0.45] [transform:translateZ(-5px)] sm:h-16"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca */}
+            <img
+              src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
+              alt="Quality Bikes"
+              className="relative h-12 w-auto drop-shadow-[0_10px_18px_rgba(0,20,40,0.35)] sm:h-16"
+            />
+          </div>
         </div>
 
         {/* Escenario 16:9: todas las capas comparten este frame (misma cámara
@@ -345,16 +357,12 @@ export default function ExplodedHero() {
             ))}
           </div>
 
-          {/* Cota inferior + cierre (aparece con el chasis) */}
+          {/* Cierre (aparece con el chasis) */}
           <div data-hero-final className="invisible absolute inset-x-[6%] bottom-[3%] z-[1] opacity-0">
-            <div className="relative border-t border-brand-navy/35">
-              <span className="absolute -top-2 left-0 h-2 border-l border-brand-navy/35" />
-              <span className="absolute -top-2 right-0 h-2 border-r border-brand-navy/35" />
-            </div>
-            <p className="mt-3 text-center font-mono text-[10px] tracking-[0.26em] text-brand-navy/55 uppercase">
-              Fig. 02 — Chasis · Todo lo demás es Quality
+            <p className="text-center font-mono text-[10px] tracking-[0.26em] text-brand-navy/55 uppercase">
+              Chasis al desnudo · Todo lo demás es Quality
             </p>
-            <p className="font-script mt-2 text-center text-2xl text-brand-navy sm:text-3xl">
+            <p className="font-script mt-2 text-center text-3xl text-brand-navy sm:text-4xl">
               {siteConfig.slogan}
             </p>
           </div>
@@ -434,6 +442,23 @@ export default function ExplodedHero() {
           </div>
         </div>
 
+        {/* Slogan de la casa, protagonista abajo a la izquierda (sale con el
+            título al arrancar el scroll) */}
+        <p
+          data-hero-title
+          className="absolute bottom-24 left-5 z-30 max-w-[80vw] font-script text-3xl leading-tight text-brand-navy drop-shadow-[0_1px_0_rgba(255,255,255,0.5)] sm:bottom-14 sm:left-10 sm:text-5xl"
+        >
+          {siteConfig.slogan}
+        </p>
+
+        {/* Pista de scroll, pequeña, justo debajo del slogan */}
+        <p
+          data-hero-hint
+          className="absolute bottom-6 left-6 z-30 font-mono text-[10px] tracking-[0.3em] text-brand-navy/50 uppercase sm:left-11 motion-reduce:hidden"
+        >
+          ↓ Scroll para despiezar
+        </p>
+
         {/* CTA (encima de todo, clickeable) */}
         <div data-hero-cta className="absolute bottom-14 z-30 sm:bottom-16">
           <Magnetic className="inline-block">
@@ -442,13 +467,6 @@ export default function ExplodedHero() {
             </OpenCatalogButton>
           </Magnetic>
         </div>
-
-        <p
-          data-hero-hint
-          className="absolute bottom-5 z-30 font-mono text-[10px] tracking-[0.3em] text-brand-navy/45 uppercase motion-reduce:hidden"
-        >
-          ↓ Scroll para despiezar
-        </p>
       </div>
     </section>
   );

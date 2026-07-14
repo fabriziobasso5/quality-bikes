@@ -59,59 +59,86 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-black/10 bg-brand-bg/95 backdrop-blur">
-      <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        {/* Anchor plano en vez de next/link: navegación dura al home con el
-            basePath ya resuelto — funciona desde cualquier subpágina de
-            GitHub Pages sin depender del estado del router del cliente. */}
-        <a href={withBasePath("/")} className="flex items-center" aria-label={siteConfig.name}>
-          {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
-          <img
-            src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
-            alt={siteConfig.name}
-            className="h-9 w-auto md:hidden"
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
-          <img
-            src={withBasePath("/assets/logo/quality-bikes-logo-venezuela.svg")}
-            alt={siteConfig.name}
-            className="hidden h-14 w-auto md:block"
-          />
-        </a>
+    <header className="sticky top-0 z-40 border-b border-white/10">
+      {/* Misma familia visual que el footer: fibra de carbono forjada con un
+          velo oscuro + viñeta radial encima. Estas capas viven en su propio
+          wrapper (no en <header>) para que overflow-hidden no recorte los
+          mega-menús, que cuelgan por fuera de esta barra. */}
+      <div className="relative overflow-hidden bg-[#0d0f11]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: `url("${withBasePath("/images/carbono-forjado.jpg")}")`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        />
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/55" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: "radial-gradient(120% 85% at 50% 0%, transparent 45%, rgba(0,0,0,0.55) 100%)",
+          }}
+        />
 
-        <nav className="hidden items-center gap-8 text-sm tracking-wide uppercase md:flex">
-          <button
-            onClick={() => toggle("catalogo")}
-            aria-expanded={openMenu === "catalogo"}
-            aria-controls="mega-catalogo"
-            className={`uppercase tracking-wide transition ${
-              openMenu === "catalogo" ? "text-brand-navy" : "text-brand-text/70 hover:text-brand-red"
-            }`}
-          >
-            Catálogo
-          </button>
-          <button
-            onClick={() => toggle("productos")}
-            aria-expanded={openMenu === "productos"}
-            aria-controls="mega-productos"
-            className={`uppercase tracking-wide transition ${
-              openMenu === "productos" ? "text-brand-navy" : "text-brand-text/70 hover:text-brand-red"
-            }`}
-          >
-            Productos
-          </button>
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-brand-text/70 transition hover:text-brand-red"
+        <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          {/* Anchor plano en vez de next/link: navegación dura al home con el
+              basePath ya resuelto — funciona desde cualquier subpágina de
+              GitHub Pages sin depender del estado del router del cliente. */}
+          <a href={withBasePath("/")} className="flex items-center" aria-label={siteConfig.name}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
+            <img
+              src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
+              alt={siteConfig.name}
+              className="h-10 w-auto md:hidden"
+              style={{ filter: "brightness(0) invert(1)" }}
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
+            <img
+              src={withBasePath("/assets/logo/quality-bikes-logo-venezuela.svg")}
+              alt={siteConfig.name}
+              className="hidden h-16 w-auto md:block"
+              style={{ filter: "brightness(0) invert(1)" }}
+            />
+          </a>
+
+          <nav className="hidden items-center gap-8 font-display text-base tracking-wide uppercase md:flex">
+            <button
+              onClick={() => toggle("catalogo")}
+              aria-expanded={openMenu === "catalogo"}
+              aria-controls="mega-catalogo"
+              className={`uppercase tracking-wide transition ${
+                openMenu === "catalogo" ? "text-brand-red" : "text-white/85 hover:text-brand-red"
+              }`}
             >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+              Catálogo
+            </button>
+            <button
+              onClick={() => toggle("productos")}
+              aria-expanded={openMenu === "productos"}
+              aria-controls="mega-productos"
+              className={`uppercase tracking-wide transition ${
+                openMenu === "productos" ? "text-brand-red" : "text-white/85 hover:text-brand-red"
+              }`}
+            >
+              Productos
+            </button>
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-white/85 transition hover:text-brand-red"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
-        <MobileMenu />
+          <MobileMenu />
+        </div>
       </div>
 
       <AnimatePresence>

@@ -40,11 +40,11 @@ export default function MobileMenu() {
         className="relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5"
       >
         <span
-          className={`h-px w-6 bg-brand-text transition ${open ? "translate-y-2 rotate-45" : ""}`}
+          className={`h-px w-6 transition ${open ? "translate-y-2 rotate-45 bg-brand-text" : "bg-white"}`}
         />
-        <span className={`h-px w-6 bg-brand-text transition ${open ? "opacity-0" : ""}`} />
+        <span className={`h-px w-6 transition ${open ? "bg-brand-text opacity-0" : "bg-white"}`} />
         <span
-          className={`h-px w-6 bg-brand-text transition ${open ? "-translate-y-2 -rotate-45" : ""}`}
+          className={`h-px w-6 transition ${open ? "-translate-y-2 -rotate-45 bg-brand-text" : "bg-white"}`}
         />
       </button>
 

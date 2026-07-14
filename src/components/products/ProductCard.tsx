@@ -67,9 +67,16 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         <div className="flex flex-1 flex-col p-5">
-          <h3 className="font-display text-base leading-snug tracking-wide text-brand-navy">
+          <h3 className="font-display text-[17px] font-semibold leading-snug tracking-wide text-brand-navy">
             {product.name}
           </h3>
+          {/* Octanaje como dato de ficha técnica (combustibles EWAY/Gulf). */}
+          {product.octane && (
+            <p className="mt-2 font-mono text-3xl leading-none tracking-tight text-brand-text">
+              {product.octane}
+              <span className="ml-1.5 text-xs tracking-[0.15em] text-brand-text/50 uppercase">oct</span>
+            </p>
+          )}
           <p className="mt-2 text-sm leading-relaxed text-brand-text/75">{product.summary}</p>
 
           {product.highlights.length > 0 && (
@@ -88,11 +95,18 @@ export default function ProductCard({ product }: { product: Product }) {
           {/* Selector de presentación (si aplica) + botón añadir, anclados
               abajo. Ningún producto se vende suelto: solo por caja/presentación. */}
           <div className="mt-auto pt-5">
+            {/* Layout en dos líneas: etiqueta arriba, valor completo debajo
+                sin truncarse — legible con presentaciones largas ("Caja de
+                12 × 1 L"). Mismo formato con y sin dropdown. */}
             {presentations.length === 1 && (
-              <p className="mb-3 flex items-baseline gap-2 rounded-lg border border-black/10 bg-white px-3.5 py-2.5 text-xs">
-                <span className="tracking-[0.08em] text-brand-navy uppercase">{presentationLabel}:</span>
-                <span className="font-mono text-brand-text/80">{presentations[0]}</span>
-              </p>
+              <div className="mb-3 rounded-lg border border-black/10 bg-white px-3.5 py-2.5 text-left">
+                <p className="text-[10px] tracking-[0.12em] text-brand-navy uppercase">
+                  {presentationLabel}
+                </p>
+                <p className="mt-0.5 font-mono text-xs leading-snug text-brand-text/80">
+                  {presentations[0]}
+                </p>
+              </div>
             )}
             {presentations.length > 1 && (
               <div ref={ddRef} className={`relative mb-3 ${open ? "z-30" : ""}`}>
@@ -101,15 +115,17 @@ export default function ProductCard({ product }: { product: Product }) {
                   onClick={() => setOpen((v) => !v)}
                   aria-expanded={open}
                   aria-haspopup="listbox"
-                  className={`flex w-full items-center justify-between gap-2 rounded-lg border bg-white px-3.5 py-2.5 text-left text-xs transition ${
+                  className={`flex w-full items-center justify-between gap-2 rounded-lg border bg-white px-3.5 py-2.5 text-left transition ${
                     open ? "border-brand-navy" : "border-black/10 hover:border-brand-red"
                   }`}
                 >
-                  <span className="flex min-w-0 items-baseline gap-2">
-                    <span className="shrink-0 tracking-[0.08em] text-brand-navy uppercase">
-                      {presentationLabel}:
+                  <span className="min-w-0">
+                    <span className="block text-[10px] tracking-[0.12em] text-brand-navy uppercase">
+                      {presentationLabel}
                     </span>
-                    <span className="truncate font-mono text-brand-text/80">{size}</span>
+                    <span className="mt-0.5 block font-mono text-xs leading-snug text-brand-text/80">
+                      {size}
+                    </span>
                   </span>
                   <span
                     aria-hidden

@@ -13,6 +13,7 @@ import {
   type Product,
   type ProductBrandMeta,
 } from "@/data/products";
+import { withBasePath } from "@/lib/base-path";
 
 type Params = Promise<{ brand: string }>;
 
@@ -151,7 +152,8 @@ const VP_ADITIVOS_CLASICOS = [
  *   "Accesorios".
  * - Mobil: 5 tarjetas, en este orden — Motores a Gasolina, Motores a Diesel
  *   (incluye el refrigerante Delvac Extended Life, antes en
- *   "Especialidades"), Motos (2T y 4T), Transmisiones e Industrial (incluye
+ *   "Especialidades"), Para Motos y Lanchas (2T/4T + Outboard),
+ *   Transmisiones e Industrial (incluye
  *   la grasa Mobilgrease XHP 222, antes en "Grasas").
  * - Falken: 3 tarjetas de primer nivel, en este orden — WildPeak (abre un
  *   2do nivel con 3 sub-opciones A/T, R/T, M/T, tomadas del campo
@@ -214,6 +216,12 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     ].filter((n) => n.count > 0);
   }
 
+  // EWAY: sin divisores — un único leaf que BrandCatalog abre solo (son 4
+  // combustibles, van directo en cuadrícula).
+  if (meta.id === "eway") {
+    return [leaf("combustibles", "Combustibles", lanesByGroup(products))].filter((n) => n.count > 0);
+  }
+
   if (meta.id === "falken") {
     const azenis = products.filter((p) => p.group === "Azenis");
     const ziex = products.filter((p) => p.group === "Ziex");
@@ -239,7 +247,7 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
   return [
     leaf("gasolina", "Motores a Gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
     leaf("diesel", "Motores a Diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético", "Refrigerante"])),
-    leaf("moto", "Motos", lanesByTag(moto, ["Semisintético", "Mineral"])),
+    leaf("moto", "Para Motos y Lanchas", lanesByTag(moto, ["Semisintético", "Mineral"])),
     leaf("transmisiones", "Transmisiones", lanesByGroup(transmisiones)),
     leaf("industrial", "Industrial", lanesByGroup(industrial)),
   ].filter((n) => n.count > 0);
@@ -274,6 +282,21 @@ export default async function BrandPage({ params }: { params: Params }) {
             <Eyebrow>Tienda</Eyebrow>
             <h1 className="mt-2 font-display text-4xl uppercase tracking-wide">{meta.name}</h1>
             <p className="mt-3 max-w-xl text-brand-text/70">{meta.tagline}</p>
+            {/* Sello discreto "Fuel by Gulf": EWAY trae y vende gasolina
+                Gulf de competencia — el respaldo se muestra, no grita. */}
+            {meta.id === "eway" && (
+              <div className="mt-4 flex items-center gap-2.5">
+                {/* eslint-disable-next-line @next/next/no-img-element -- sello de tercero */}
+                <img
+                  src={withBasePath("/images/brands/gulf-seal.png")}
+                  alt="Gulf"
+                  className="h-9 w-auto"
+                />
+                <span className="font-mono text-[11px] tracking-[0.15em] text-brand-text/60 uppercase">
+                  Fuel by Gulf
+                </span>
+              </div>
+            )}
           </div>
           {/* Placa de logo protagonista: más grande que el logo chico de
               /productos, mascota propia cuando la hay (VP, Mobil), mismo

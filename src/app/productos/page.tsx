@@ -22,7 +22,7 @@ export default function ProductsPage() {
         </p>
       </Reveal>
 
-      <RevealGroup className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <RevealGroup className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {productBrands.map((brand) => (
           <RevealItem key={brand.id} className="h-full">
             <BrandCard brand={brand} />

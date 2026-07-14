@@ -99,12 +99,13 @@ const JerryCanIcon = ({ color, className, strokeWidth }: IconProps) => (
     <path d="M20 27v8M28 27v8" />
   </svg>
 );
-// Casco de moto (línea Moto de Mobil).
-const HelmetIcon = ({ color, className, strokeWidth }: IconProps) => (
+// Casco de moto sobre olas (línea "Para Motos y Lanchas" de Mobil: los
+// aceites 4T/2T conviven con los Outboard marinos).
+const HelmetWaveIcon = ({ color, className, strokeWidth }: IconProps) => (
   <svg viewBox="0 0 48 48" className={className} aria-hidden {...svg(color, strokeWidth)}>
-    <path d="M7 30a17 17 0 0 1 34 0v4a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4v-4z" />
-    <path d="M7 30h34" />
-    <path d="M28 30v6a4 4 0 0 1-8 0v-6" />
+    <path d="M9 26a15 15 0 0 1 30 0v3H9v-3z" />
+    <path d="M26 29v3a3.5 3.5 0 0 1-7 0v-3" />
+    <path d="M5 38c3 0 3 2 6 2s3-2 6-2 3 2 6 2 3-2 6-2 3 2 6 2 3-2 6-2" />
   </svg>
 );
 // Engranaje (transmisiones).
@@ -215,8 +216,9 @@ const OPTION_STYLES: Record<
   fluidos: { accent: NAVY, Icon: DropIcon },
   limpieza: { accent: TAUPE, Icon: SprayIcon },
   accesorios: { accent: GRAPHITE, Icon: JerryCanIcon },
-  // Mobil — secciones nuevas / restauradas.
-  moto: { accent: NAVY, Icon: HelmetIcon },
+  // Mobil — secciones nuevas / restauradas. "moto" cubre motos Y lanchas
+  // (Outboard): teal marino + casco sobre olas.
+  moto: { accent: "#0F7E8A", Icon: HelmetWaveIcon },
   transmisiones: { accent: GRAPHITE, Icon: GearIcon },
   industrial: { accent: TAUPE, Icon: FactoryIcon },
 };
@@ -405,15 +407,19 @@ export default function BrandCatalog({
   nodes: CatalogNode[];
   accent: string;
 }) {
-  const [path, setPath] = useState<string[]>([]);
+  // Marca con un solo grupo (EWAY): se abre directo en la cuadrícula de
+  // productos, sin tarjeta de divisor ni botón Volver.
+  const singleNode = nodes.length === 1 && Boolean(nodes[0].lanes);
+  const [path, setPath] = useState<string[]>(singleNode ? [nodes[0].id] : []);
   const { options, leaf, trail } = resolvePath(nodes, path);
   const atRoot = path.length === 0;
+  const hideNav = singleNode && path.length === 1;
   // Las filas de producto heredan el acento del tipo elegido (cohesión visual).
   const leafAccent = leaf ? optionStyle(leaf.id, accent).accent : accent;
 
   return (
     <div className="mt-14">
-      {!atRoot && (
+      {!atRoot && !hideNav && (
         <div className="mb-10 flex flex-wrap items-center gap-4">
           <button
             type="button"

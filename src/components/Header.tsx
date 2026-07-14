@@ -213,7 +213,7 @@ export default function Header() {
                 className="absolute inset-x-0 top-full hidden border-b border-black/10 bg-white shadow-xl shadow-black/5 md:block"
               >
                 <div className="mx-auto max-w-7xl px-6 py-8">
-                  <div className="grid grid-cols-4 gap-6">
+                  <div className="grid grid-cols-5 gap-5">
                     {productBrands.map((brand) => (
                       <Link
                         key={brand.id}

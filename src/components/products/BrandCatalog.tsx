@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import ProductCarousel from "./ProductCarousel";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
+import { withBasePath } from "@/lib/base-path";
 import type { Product } from "@/data/products";
 
 export interface CatalogLane {
@@ -170,9 +171,16 @@ const RED = "#D51C29";
 const TAUPE = "#A79F9D";
 const GRAPHITE = "#3F3B36";
 const EARTH = "#4A4630"; // grafito/tierra — familia WildPeak
+const MUD = "#1A1714"; // casi negro — M/T, el más agresivo de los 3
 
 // Diseño por tipo de opción (keyed por node.id, que es estable entre marcas).
-const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => React.ReactElement }> = {
+// "image" es opcional: cuando existe, la tarjeta usa la foto real del
+// producto como fondo (duotono) en vez del ícono ampliado como marca de
+// agua — ver WildPeak A/T · R/T · M/T más abajo.
+const OPTION_STYLES: Record<
+  string,
+  { accent: string; Icon: (p: IconProps) => React.ReactElement; image?: string }
+> = {
   gasolina: { accent: "#D9480F", Icon: PumpIcon },
   diesel: { accent: "#455A64", Icon: TruckIcon },
   aditivos: { accent: "#0F8A7E", Icon: BottlePlusIcon },
@@ -181,10 +189,25 @@ const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => Re
   azenis: { accent: RED, Icon: ChequeredFlagIcon },
   ziex: { accent: NAVY, Icon: RoadIcon },
   wildpeak: { accent: EARTH, Icon: MountainIcon },
-  // WildPeak — 2do nivel (A/T, M/T, R/T): mismo acento tierra, ícono de rin.
-  at: { accent: EARTH, Icon: TireIcon },
-  mt: { accent: EARTH, Icon: TireIcon },
-  rt: { accent: EARTH, Icon: TireIcon },
+  // WildPeak — 2do nivel: cada sub-familia usa la foto real de su propio
+  // modelo como fondo (misma composición, mismo ícono de rin), pero con un
+  // acento de color distinto que va de más claro/versátil (A/T) a más
+  // oscuro/agresivo (M/T) — la diferencia de tono ya narra el uso.
+  at: {
+    accent: TAUPE,
+    Icon: TireIcon,
+    image: "/images/products/falken/falken-wildpeak-at3w.webp",
+  },
+  rt: {
+    accent: RED,
+    Icon: TireIcon,
+    image: "/images/products/falken/falken-wildpeak-rt01.webp",
+  },
+  mt: {
+    accent: MUD,
+    Icon: TireIcon,
+    image: "/images/products/falken/falken-wildpeak-mt01.webp",
+  },
   // VP Racing — 6 divisores: combustibles (racing) en rojo, fluidos técnicos
   // en navy, limpieza/detailing en taupe, accesorios en grafito. "aditivos"
   // y "diesel" (arriba) se quedan con su estilo de siempre.
@@ -199,7 +222,7 @@ const OPTION_STYLES: Record<string, { accent: string; Icon: (p: IconProps) => Re
 };
 
 function optionStyle(id: string, fallbackAccent: string) {
-  return OPTION_STYLES[id] ?? { accent: fallbackAccent, Icon: BottlePlusIcon };
+  return OPTION_STYLES[id] ?? { accent: fallbackAccent, Icon: BottlePlusIcon, image: undefined };
 }
 
 /**
@@ -210,10 +233,14 @@ function optionStyle(id: string, fallbackAccent: string) {
  * aditivos). Detrás, el mismo ícono a gran escala sangra el borde inferior
  * como marca de agua editorial, con un resplandor radial del acento detrás
  * para dar profundidad (en vez de una foto por categoría, que no existe
- * para agrupaciones abstractas como "Accesorios"). Al hover: el ícono y el
- * chip escalan y rotan levemente, el borde vira hacia el acento y un filo
- * de color crece al pie — mismo lenguaje que BrandCard en /productos, para
- * que toda la sección de tienda se sienta de una sola pieza.
+ * para agrupaciones abstractas como "Accesorios"). Cuando el estilo SÍ trae
+ * "image" (hoy solo WildPeak A/T · R/T · M/T, donde cada sub-familia tiene
+ * su propia foto de producto), esa foto reemplaza al ícono-marca de agua:
+ * se muestra en duotono (gris + acento vía mix-blend multiply) con un velo
+ * blanco hacia abajo para que el texto siga legible. Al hover: el ícono y
+ * el chip escalan y rotan levemente, el borde vira hacia el acento y un
+ * filo de color crece al pie — mismo lenguaje que BrandCard en /productos,
+ * para que toda la sección de tienda se sienta de una sola pieza.
  */
 function OptionCard({
   node,
@@ -226,7 +253,7 @@ function OptionCard({
   index: number;
   onSelect: () => void;
 }) {
-  const { accent, Icon } = optionStyle(node.id, brandAccent);
+  const { accent, Icon, image } = optionStyle(node.id, brandAccent);
   const isBranch = !!node.children;
 
   return (
@@ -236,25 +263,54 @@ function OptionCard({
       style={{ "--accent": accent } as React.CSSProperties}
       className="group relative flex h-60 w-full flex-col justify-between overflow-hidden rounded-2xl border border-black/10 bg-white text-left shadow-sm shadow-black/[0.03] transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-[color:var(--accent)]/40 hover:shadow-xl hover:shadow-black/10"
     >
-      {/* Fondo: degradado sutil en el color de la categoría (tinte arriba, se
-          aclara hacia el texto) */}
-      <div
-        aria-hidden
-        className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-80"
-        style={{ backgroundImage: `linear-gradient(150deg, ${accent}22 0%, ${accent}0a 45%, #ffffff 100%)` }}
-      />
-      {/* Resplandor radial detrás del ícono grande: sustituye a una foto de
-          fondo (no hay una por categoría) dando profundidad y color propio. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-12 bottom-0 h-56 w-56 rounded-full opacity-40 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
-        style={{ backgroundColor: `${accent}40` }}
-      />
-      {/* Marca de agua: el mismo ícono a gran escala, sangrando la esquina. */}
-      <Icon
-        color={accent}
-        className="pointer-events-none absolute -right-8 -bottom-8 h-52 w-52 opacity-[0.09] transition-transform duration-700 ease-out group-hover:-rotate-3 group-hover:scale-110 group-hover:opacity-[0.16]"
-      />
+      {image ? (
+        <>
+          {/* Foto real del producto en duotono (gris + acento vía multiply):
+              cada sub-familia se distingue por su propio caucho, no solo
+              por texto. El acento va de claro (A/T) a casi negro (M/T). */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- fondo decorativo, recorte por object-position */}
+          <img
+            src={withBasePath(image)}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover object-[25%_center] grayscale transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(20deg, ${accent} 0%, ${accent}cc 32%, ${accent}55 58%, transparent 78%)`,
+              mixBlendMode: "multiply",
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent"
+          />
+        </>
+      ) : (
+        <>
+          {/* Fondo: degradado sutil en el color de la categoría (tinte arriba, se
+              aclara hacia el texto) */}
+          <div
+            aria-hidden
+            className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-80"
+            style={{ backgroundImage: `linear-gradient(150deg, ${accent}22 0%, ${accent}0a 45%, #ffffff 100%)` }}
+          />
+          {/* Resplandor radial detrás del ícono grande: sustituye a una foto de
+              fondo (no hay una por categoría) dando profundidad y color propio. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-12 bottom-0 h-56 w-56 rounded-full opacity-40 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
+            style={{ backgroundColor: `${accent}40` }}
+          />
+          {/* Marca de agua: el mismo ícono a gran escala, sangrando la esquina. */}
+          <Icon
+            color={accent}
+            className="pointer-events-none absolute -right-8 -bottom-8 h-52 w-52 opacity-[0.09] transition-transform duration-700 ease-out group-hover:-rotate-3 group-hover:scale-110 group-hover:opacity-[0.16]"
+          />
+        </>
+      )}
 
       {/* Número de orden — detalle editorial discreto, esquina superior. */}
       <span

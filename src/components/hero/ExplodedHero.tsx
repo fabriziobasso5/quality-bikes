@@ -283,17 +283,17 @@ export default function ExplodedHero() {
     >
       <div
         ref={stageRef}
-        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-[#767e88] motion-reduce:static motion-reduce:h-svh"
+        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-[#545b64] motion-reduce:static motion-reduce:h-svh"
       >
         {/* Fondo gris oscuro de estudio (sin plano técnico): degradé vertical
             + viñeta para que la moto se despegue del fondo */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(180deg,#8b929b_0%,#767e88_45%,#5d656f_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(180deg,#666d76_0%,#545b64_45%,#3e454d_100%)]"
         />
         <div
           aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(8,15,26,0.3)_100%)]"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(5,10,18,0.34)_100%)]"
         />
 
         {/* Isotipo QB en 3D — marca de la casa, arriba a la izquierda.
@@ -328,7 +328,7 @@ export default function ExplodedHero() {
               en grande y bien arriba, para que la moto no la tape */}
           <div
             data-hero-title
-            className="absolute top-[-5%] left-1/2 z-[1] w-screen -translate-x-1/2 px-4 text-center will-change-transform md:w-full"
+            className="absolute top-[-42%] left-1/2 z-[1] w-screen -translate-x-1/2 px-4 text-center will-change-transform md:top-[-5%] md:w-full"
           >
             <h1 className="font-display text-[clamp(2.6rem,8.6vw,7.5rem)] leading-[0.95] tracking-wide text-white/95 uppercase drop-shadow-[0_2px_14px_rgba(10,20,35,0.35)]">
               Quality Bikes
@@ -352,9 +352,9 @@ export default function ExplodedHero() {
           </div>
 
           {/* Cierre (aparece con el chasis) */}
-          <div data-hero-final className="invisible absolute inset-x-[6%] bottom-[3%] z-[1] opacity-0">
-            <p className="text-center font-mono text-[10px] tracking-[0.26em] text-white/60 uppercase">
-              Chasis al desnudo · Todo lo demás es Quality
+          <div data-hero-final className="invisible absolute inset-x-[6%] bottom-[-30%] z-[1] opacity-0 md:bottom-[3%]">
+            <p className="text-center font-mono text-[11px] tracking-[0.3em] text-brand-red uppercase">
+              Caracas · Venezuela
             </p>
             <p className="font-script mt-2 text-center text-3xl text-white sm:text-4xl">
               {siteConfig.slogan}

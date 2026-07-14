@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BackLink from "@/components/BackLink";
+import Eyebrow from "@/components/Eyebrow";
 import MotoGallery from "@/components/MotoGallery";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
 import MotoCard from "@/components/MotoCard";
@@ -45,11 +46,14 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
       <BackLink fallbackHref="/catalogo/inventario" className="mb-6" />
-      <nav className="mb-8 text-xs tracking-wide text-brand-text/50 uppercase">
-        <OpenCatalogButton className="hover:text-brand-red">
-          Catálogo
-        </OpenCatalogButton>{" "}
-        / {moto.brand} {moto.model}
+      <nav className="mb-8 flex items-center gap-2 font-mono text-xs tracking-[0.08em] text-brand-text/60 uppercase">
+        <span aria-hidden className="text-brand-red">
+          ›
+        </span>
+        <span>
+          <OpenCatalogButton className="hover:text-brand-red">Catálogo</OpenCatalogButton>{" "}
+          / {moto.brand} {moto.model}
+        </span>
       </nav>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
@@ -57,7 +61,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
 
         <div>
           <div className="flex items-center gap-3">
-            <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">{moto.brand}</p>
+            <Eyebrow>{moto.brand}</Eyebrow>
             {moto.availability === "proximo-arribo" && (
               <span className="rounded-full border border-brand-red px-3 py-0.5 text-[10px] tracking-widest text-brand-red uppercase">
                 Próximo arribo
@@ -86,7 +90,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
                   {stat.value}
                   <span className="ml-1 text-sm text-brand-text/50 sm:text-base">{stat.unit}</span>
                 </p>
-                <p className="mt-2 text-[10px] tracking-[0.25em] text-brand-text/50 uppercase">
+                <p className="mt-2 font-mono text-[10px] tracking-[0.2em] text-brand-text/50 uppercase">
                   {stat.label}
                 </p>
               </div>
@@ -113,7 +117,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
               ] as const
             ).map(([label, value]) => (
               <div key={label} className="flex items-baseline justify-between gap-6 py-3.5">
-                <dt className="text-[11px] tracking-[0.2em] text-brand-text/45 uppercase">
+                <dt className="font-mono text-[11px] tracking-[0.15em] text-brand-text/45 uppercase">
                   {label}
                 </dt>
                 <dd className="text-right font-mono text-sm">{value}</dd>

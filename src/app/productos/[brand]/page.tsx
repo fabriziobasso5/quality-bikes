@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import BackLink from "@/components/BackLink";
+import Eyebrow from "@/components/Eyebrow";
 import BrandLogo from "@/components/products/BrandLogo";
 import BrandCatalog, { type CatalogLane, type CatalogNode } from "@/components/products/BrandCatalog";
 import { Reveal } from "@/components/Reveal";
@@ -236,24 +237,31 @@ export default async function BrandPage({ params }: { params: Params }) {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
       <BackLink fallbackHref="/productos" className="mb-6" />
-      <nav className="mb-8 text-xs tracking-wide text-brand-text/50 uppercase">
-        <Link href="/productos" className="hover:text-brand-red">
-          Productos
-        </Link>{" "}
-        / {meta.name}
+      <nav className="mb-8 flex items-center gap-2 font-mono text-xs tracking-[0.08em] text-brand-text/60 uppercase">
+        <span aria-hidden className="text-brand-red">
+          ›
+        </span>
+        <span>
+          <Link href="/productos" className="hover:text-brand-red">
+            Productos
+          </Link>{" "}
+          / {meta.name}
+        </span>
       </nav>
 
       <Reveal>
         <div className="flex flex-col gap-6 border-b border-black/10 pb-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">Tienda</p>
+            <Eyebrow>Tienda</Eyebrow>
             <h1 className="mt-2 font-display text-4xl uppercase tracking-wide">{meta.name}</h1>
             <p className="mt-3 max-w-xl text-brand-text/70">{meta.tagline}</p>
           </div>
-          {/* Placa de logo consistente entre marcas: fondo claro, alto fijo,
-              centrado y con aire. */}
-          <div className="flex h-24 w-56 shrink-0 items-center justify-center rounded-lg border border-black/10 bg-white px-8">
-            <BrandLogo brand={meta} />
+          {/* Placa de logo protagonista: más grande que el logo chico de
+              /productos, mascota propia cuando la hay (VP, Mobil), mismo
+              alto de placa entre las 4 marcas aunque cada gráfico tenga
+              proporciones distintas. */}
+          <div className="flex h-32 w-72 shrink-0 items-center justify-center rounded-lg border border-black/10 bg-white px-6 sm:h-40 sm:w-80">
+            <BrandLogo brand={meta} useHeaderLogo imgClassName="max-h-28 sm:max-h-36" />
           </div>
         </div>
       </Reveal>

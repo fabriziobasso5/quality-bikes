@@ -418,7 +418,7 @@ export default function BrandCatalog({
           <button
             type="button"
             onClick={() => setPath((p) => p.slice(0, -1))}
-            className="flex items-center gap-2 rounded-full border border-black/15 px-4 py-2 text-xs tracking-widest text-brand-text/70 uppercase transition hover:border-brand-navy hover:text-brand-navy"
+            className="flex items-center gap-2 rounded-full border border-black/15 px-4 py-2 font-mono text-xs tracking-[0.1em] text-brand-text/70 uppercase transition hover:border-brand-navy hover:text-brand-navy"
           >
             ← Volver
           </button>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import BackLink from "@/components/BackLink";
+import Eyebrow from "@/components/Eyebrow";
 import InventoryBrandFilter from "@/components/InventoryBrandFilter";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { Reveal } from "@/components/Reveal";
@@ -18,15 +19,18 @@ export default function InventoryPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
       <BackLink fallbackHref="/" className="mb-6" />
-      <nav className="mb-8 text-xs tracking-wide text-brand-text/50 uppercase">
-        <OpenCatalogButton className="hover:text-brand-red">
-          Catálogo
-        </OpenCatalogButton>{" "}
-        / Inventario completo
+      <nav className="mb-8 flex items-center gap-2 font-mono text-xs tracking-[0.08em] text-brand-text/60 uppercase">
+        <span aria-hidden className="text-brand-red">
+          ›
+        </span>
+        <span>
+          <OpenCatalogButton className="hover:text-brand-red">Catálogo</OpenCatalogButton>{" "}
+          / Inventario completo
+        </span>
       </nav>
 
       <Reveal className="text-center">
-        <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">Inventario completo</p>
+        <Eyebrow className="justify-center">Inventario completo</Eyebrow>
         <h1 className="mt-2 font-display text-4xl uppercase tracking-wide sm:text-5xl">
           Todas las motos
         </h1>

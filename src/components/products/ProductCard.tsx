@@ -66,7 +66,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <div className="mt-auto pt-5">
             {presentations.length > 0 && (
               <div className="mb-3">
-                <p className="mb-2 text-[10px] font-medium tracking-[0.12em] text-brand-navy/60 uppercase">
+                <p className="mb-2 font-mono text-[10px] tracking-[0.1em] text-brand-navy/60 uppercase">
                   {presentationLabel}
                 </p>
                 <div className="flex flex-wrap gap-1.5">

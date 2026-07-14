@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
+import Eyebrow from "@/components/Eyebrow";
 import { RevealGroup, RevealItem } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 export default function ContactoPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-16">
-      <p className="text-xs tracking-[0.3em] text-brand-navy uppercase">Contacto</p>
+      <Eyebrow>Contacto</Eyebrow>
       <h1 className="mt-2 font-display text-4xl uppercase tracking-wide">
         Hablemos de tu próxima moto
       </h1>

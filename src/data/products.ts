@@ -16,6 +16,11 @@ export interface ProductBrandMeta {
   name: string;
   tagline: string;
   logo: string;      // ruta del logo real que ya usa el home; "" => usar wordmark
+  // Gráfico protagonista del header de /productos/[marca] — mascota o logo
+  // recortado a mayor tamaño. Archivo propio (no el de `logo`, que también
+  // usa el home) para poder agrandar/recortar sin tocar la portada. Si
+  // falta, el header cae a `logo`.
+  headerLogo?: string;
   accent: string;
   accent2?: string;
   categories: ProductCategory[];
@@ -48,10 +53,10 @@ export const categoryLabels: Record<ProductCategory, string> = {
 };
 
 export const productBrands: ProductBrandMeta[] = [
-  { id: "vp-racing", name: "VP Racing", tagline: "Combustibles, aditivos, fluidos y detailing de competencia", logo: "/images/brands/vp-racing.png", accent: "#E4002B", accent2: "#003DA5", categories: ["aditivos", "gasolinas", "alcoholes"] },
-  { id: "mobil", name: "Mobil", tagline: "Lubricantes para moto, auto, transmisión e industria", logo: "/images/brands/mobil-1.svg", accent: "#0033A0", accent2: "#ED1C24", categories: ["lubricantes"] },
+  { id: "vp-racing", name: "VP Racing", tagline: "Combustibles, aditivos, fluidos y detailing de competencia", logo: "/images/brands/vp-racing.png", headerLogo: "/images/brands/vp-racing-mascot.png", accent: "#E4002B", accent2: "#003DA5", categories: ["aditivos", "gasolinas", "alcoholes"] },
+  { id: "mobil", name: "Mobil", tagline: "Lubricantes para moto, auto, transmisión e industria", logo: "/images/brands/mobil-1.svg", headerLogo: "/images/brands/mobil-pegasus.png", accent: "#0033A0", accent2: "#ED1C24", categories: ["lubricantes"] },
   { id: "bk3", name: "BK3", tagline: "Elevadores de octanaje, cetano y tratamiento marino", logo: "/images/brands/bk3.png", accent: "#E30613", accent2: "#111111", categories: ["aditivos"] },
-  { id: "falken", name: "Falken", tagline: "Cauchos deportivos, de touring y todo terreno", logo: "/images/brands/falken.png", accent: "#0033A0", accent2: "#E4032E", categories: ["llantas"] },
+  { id: "falken", name: "Falken", tagline: "Cauchos deportivos, de touring y todo terreno", logo: "/images/brands/falken.png", headerLogo: "/images/brands/falken-header.png", accent: "#0033A0", accent2: "#E4032E", categories: ["llantas"] },
 ];
 
 export const products: Product[] = [

@@ -27,7 +27,7 @@ export default function BrandCard({ brand }: { brand: ProductBrandMeta }) {
         />
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <p className="text-[11px] tracking-[0.25em] text-brand-text/45 uppercase">{brand.name}</p>
+        <p className="font-mono text-[11px] tracking-[0.15em] text-brand-text/45 uppercase">{brand.name}</p>
         <p className="mt-2 font-display text-lg leading-snug tracking-wide">{brand.tagline}</p>
         <div className="mt-4 flex flex-wrap gap-1.5">
           {brand.categories.map((cat) => (

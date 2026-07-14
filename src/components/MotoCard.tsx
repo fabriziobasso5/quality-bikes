@@ -44,13 +44,13 @@ export default function MotoCard({ moto }: { moto: Motorcycle }) {
         {moto.availability === "proximo-arribo" && (
           /* Fondo opaco + sombra: sobre la portada blanca el badge se separa
              y queda legible en cualquier viewport, incluido mobile. */
-          <span className="absolute top-3 left-3 z-10 rounded-full border border-brand-red/50 bg-white px-2.5 py-0.5 text-[9px] tracking-[0.18em] text-brand-red uppercase shadow-sm shadow-black/10">
+          <span className="absolute top-3 left-3 z-10 rounded-full border border-brand-red/50 bg-white px-2.5 py-0.5 font-mono text-[9px] tracking-[0.14em] text-brand-red uppercase shadow-sm shadow-black/10">
             Próximo arribo
           </span>
         )}
       </div>
       <div className="p-5">
-        <p className="text-xs tracking-widest text-brand-navy uppercase">{moto.brand}</p>
+        <p className="font-mono text-xs tracking-[0.12em] text-brand-navy uppercase">{moto.brand}</p>
         <h3 className="mt-1 font-display text-lg tracking-wide">{moto.model}</h3>
         <p className="mt-2 font-mono text-sm text-brand-text/60">
           {moto.cc} cc · {moto.year} ·{" "}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Eyebrow from "@/components/Eyebrow";
 import { Reveal } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
@@ -16,7 +17,7 @@ export default function NosotrosPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-24 sm:py-32">
       <Reveal>
-        <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Nosotros</p>
+        <Eyebrow tone="red">Nosotros</Eyebrow>
         <h1 className="mt-3 font-display text-4xl leading-tight tracking-wide uppercase sm:text-5xl">
           {siteConfig.name}
         </h1>
@@ -56,7 +57,7 @@ export default function NosotrosPage() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           </div>
-          <p className="mt-3 text-center text-xs tracking-[0.2em] text-brand-text/40 uppercase">
+          <p className="mt-3 text-center font-mono text-xs tracking-[0.15em] text-brand-text/40 uppercase">
             Caracas · Venezuela · desde 1977
           </p>
         </Reveal>

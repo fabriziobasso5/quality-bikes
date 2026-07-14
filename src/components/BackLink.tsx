@@ -31,7 +31,7 @@ export default function BackLink({
           router.push(fallbackHref);
         }
       }}
-      className={`inline-flex items-center gap-2 rounded-full border border-black/15 px-4 py-2 text-xs tracking-widest text-brand-text/70 uppercase transition hover:border-brand-navy hover:text-brand-navy ${className}`}
+      className={`inline-flex items-center gap-2 rounded-full border border-black/15 px-4 py-2 font-mono text-xs tracking-[0.1em] text-brand-text/70 uppercase transition hover:border-brand-navy hover:text-brand-navy ${className}`}
     >
       ← {label}
     </button>

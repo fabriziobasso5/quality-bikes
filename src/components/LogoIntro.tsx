@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 import gsap from "gsap";
 import { withBasePath } from "@/lib/base-path";
 import { siteConfig } from "@/lib/site-config";
@@ -24,14 +24,14 @@ export const INTRO_SESSION_KEY = "qb-intro-played";
  * total sea 1s aunque la hidratación llegue tarde.
  */
 export default function LogoIntro() {
-  const [alive, setAlive] = useState(true);
-
   useLayoutEffect(() => {
+    // Los casos "no animar" ya están resueltos en CSS antes del primer paint:
+    // .qb-intro-skip (script síncrono del layout, sesión repetida) y el media
+    // query de prefers-reduced-motion ocultan el overlay — acá solo se decide
+    // si corre la coreografía. Sin estado: desmontar el overlay fuerza un
+    // repaint de viewport completo que re-registra el LCP.
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || sessionStorage.getItem(INTRO_SESSION_KEY)) {
-      setAlive(false);
-      return;
-    }
+    if (reduced || sessionStorage.getItem(INTRO_SESSION_KEY)) return;
     sessionStorage.setItem(INTRO_SESSION_KEY, "1");
 
     const overlay = document.getElementById("qb-intro");
@@ -72,8 +72,6 @@ export default function LogoIntro() {
 
     return () => ctx.revert();
   }, []);
-
-  if (!alive) return null;
 
   return (
     <div

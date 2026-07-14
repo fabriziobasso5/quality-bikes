@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { preload } from "react-dom";
+import Image from "next/image";
 import gsap from "gsap";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import Magnetic from "@/components/Magnetic";
@@ -118,10 +118,6 @@ const SPECS = ["1.300 cc · Bóxer", "Option 719", "Akrapovic · Titanio", "Radi
 const HERO_DIR = "/images/hero-exploded";
 
 export default function ExplodedHero() {
-  // El LCP: <link rel=preload> emitido en SSR para que la moto se pida desde
-  // el HTML sin esperar al parser/JS.
-  preload(withBasePath(`${HERO_DIR}/layer-full.webp`), { as: "image", fetchPriority: "high" });
-
   const trackRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   // Timelines activos (uno por breakpoint): el scrub es manual — framer-motion
@@ -410,13 +406,13 @@ export default function ExplodedHero() {
           {/* Moto completa: el único asset eager (LCP). Visible también como
               estado estático bajo prefers-reduced-motion y primer frame mobile */}
           <div data-hero-bike data-mlayer="full" className="absolute inset-0 z-[7] will-change-transform">
-            {/* eslint-disable-next-line @next/next/no-img-element -- img plano con fetchpriority/decoding sync: en export estático next/image no optimiza y su decoding async retrasa el registro del LCP bajo CPU throttling */}
-            <img
+            <Image
               src={withBasePath(`${HERO_DIR}/layer-full.webp`)}
               alt="BMW R 1300 GS Adventure Option 719 verde esmeralda con escape Akrapovic, vista lateral"
-              fetchPriority="high"
-              decoding="sync"
-              className="absolute inset-0 h-full w-full object-contain"
+              fill
+              preload
+              sizes="(max-width: 767px) 132vw, 1600px"
+              className="object-contain"
             />
             <div aria-hidden className="absolute bottom-[2%] left-1/2 h-5 w-3/5 -translate-x-1/2 rounded-[50%] bg-brand-navy/25 blur-xl" />
           </div>

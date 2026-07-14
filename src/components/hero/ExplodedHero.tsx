@@ -113,7 +113,10 @@ const HW = EXPLODED.hardware.sprites.map((s, i) => {
   };
 });
 
-const SPECS = ["1.300 cc · Bóxer", "Option 719", "Akrapovic · Titanio", "Radios cruzados"];
+// Columnas laterales: las marcas que representa la casa — identidad
+// multimarca de Quality Bikes, no ficha técnica del modelo.
+const BRANDS_LEFT = siteConfig.brandsRepresented.slice(0, 4);
+const BRANDS_RIGHT = siteConfig.brandsRepresented.slice(4, 8);
 
 const HERO_DIR = "/images/hero-exploded";
 
@@ -284,13 +287,13 @@ export default function ExplodedHero() {
     >
       <div
         ref={stageRef}
-        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-[#d3d8dd] motion-reduce:static motion-reduce:h-svh"
+        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-[#bdc4ca] motion-reduce:static motion-reduce:h-svh"
       >
         {/* Fondo liso gris (sin plano técnico): solo un degradé vertical muy
             sutil + viñeta para que la moto se despegue del fondo */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(180deg,#dde1e5_0%,#d3d8dd_45%,#c6ccd2_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(180deg,#ccd2d7_0%,#bdc4ca_45%,#aab2ba_100%)]"
         />
         <div
           aria-hidden
@@ -325,33 +328,34 @@ export default function ExplodedHero() {
             en toda la serie), así el crossfade queda registrado. perspective
             para que las rotaciones 3D de las piezas lean con fuga real. */}
         <div className="relative aspect-[16/9] w-[132vw] shrink-0 [perspective:1300px] md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)]">
-          {/* Tipografía protagonista, detrás de la moto (estilo automotriz) */}
+          {/* Tipografía protagonista, detrás de la moto: LA MARCA de la casa
+              (no el modelo) en grande, estilo automotriz */}
           <div
             data-hero-title
             className="absolute top-[2%] left-1/2 z-[1] w-screen -translate-x-1/2 px-4 text-center will-change-transform md:w-full"
           >
             <p className="text-[11px] tracking-[0.34em] text-brand-red uppercase sm:text-xs">
-              Quality Bikes · Caracas
+              Concesionario multimarca · Caracas
             </p>
-            <h1 className="mt-2 font-display text-[clamp(2.4rem,7.2vw,6.5rem)] leading-[0.95] tracking-wide text-brand-navy uppercase">
-              R 1300 GS Adventure
+            <h1 className="mt-2 font-display text-[clamp(2.6rem,8.6vw,7.5rem)] leading-[0.95] tracking-wide text-brand-navy uppercase">
+              Quality Bikes
             </h1>
-            <p className="mt-3 font-mono text-[10px] tracking-[0.3em] text-brand-navy/50 uppercase sm:text-xs">
-              Option 719 · Verde esmeralda · Full equipo
+            <p className="mt-3 font-mono text-[10px] tracking-[0.3em] text-brand-navy/55 uppercase sm:text-xs">
+              {siteConfig.tagline}
             </p>
           </div>
 
-          {/* Specs laterales (salen con el título) */}
+          {/* Marcas representadas a los lados (salen con el título) */}
           <div data-hero-title className="absolute top-1/2 left-0 z-[1] hidden -translate-y-1/2 space-y-3 lg:block">
-            {SPECS.map((s) => (
-              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-brand-navy/45 uppercase">
+            {BRANDS_LEFT.map((s) => (
+              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-brand-navy/50 uppercase">
                 {s}
               </p>
             ))}
           </div>
           <div data-hero-title className="absolute top-1/2 right-0 z-[1] hidden -translate-y-1/2 space-y-3 text-right lg:block">
-            {["145 cv · 149 Nm", "89 kg menos aire", "870–890 mm asiento", "30 L tanque"].map((s) => (
-              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-brand-navy/45 uppercase">
+            {BRANDS_RIGHT.map((s) => (
+              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-brand-navy/50 uppercase">
                 {s}
               </p>
             ))}

@@ -99,7 +99,9 @@ export default function BlueprintReveal() {
   return (
     <section
       ref={trackRef}
-      className={reduce ? "relative" : "relative h-[150vh] sm:h-[170vh]"}
+      // motion-reduce en CSS y no en JS: el markup del server no depende del
+      // media query del cliente (evita mismatch de hidratación)
+      className="relative h-[150vh] sm:h-[170vh] motion-reduce:h-auto"
     >
       <div
         ref={stageRef}
@@ -107,7 +109,7 @@ export default function BlueprintReveal() {
         /* Fija bajo el header sticky (altura medida en --qbh): al engancharse
            el pin, la lámina completa — rótulo arriba, cajetín abajo — queda
            contenida en el viewport en todos los breakpoints */
-        className={`${reduce ? "relative h-svh" : "sticky top-[var(--qbh,76px)] h-[calc(100svh-var(--qbh,76px))]"} flex w-full flex-col items-center justify-center overflow-hidden bg-brand-navy`}
+        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-brand-navy motion-reduce:static motion-reduce:h-svh"
       >
         {/* Anochecer: entra con la moto — cielo que cae a negro azulado y un
             resplandor cálido de horizonte hacia donde apunta el faro */}
@@ -329,14 +331,12 @@ export default function BlueprintReveal() {
         {/* Pista de scroll: solo al inicio de la fase plano. bottom-20 en
             móvil: a bottom-6 chocaría con el cajetín, que en 390px cruza el
             centro; el eslogan no coexiste (sale en bp 0.8). */}
-        {!reduce && (
-          <p
-            style={{ opacity: fade(0, 0.06) }}
-            className="absolute bottom-20 font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase sm:bottom-6"
-          >
-            ↓ Scroll
-          </p>
-        )}
+        <p
+          style={{ opacity: fade(0, 0.06) }}
+          className="absolute bottom-20 font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase sm:bottom-6 motion-reduce:hidden"
+        >
+          ↓ Scroll
+        </p>
       </div>
     </section>
   );

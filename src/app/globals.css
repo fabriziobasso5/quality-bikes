@@ -105,6 +105,31 @@ body::after {
   display: none;
 }
 
+/*
+  Intro de marca (LogoIntro): la fase 1 (0–0.4s, fade + scale 0.85→1) es CSS
+  puro para correr desde el primer paint sin esperar la hidratación. El script
+  síncrono del layout marca .qb-intro-skip antes de pintar cuando la sesión ya
+  la vio o hay prefers-reduced-motion.
+*/
+@keyframes qb-intro-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.qb-intro-skip #qb-intro {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #qb-intro {
+    display: none;
+  }
+}
+
 /* Latido sutil de las capas de luz del BlueprintReveal: respiración lenta,
    nunca por debajo de ~86% para que no se lea como parpadeo/fallo. */
 @keyframes qb-breathe {

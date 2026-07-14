@@ -8,7 +8,7 @@ import InstagramFloat from "@/components/InstagramFloat";
 import { CartProvider } from "@/components/cart/CartContext";
 import CartFloat from "@/components/cart/CartFloat";
 import MotionProvider from "@/components/MotionProvider";
-import IntroLoader from "@/components/IntroLoader";
+import LogoIntro from "@/components/LogoIntro";
 import CustomCursor from "@/components/CustomCursor";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
@@ -89,9 +89,21 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${beauRivage.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-brand-bg text-brand-text">
+        {/* Síncrono y ANTES del overlay de LogoIntro en el DOM: decide si la
+            intro se salta (ya vista en la sesión / reduced-motion) sin dejar
+            que llegue a pintar. Con JS deshabilitado, el <noscript> la anula. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(sessionStorage.getItem('qb-intro-played'))document.documentElement.classList.add('qb-intro-skip')}catch(e){}",
+          }}
+        />
+        <noscript>
+          <style>{"#qb-intro{display:none}"}</style>
+        </noscript>
         <MotionProvider>
           <CartProvider>
-            <IntroLoader />
+            <LogoIntro />
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />

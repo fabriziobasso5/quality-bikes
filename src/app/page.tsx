@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import BrandStats from "@/components/BrandStats";
 import BlueprintReveal from "@/components/BlueprintReveal";
-import Hero from "@/components/Hero";
+import ExplodedHero from "@/components/hero/ExplodedHero";
 import MotoCover from "@/components/MotoCover";
 import Magnetic from "@/components/Magnetic";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <>
-      <Hero />
+      <ExplodedHero />
 
       {/* Multimarca en una sola línea discreta */}
       <section className="border-b border-black/5 py-10">

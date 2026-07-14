@@ -4,8 +4,6 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
-import Magnetic from "@/components/Magnetic";
-import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 import { EXPLODED, type SpriteBox } from "./exploded-manifest";
@@ -175,7 +173,6 @@ export default function ExplodedHero() {
         .to(q("[data-hero-bike]"), { autoAlpha: 0, duration: 0.12 }, 0.07)
         // Tipografía inicial y pista de scroll
         .to(q("[data-hero-title]"), { autoAlpha: 0, y: -36, duration: 0.1, ease: "power1.in" }, 0.02)
-        .to(q("[data-hero-cta]"), { autoAlpha: 0, y: 24, duration: 0.08, ease: "power1.in" }, 0.02)
         .to(q("[data-hero-hint]"), { autoAlpha: 0, duration: 0.04 }, 0);
 
       // Vuelo de cada pieza: nace "recogida" hacia el centro (dentro de la
@@ -237,7 +234,6 @@ export default function ExplodedHero() {
       const layers = ["full", "bodywork", "rolling", "powertrain", "chassis"];
       const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } });
       tl.to(q("[data-hero-title]"), { autoAlpha: 0, y: -24, duration: 0.12, ease: "power1.in" }, 0.02)
-        .to(q("[data-hero-cta]"), { autoAlpha: 0, duration: 0.1 }, 0.02)
         .to(q("[data-hero-hint]"), { autoAlpha: 0, duration: 0.05 }, 0);
       for (let i = 0; i < layers.length; i++) {
         const el = q<HTMLElement>(`[data-mlayer="${layers[i]}"]`);
@@ -287,17 +283,17 @@ export default function ExplodedHero() {
     >
       <div
         ref={stageRef}
-        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-[#bdc4ca] motion-reduce:static motion-reduce:h-svh"
+        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-[#767e88] motion-reduce:static motion-reduce:h-svh"
       >
-        {/* Fondo liso gris (sin plano técnico): solo un degradé vertical muy
-            sutil + viñeta para que la moto se despegue del fondo */}
+        {/* Fondo gris oscuro de estudio (sin plano técnico): degradé vertical
+            + viñeta para que la moto se despegue del fondo */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(180deg,#ccd2d7_0%,#bdc4ca_45%,#aab2ba_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(180deg,#8b929b_0%,#767e88_45%,#5d656f_100%)]"
         />
         <div
           aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(10,25,45,0.14)_100%)]"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(8,15,26,0.3)_100%)]"
         />
 
         {/* Isotipo QB en 3D — marca de la casa, arriba a la izquierda.
@@ -329,33 +325,27 @@ export default function ExplodedHero() {
             para que las rotaciones 3D de las piezas lean con fuga real. */}
         <div className="relative aspect-[16/9] w-[132vw] shrink-0 [perspective:1300px] md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)]">
           {/* Tipografía protagonista, detrás de la moto: LA MARCA de la casa
-              (no el modelo) en grande, estilo automotriz */}
+              en grande y bien arriba, para que la moto no la tape */}
           <div
             data-hero-title
-            className="absolute top-[2%] left-1/2 z-[1] w-screen -translate-x-1/2 px-4 text-center will-change-transform md:w-full"
+            className="absolute top-[-5%] left-1/2 z-[1] w-screen -translate-x-1/2 px-4 text-center will-change-transform md:w-full"
           >
-            <p className="text-[11px] tracking-[0.34em] text-brand-red uppercase sm:text-xs">
-              Concesionario multimarca · Caracas
-            </p>
-            <h1 className="mt-2 font-display text-[clamp(2.6rem,8.6vw,7.5rem)] leading-[0.95] tracking-wide text-brand-navy uppercase">
+            <h1 className="font-display text-[clamp(2.6rem,8.6vw,7.5rem)] leading-[0.95] tracking-wide text-white/95 uppercase drop-shadow-[0_2px_14px_rgba(10,20,35,0.35)]">
               Quality Bikes
             </h1>
-            <p className="mt-3 font-mono text-[10px] tracking-[0.3em] text-brand-navy/55 uppercase sm:text-xs">
-              {siteConfig.tagline}
-            </p>
           </div>
 
           {/* Marcas representadas a los lados (salen con el título) */}
           <div data-hero-title className="absolute top-1/2 left-0 z-[1] hidden -translate-y-1/2 space-y-3 lg:block">
             {BRANDS_LEFT.map((s) => (
-              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-brand-navy/50 uppercase">
+              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/60 uppercase">
                 {s}
               </p>
             ))}
           </div>
           <div data-hero-title className="absolute top-1/2 right-0 z-[1] hidden -translate-y-1/2 space-y-3 text-right lg:block">
             {BRANDS_RIGHT.map((s) => (
-              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-brand-navy/50 uppercase">
+              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/60 uppercase">
                 {s}
               </p>
             ))}
@@ -363,10 +353,10 @@ export default function ExplodedHero() {
 
           {/* Cierre (aparece con el chasis) */}
           <div data-hero-final className="invisible absolute inset-x-[6%] bottom-[3%] z-[1] opacity-0">
-            <p className="text-center font-mono text-[10px] tracking-[0.26em] text-brand-navy/55 uppercase">
+            <p className="text-center font-mono text-[10px] tracking-[0.26em] text-white/60 uppercase">
               Chasis al desnudo · Todo lo demás es Quality
             </p>
-            <p className="font-script mt-2 text-center text-3xl text-brand-navy sm:text-4xl">
+            <p className="font-script mt-2 text-center text-3xl text-white sm:text-4xl">
               {siteConfig.slogan}
             </p>
           </div>
@@ -450,7 +440,7 @@ export default function ExplodedHero() {
             título al arrancar el scroll) */}
         <p
           data-hero-title
-          className="absolute bottom-24 left-5 z-30 max-w-[80vw] font-script text-3xl leading-tight text-brand-navy drop-shadow-[0_1px_0_rgba(255,255,255,0.5)] sm:bottom-14 sm:left-10 sm:text-5xl"
+          className="absolute bottom-16 left-5 z-30 max-w-[80vw] font-script text-3xl leading-tight text-white drop-shadow-[0_2px_10px_rgba(10,20,35,0.45)] sm:bottom-14 sm:left-10 sm:text-5xl"
         >
           {siteConfig.slogan}
         </p>
@@ -458,19 +448,11 @@ export default function ExplodedHero() {
         {/* Pista de scroll, pequeña, justo debajo del slogan */}
         <p
           data-hero-hint
-          className="absolute bottom-6 left-6 z-30 font-mono text-[10px] tracking-[0.3em] text-brand-navy/50 uppercase sm:left-11 motion-reduce:hidden"
+          className="absolute bottom-6 left-6 z-30 font-mono text-[10px] tracking-[0.3em] text-white/55 uppercase sm:left-11 motion-reduce:hidden"
         >
           ↓ Scroll para despiezar
         </p>
 
-        {/* CTA (encima de todo, clickeable) */}
-        <div data-hero-cta className="absolute bottom-14 z-30 sm:bottom-16">
-          <Magnetic className="inline-block">
-            <OpenCatalogButton className="inline-block rounded-full bg-brand-navy px-9 py-3.5 text-xs tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft sm:px-10 sm:py-4 sm:text-sm">
-              Ver catálogo
-            </OpenCatalogButton>
-          </Magnetic>
-        </div>
       </div>
     </section>
   );

@@ -123,13 +123,15 @@ function leavesBySubgroup(items: Product[]): CatalogNode[] {
 }
 
 // Grupos "de siempre" de la categoría aditivos de VP (elevadores, potencia,
-// limpiadores, estabilizadores). Todo lo demás que sea category "aditivos"
-// (refrigerantes, aerosoles, frenos, accesorios) tiene su propia sección.
+// limpiadores, estabilizadores, lubricantes de combustible). Todo lo demás
+// que sea category "aditivos" (refrigerantes, aerosoles, frenos, accesorios)
+// tiene su propia sección.
 const VP_ADITIVOS_CLASICOS = [
   "Elevador de octanaje",
   "Mejorador de potencia",
   "Limpiador de combustible",
   "Estabilizador",
+  "Lubricante de combustible",
 ];
 
 /**
@@ -138,12 +140,15 @@ const VP_ADITIVOS_CLASICOS = [
  *   Motores a Diesel (cetanium) — mismos ids "gasolina"/"diesel" de siempre,
  *   solo cambia el label mostrado.
  * - VP Racing: 6 tarjetas planas, en este orden — Combustibles de
- *   Competencia (gasolinas + alcoholes de carrera), Motores a Diesel
- *   (aditivos diesel + Diesel Armor), Aditivos (clásicos), Fluidos y
- *   Refrigerantes (refrigerantes + líquido de frenos), Limpieza y Detailing
+ *   Competencia (gasolinas + alcoholes de carrera), Diesel y Maquinaria
+ *   Pesada (aceites diesel + fluidos de maquinaria + aditivos diesel +
+ *   Diesel Armor), Aditivos (clásicos + lubricante de combustible),
+ *   Lubricantes y Fluidos (Street Legal + transmisión/dirección +
+ *   moto/especiales + refrigerantes + frenos), Limpieza y Detailing
  *   (aerosoles + power wash) y Accesorios (cuidado del tanque + bidones).
  *   Diesel Armor vive en "Cuidado del tanque" pero está tags:["Diesel"]:
- *   se saca de ahí y se suma a "Motores a Diesel", no a "Accesorios".
+ *   se saca de ahí y se suma a "Diesel y Maquinaria Pesada", no a
+ *   "Accesorios".
  * - Mobil: 5 tarjetas, en este orden — Motores a Gasolina, Motores a Diesel
  *   (incluye el refrigerante Delvac Extended Life, antes en
  *   "Especialidades"), Motos (2T y 4T), Transmisiones e Industrial (incluye
@@ -170,6 +175,15 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     const aditivos = products.filter(
       (p) => p.category === "aditivos" && VP_ADITIVOS_CLASICOS.includes(p.group),
     );
+    // "Lubricantes y Fluidos" (ex "Fluidos y Refrigerantes"): aceites Street
+    // Legal + transmisión/dirección + moto/especiales primero, luego los
+    // fluidos de siempre (refrigerantes y frenos).
+    const lubricantes = products.filter(
+      (p) =>
+        p.group === "Aceites de motor Street Legal" ||
+        p.group === "Transmisión y dirección" ||
+        p.group === "Moto y especiales",
+    );
     const fluidos = products.filter((p) => p.group === "Refrigerantes" || p.group === "Frenos");
     const limpieza = products.filter(
       (p) => p.group === "Aerosoles" || p.group === "Power Wash y Sprays",
@@ -185,11 +199,16 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
       (p) => p.group === "Cuidado del tanque" && p.tags?.includes("Diesel"),
     );
     const dieselAditivos = products.filter((p) => p.category === "aditivos" && p.group === "Diesel");
+    // "Diesel y Maquinaria Pesada" (ex "Motores a Diesel"): aceites y fluidos
+    // de maquinaria primero, luego los aditivos diesel y Diesel Armor.
+    const dieselMaquinaria = products.filter(
+      (p) => p.group === "Aceites de motor diesel" || p.group === "Fluidos de maquinaria",
+    );
     return [
       leaf("combustibles", "Combustibles de Competencia", lanesByGroup(combustibles)),
-      leaf("diesel", "Motores a Diesel", lanesByGroup([...dieselAditivos, ...dieselTanque])),
+      leaf("diesel", "Diesel y Maquinaria Pesada", lanesByGroup([...dieselMaquinaria, ...dieselAditivos, ...dieselTanque])),
       leaf("aditivos", "Aditivos", lanesByGroup(aditivos)),
-      leaf("fluidos", "Fluidos y Refrigerantes", lanesByGroup(fluidos)),
+      leaf("fluidos", "Lubricantes y Fluidos", lanesByGroup([...lubricantes, ...fluidos])),
       leaf("limpieza", "Limpieza y Detailing", lanesByGroup(limpieza)),
       leaf("accesorios", "Accesorios", lanesByGroup(accesorios)),
     ].filter((n) => n.count > 0);

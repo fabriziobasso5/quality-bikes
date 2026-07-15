@@ -9,7 +9,6 @@ import OpenCatalogButton from "@/components/OpenCatalogButton";
 import FeaturedArrivals from "@/components/FeaturedArrivals";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
-import { productBrands } from "@/data/products";
 import { siteConfig, buildWhatsAppLink } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
@@ -103,49 +102,6 @@ export default function Home() {
       {/* Moto destacada rotativa (estilo CAKE): alterna cada ~5 s entre TODAS
           las motos de próximo arribo — foto flotante, specs y "Reservar". */}
       {upcoming.length > 0 && <FeaturedArrivals motos={upcoming} />}
-
-      {/* Productos en tienda: marcas complementarias, mismos logos en placas
-          idénticas. Divisor superior + eyebrow en rojo de marca para marcar
-          que aquí empieza la zona de tienda. */}
-      <section className="border-t border-black/10 bg-[#1c2024]">
-        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
-          <Reveal className="text-center">
-            <span aria-hidden className="mx-auto mb-6 block h-px w-12 bg-brand-red" />
-            <p className="text-sm font-medium tracking-[0.3em] text-brand-red uppercase">
-              También en tienda
-            </p>
-          </Reveal>
-          <RevealGroup className="mx-auto mt-14 grid max-w-6xl grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
-          {siteConfig.productsCarried.map((product, i) => {
-            // productsCarried y productBrands describen las mismas casas en el
-            // mismo orden (VP Racing, Mobil, BK3, Falken, EWAY): el índice da
-            // el id de la ruta. (Asunción: si se reordena una lista, reordenar
-            // la otra.)
-            const brandId = productBrands[i]?.id;
-            return (
-              <RevealItem key={product.name} className="text-center">
-                <Link href={brandId ? `/productos/${brandId}` : "/productos"} className="group block">
-                  {/* Placas idénticas: el logo se maximiza dentro del mismo
-                      marco en todas las marcas, así se ven simétricos en tamaño. */}
-                  <div className="flex h-28 items-center justify-center overflow-hidden rounded-2xl border border-black/10 bg-white px-7 shadow-sm shadow-black/[0.04] transition duration-300 group-hover:-translate-y-1 group-hover:border-black/20 group-hover:shadow-lg group-hover:shadow-black/10">
-                    {/* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */}
-                    <img
-                      src={withBasePath(product.logo)}
-                      alt={product.name}
-                      className="max-h-16 w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <p className="mt-4 text-sm text-white/60">{product.description}</p>
-                  <p className="link-underline mt-2 inline-block text-xs tracking-widest text-white/85 uppercase">
-                    Ver productos →
-                  </p>
-                </Link>
-              </RevealItem>
-            );
-          })}
-          </RevealGroup>
-        </div>
-      </section>
 
       {/* La pieza de la casa: el plano técnico del isotipo se dibuja con el
           scroll y se materializa en la Multistrada V4 real — cierre visual de

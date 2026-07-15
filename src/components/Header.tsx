@@ -6,24 +6,24 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import MobileMenu from "./MobileMenu";
 import MotoCover from "./MotoCover";
-import BrandLogo from "./products/BrandLogo";
 import { motorcycles } from "@/data/motorcycles";
-import { productBrands, categoryLabels } from "@/data/products";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
 const navItems = [
+  { href: "/productos", label: "Productos" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
 
-type MenuId = "catalogo" | "productos";
+type MenuId = "catalogo";
 
 /**
- * Ducati-style mega menu: "Catálogo" y "Productos" abren cada uno un panel
- * blanco a todo el ancho. Click-driven (como Ducati) en vez de hover: sin
- * aperturas accidentales y con soporte de teclado. Solo un panel abierto a la
- * vez; cierra con click fuera, Escape o cualquier navegación.
+ * Ducati-style mega menu: "Catálogo" abre un panel blanco a todo el ancho con
+ * todas las motos. Click-driven (como Ducati) en vez de hover: sin aperturas
+ * accidentales y con soporte de teclado. "Productos" es un link normal a la
+ * página real /productos (tiene su propia página con las 5 marcas, no
+ * necesita un panel propio aquí).
  */
 export default function Header() {
   const [openMenu, setOpenMenu] = useState<MenuId | null>(null);
@@ -89,7 +89,7 @@ export default function Header() {
           {/* Anchor plano en vez de next/link: navegación dura al home con el
               basePath ya resuelto — funciona desde cualquier subpágina de
               GitHub Pages sin depender del estado del router del cliente. */}
-          <a href={withBasePath("/")} className="flex items-center" aria-label={siteConfig.name}>
+          <a href={withBasePath("/")} className="flex shrink-0 items-center" aria-label={siteConfig.name}>
             {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
             <img
               src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
@@ -116,16 +116,6 @@ export default function Header() {
               }`}
             >
               Catálogo
-            </button>
-            <button
-              onClick={() => toggle("productos")}
-              aria-expanded={openMenu === "productos"}
-              aria-controls="mega-productos"
-              className={`uppercase tracking-wide transition ${
-                openMenu === "productos" ? "text-brand-red" : "text-white/85 hover:text-brand-red"
-              }`}
-            >
-              Productos
             </button>
             {navItems.map((item) => (
               <Link
@@ -199,54 +189,6 @@ export default function Header() {
                     >
                       Ver inventario completo →
                     </Link>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {openMenu === "productos" && (
-              <motion.div
-                id="mega-productos"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-x-0 top-full hidden border-b border-black/10 bg-white shadow-xl shadow-black/5 md:block"
-              >
-                <div className="mx-auto max-w-7xl px-6 py-8">
-                  <div className="grid grid-cols-5 gap-5">
-                    {productBrands.map((brand) => (
-                      <Link
-                        key={brand.id}
-                        href={`/productos/${brand.id}`}
-                        onClick={() => setOpenMenu(null)}
-                        className="group flex flex-col border border-black/10 transition hover:border-brand-navy/40"
-                      >
-                        <div className="relative flex h-32 items-center justify-center overflow-hidden bg-white px-8">
-                          <BrandLogo
-                            brand={brand}
-                            className="transition-transform duration-500 group-hover:scale-105"
-                            imgClassName="max-h-11"
-                          />
-                        </div>
-                        <div className="border-t border-black/10 p-4">
-                          <p className="text-[11px] tracking-widest text-brand-text/45 uppercase">
-                            {brand.name}
-                          </p>
-                          <p className="mt-1 text-sm text-brand-text/70">{brand.tagline}</p>
-                          <div className="mt-2 flex flex-wrap gap-1.5">
-                            {brand.categories.map((cat) => (
-                              <span
-                                key={cat}
-                                className="text-[10px] tracking-wide text-brand-navy uppercase"
-                              >
-                                {categoryLabels[cat]}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
                   </div>
                 </div>
               </motion.div>

@@ -77,9 +77,8 @@ export default function ExplodedHero() {
       const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.in" } });
 
       // El chasis se enciende al primer soplo de scroll (antes de que vuele
-      // la primera pieza); tipografía inicial cede a la vez.
+      // la primera pieza).
       tl.set(q("[data-hero-chassis]"), { autoAlpha: 1 }, 0.008)
-        .to(q("[data-hero-title]"), { autoAlpha: 0, y: -28, duration: 0.09, ease: "power1.in" }, 0.015)
         .to(q("[data-hero-hint]"), { autoAlpha: 0, duration: 0.04, ease: "none" }, 0);
 
       // Cada pieza: un solo tween acelerando (power2.in = se desprende y se
@@ -159,10 +158,12 @@ export default function ExplodedHero() {
           className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_46%,rgba(3,7,14,0.42)_100%)]"
         />
 
-        {/* Marca fina arriba: identidad, sin competir con la moto */}
+        {/* Marca fina arriba: identidad, sin competir con la moto. Siempre
+            visible (ya no se desvanece con el scroll) y pegada al borde
+            superior del stage para no chocar nunca con el parabrisas/visera,
+            que es la parte más alta de la moto en todo el recorrido. */}
         <p
-          data-hero-title
-          className="absolute top-[4.5%] left-1/2 z-30 w-max max-w-[94vw] -translate-x-1/2 text-center font-light tracking-[0.42em] text-brand-red uppercase text-xs sm:text-base"
+          className="absolute top-2 left-1/2 z-30 w-max max-w-[94vw] -translate-x-1/2 text-center font-light tracking-[0.42em] text-brand-red uppercase text-xs sm:top-4 sm:text-base"
         >
           Quality Bikes Venezuela • Caracas
         </p>
@@ -308,8 +309,8 @@ export default function ExplodedHero() {
             viven fuera de este stage. whitespace-nowrap + clamp() evita que
             la frase corte a una segunda línea en cualquier viewport. */}
         <p
-          className="z-20 mt-3 max-w-[92vw] px-4 text-center font-display font-medium whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-5"
-          style={{ fontSize: "clamp(1rem, 4.5vw, 1.75rem)", letterSpacing: "0.01em" }}
+          className="font-script z-20 mt-3 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-5"
+          style={{ fontSize: "clamp(1.2rem, 5.5vw, 2.25rem)" }}
         >
           {siteConfig.slogan}
         </p>

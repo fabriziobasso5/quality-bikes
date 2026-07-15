@@ -13,7 +13,7 @@ export default function BrandCard({ brand }: { brand: ProductBrandMeta }) {
       href={`/productos/${brand.id}`}
       className="group flex h-full flex-col overflow-hidden border border-black/10 bg-brand-bg shadow-sm shadow-black/[0.03] transition duration-300 hover:border-brand-navy/40 hover:shadow-lg hover:shadow-brand-navy/10"
     >
-      <div className="relative flex h-48 items-center justify-center overflow-hidden bg-white px-10">
+      <div className="relative flex h-32 items-center justify-center overflow-hidden bg-white px-10">
         <BrandLogo
           brand={brand}
           className="transition-transform duration-500 group-hover:scale-105"

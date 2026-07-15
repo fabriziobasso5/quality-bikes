@@ -3,31 +3,28 @@
 import Link from "next/link";
 import { useState } from "react";
 import MotoCover from "./MotoCover";
-import BrandLogo from "./products/BrandLogo";
 import { motorcycles } from "@/data/motorcycles";
-import { productBrands } from "@/data/products";
 
 const navItems = [
+  { href: "/productos", label: "Productos" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
 
 /**
  * Menú móvil = versión móvil del mega-menú. La hamburguesa despliega un panel
- * con Catálogo, Productos, Nosotros y Contacto. "Catálogo" y "Productos" se
- * expanden EN SITIO (acordeón) mostrando, respectivamente, todas las motos y
- * las marcas — sin depender del overlay de escritorio, así funciona bien en
- * teléfono. "Nosotros" y "Contacto" navegan a sus páginas.
+ * con Catálogo, Productos, Nosotros y Contacto. "Catálogo" se expande EN SITIO
+ * (acordeón) mostrando todas las motos — sin depender del overlay de
+ * escritorio, así funciona bien en teléfono. "Productos", "Nosotros" y
+ * "Contacto" navegan directo a su página real.
  */
 export default function MobileMenu() {
   const [open, setOpen] = useState(false);
   const [catalogOpen, setCatalogOpen] = useState(false);
-  const [productsOpen, setProductsOpen] = useState(false);
 
   function closeAll() {
     setOpen(false);
     setCatalogOpen(false);
-    setProductsOpen(false);
   }
 
   return (
@@ -106,42 +103,6 @@ export default function MobileMenu() {
               >
                 Ver inventario completo →
               </Link>
-            </div>
-          )}
-
-          {/* Productos — mega-menú móvil: las marcas. */}
-          <button
-            type="button"
-            onClick={() => setProductsOpen((v) => !v)}
-            aria-expanded={productsOpen}
-            className="flex w-full items-center justify-between py-3 text-sm tracking-wide uppercase text-brand-text/80"
-          >
-            Productos
-            <span
-              className={`text-brand-text/40 transition-transform duration-200 ${productsOpen ? "rotate-90" : ""}`}
-            >
-              →
-            </span>
-          </button>
-
-          {productsOpen && (
-            <div className="mb-2 border-l border-black/10 pl-4">
-              {productBrands.map((brand) => (
-                <Link
-                  key={brand.id}
-                  href={`/productos/${brand.id}`}
-                  onClick={closeAll}
-                  className="flex items-center gap-4 py-2.5"
-                >
-                  <span className="flex h-12 w-16 shrink-0 items-center justify-center rounded border border-black/10 bg-white px-2">
-                    <BrandLogo brand={brand} imgClassName="max-h-7" />
-                  </span>
-                  <div>
-                    <p className="font-display text-sm tracking-wide">{brand.name}</p>
-                    <p className="text-[11px] text-brand-text/50">{brand.tagline}</p>
-                  </div>
-                </Link>
-              ))}
             </div>
           )}
 

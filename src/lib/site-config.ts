@@ -1,7 +1,7 @@
 // Configuración central de la marca.
 export const siteConfig = {
   name: "Quality Bikes",
-  slogan: "...mucho más que solo motos",
+  slogan: "...Mucho más que solo motos.",
   tagline: "Motocicletas de alta cilindrada. Curadas para quienes exigen lo mejor.",
   description:
     "Concesionario multimarca de motocicletas de alta cilindrada en Caracas: BMW, Ducati, Honda, Suzuki, Kawasaki, Yamaha, Triumph y Voge. Asesoría experta y personalizada para conseguir la moto de tus sueños.",
@@ -23,44 +23,6 @@ export const siteConfig = {
   // Concesionario multimarca — sin orden de énfasis por marca. Son marcas
   // que la casa vende o ha vendido, no representaciones oficiales.
   brandsRepresented: ["BMW", "Ducati", "Honda", "Yamaha", "Suzuki", "Kawasaki", "Triumph", "Voge"],
-  // Productos complementarios en tienda física (lubricantes/racing/cauchos),
-  // no motocicletas. BK3 se presenta como marca tipográfica de la casa (logo:
-  // null + sublabel): decisión de diseño — el arte oficial del distribuidor
-  // no convive con la estética minimalista del sitio.
-  // Mismo orden que productBrands en data/products.ts (VP Racing, Mobil, BK3,
-  // Falken, EWAY): el índice de cada tarjeta se usa para resolver su ruta.
-  productsCarried: [
-    {
-      name: "VP Racing",
-      description: "Gasolina de alto octanaje, elevadores, ethanol y aceites",
-      logo: "/images/brands/vp-racing.png",
-      sublabel: null,
-    },
-    {
-      name: "Mobil 1",
-      description: "Aceites",
-      logo: "/images/brands/mobil-1.svg",
-      sublabel: null,
-    },
-    {
-      name: "BK3",
-      description: "Elevadores de octanaje",
-      logo: "/images/brands/bk3.png",
-      sublabel: "Potenciador de octanaje",
-    },
-    {
-      name: "Falken",
-      description: "Cauchos de alto rendimiento para todo terreno",
-      logo: "/images/brands/falken.png",
-      sublabel: null,
-    },
-    {
-      name: "EWAY",
-      description: "Combustibles de competencia Gulf",
-      logo: "/images/brands/eway-racing.png",
-      sublabel: null,
-    },
-  ],
 } as const;
 
 export function buildWhatsAppLink(message: string) {

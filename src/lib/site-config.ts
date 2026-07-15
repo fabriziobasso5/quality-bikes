@@ -28,7 +28,7 @@ export const siteConfig = {
   // null + sublabel): decisión de diseño — el arte oficial del distribuidor
   // no convive con la estética minimalista del sitio.
   // Mismo orden que productBrands en data/products.ts (VP Racing, Mobil, BK3,
-  // Falken): el índice de cada tarjeta se usa para resolver su ruta.
+  // Falken, EWAY): el índice de cada tarjeta se usa para resolver su ruta.
   productsCarried: [
     {
       name: "VP Racing",
@@ -52,6 +52,12 @@ export const siteConfig = {
       name: "Falken",
       description: "Cauchos de alto rendimiento para todo terreno",
       logo: "/images/brands/falken.png",
+      sublabel: null,
+    },
+    {
+      name: "EWAY",
+      description: "Combustibles de competencia Gulf",
+      logo: "/images/brands/eway-racing.png",
       sublabel: null,
     },
   ],

@@ -61,10 +61,11 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/10">
       {/* Misma familia visual que el footer: fibra de carbono forjada con un
-          velo oscuro + viñeta radial encima. Estas capas viven en su propio
-          wrapper (no en <header>) para que overflow-hidden no recorte los
-          mega-menús, que cuelgan por fuera de esta barra. */}
-      <div className="relative overflow-hidden bg-[#0d0f11]">
+          velo oscuro + viñeta radial encima. Sin overflow-hidden aquí: cada
+          capa de fondo ya es "absolute inset-0" (se recorta sola a su caja,
+          no necesita el contenedor) y el panel del menú móvil, que sí es
+          descendiente de este div, necesita poder desbordar hacia abajo. */}
+      <div className="relative bg-[#0d0f11]">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"

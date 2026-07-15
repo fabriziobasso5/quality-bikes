@@ -128,11 +128,12 @@ export default function Home() {
               También en tienda
             </p>
           </Reveal>
-          <RevealGroup className="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <RevealGroup className="mx-auto mt-14 grid max-w-6xl grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
           {siteConfig.productsCarried.map((product, i) => {
             // productsCarried y productBrands describen las mismas casas en el
-            // mismo orden (VP Racing, Mobil, BK3, Falken): el índice da el id
-            // de la ruta. (Asunción: si se reordena una lista, reordenar la otra.)
+            // mismo orden (VP Racing, Mobil, BK3, Falken, EWAY): el índice da
+            // el id de la ruta. (Asunción: si se reordena una lista, reordenar
+            // la otra.)
             const brandId = productBrands[i]?.id;
             return (
               <RevealItem key={product.name} className="text-center">

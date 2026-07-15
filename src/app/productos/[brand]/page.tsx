@@ -137,21 +137,21 @@ const VP_ADITIVOS_CLASICOS = [
 
 /**
  * Árbol de navegación in-page por marca.
- * - BK3: Motores a Gasolina (octane boosters + performance marine) y
- *   Motores a Diesel (cetanium) — mismos ids "gasolina"/"diesel" de siempre,
- *   solo cambia el label mostrado.
+ * - BK3: Para Motores a Gasolina (octane boosters + performance marine) y
+ *   Para Motores a Diesel (cetanium) — mismos ids "gasolina"/"diesel" de
+ *   siempre, solo cambia el label mostrado.
  * - VP Racing: 6 tarjetas planas, en este orden — Combustibles de
  *   Competencia (gasolinas + alcoholes de carrera), Diesel y Maquinaria
  *   Pesada (aceites diesel + fluidos de maquinaria + aditivos diesel +
  *   Diesel Armor), Aditivos (clásicos + lubricante de combustible),
- *   Lubricantes y Fluidos (Street Legal + transmisión/dirección +
+ *   Aceites y Fluidos (Street Legal + transmisión/dirección +
  *   moto/especiales + refrigerantes + frenos), Limpieza y Detailing
  *   (aerosoles + power wash) y Accesorios (cuidado del tanque + bidones).
  *   Diesel Armor vive en "Cuidado del tanque" pero está tags:["Diesel"]:
  *   se saca de ahí y se suma a "Diesel y Maquinaria Pesada", no a
  *   "Accesorios".
- * - Mobil: 5 tarjetas, en este orden — Motores a Gasolina, Motores a Diesel
- *   (incluye el refrigerante Delvac Extended Life, antes en
+ * - Mobil: 5 tarjetas, en este orden — Para Motores a Gasolina, Para Motores
+ *   a Diesel (incluye el refrigerante Delvac Extended Life, antes en
  *   "Especialidades"), Para Motos y Lanchas (2T/4T + Outboard),
  *   Transmisiones e Industrial (incluye
  *   la grasa Mobilgrease XHP 222, antes en "Grasas").
@@ -165,8 +165,8 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     const gasolina = products.filter((p) => p.group === "Gasolina" || p.group === "Marino");
     const diesel = products.filter((p) => p.group === "Diesel");
     return [
-      leaf("gasolina", "Motores a Gasolina", lanesByGroup(gasolina)),
-      leaf("diesel", "Motores a Diesel", lanesByGroup(diesel)),
+      leaf("gasolina", "Para Motores a Gasolina", lanesByGroup(gasolina)),
+      leaf("diesel", "Para Motores a Diesel", lanesByGroup(diesel)),
     ].filter((n) => n.count > 0);
   }
 
@@ -177,9 +177,10 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     const aditivos = products.filter(
       (p) => p.category === "aditivos" && VP_ADITIVOS_CLASICOS.includes(p.group),
     );
-    // "Lubricantes y Fluidos" (ex "Fluidos y Refrigerantes"): aceites Street
-    // Legal + transmisión/dirección + moto/especiales primero, luego los
-    // fluidos de siempre (refrigerantes y frenos).
+    // "Aceites y Fluidos" (ex "Fluidos y Refrigerantes", luego "Lubricantes y
+    // Fluidos"): aceites Street Legal + transmisión/dirección +
+    // moto/especiales primero, luego los fluidos de siempre (refrigerantes y
+    // frenos).
     const lubricantes = products.filter(
       (p) =>
         p.group === "Aceites de motor Street Legal" ||
@@ -210,7 +211,7 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
       leaf("combustibles", "Combustibles de Competencia", lanesByGroup(combustibles)),
       leaf("diesel", "Diesel y Maquinaria Pesada", lanesByGroup([...dieselMaquinaria, ...dieselAditivos, ...dieselTanque])),
       leaf("aditivos", "Aditivos", lanesByGroup(aditivos)),
-      leaf("fluidos", "Lubricantes y Fluidos", lanesByGroup([...lubricantes, ...fluidos])),
+      leaf("fluidos", "Aceites y Fluidos", lanesByGroup([...lubricantes, ...fluidos])),
       leaf("limpieza", "Limpieza y Detailing", lanesByGroup(limpieza)),
       leaf("accesorios", "Accesorios", lanesByGroup(accesorios)),
     ].filter((n) => n.count > 0);
@@ -245,8 +246,8 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
     (p) => p.group === "Línea industrial" || p.group === "Línea grasas",
   );
   return [
-    leaf("gasolina", "Motores a Gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
-    leaf("diesel", "Motores a Diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético", "Refrigerante"])),
+    leaf("gasolina", "Para Motores a Gasolina", lanesByTag(gasolina, ["Sintético", "Semisintético", "Mineral"])),
+    leaf("diesel", "Para Motores a Diesel", lanesByTag(diesel, ["Mineral", "Sintético", "Semisintético", "Refrigerante"])),
     leaf("moto", "Para Motos y Lanchas", lanesByTag(moto, ["Semisintético", "Mineral"])),
     leaf("transmisiones", "Transmisiones", lanesByGroup(transmisiones)),
     leaf("industrial", "Industrial", lanesByGroup(industrial)),

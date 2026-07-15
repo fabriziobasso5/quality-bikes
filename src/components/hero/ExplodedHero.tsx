@@ -131,7 +131,7 @@ export default function ExplodedHero() {
   const bikeSrc = withBasePath(`${HERO_DIR}/bike.webp`);
   const bikeSmSrc = withBasePath(`${HERO_DIR}/bike-sm.webp`);
   const bikeSrcSet = `${bikeSmSrc} 1200w, ${bikeSrc} 1800w`;
-  const bikeSizes = "(max-width: 767px) 132vw, 96vw";
+  const bikeSizes = "(max-width: 767px) 94vw, 96vw";
 
   return (
     <>
@@ -197,7 +197,7 @@ export default function ExplodedHero() {
         </div>
 
         {/* ——— Escenario 16:9: todas las capas comparten este frame ——— */}
-        <div className="relative aspect-[16/9] w-[132vw] shrink-0 md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)]">
+        <div className="relative aspect-[16/9] w-[94vw] shrink-0 md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)]">
           {/* Capa base semántica y candidata LCP: la moto completa visible
               desde el primer paint (los tiles encima muestran exactamente los
               mismos píxeles). Es la imagen con alt del hero. */}

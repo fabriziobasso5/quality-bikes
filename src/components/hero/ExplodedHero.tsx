@@ -1,130 +1,43 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
-import { EXPLODED, type SpriteBox } from "./exploded-manifest";
+import { SPOKES, TILES, centroid, polyToClip } from "./exploded-tiles";
+import QbMark from "./QbMark";
 
 /**
- * Hero "despiece controlado por scroll" — la evolución en claro del plano
- * técnico navy que cierra la página (BlueprintReveal): mismo lenguaje de
- * retícula, marco con cajetín, cotas y specs en mono, pero sobre papel gris
- * claro y con la R 1300 GS Adventure Option 719 (serie generada con IA,
- * misma cámara/luz en todas las capas) desarmándose pieza a pieza.
+ * Hero "la moto se desviste en el lugar": la R 1300 GS Adventure NO se mueve
+ * — el chasis es el ancla absoluta, en el mismo píxel del primer al último
+ * frame. Con el scroll (scrub 1:1, sin inercia), las piezas se desprenden en
+ * orden exterior→interior y salen volando hacia los cuatro costados con
+ * física por peso; al final queda el chasis desnudo exactamente donde
+ * siempre estuvo.
  *
- * Mecánica: sección track alta (~185vh) + stage sticky; un timeline GSAP con
- * scrub:true (1:1 con el scroll, sin inercia — scroll rápido = despiece
- * rápido, scroll lento = se aprecia el detalle). Cada sprite (recortado por
- * componente del frame 16:9 compartido) vuela con su propio vector radial,
- * rotación 3D y "profundidad": piezas grandes = más cercanas = más rápidas y
- * lejanas. El stage lleva perspective para que rotationX/Y/translateZ lean
- * como 3D real. La tornillería queda dispersa con blur alrededor del chasis
- * final (profundidad de campo).
+ * Arquitectura de capas (alineación pixel-perfect por construcción):
+ *  - chassis.webp (abajo, estático): edición encadenada del master,
+ *    registrada por overlay.
+ *  - "remainder": el MISMO bike.webp con una máscara SVG que oculta las
+ *    regiones de todas las piezas — lo que queda visible de la moto original
+ *    son sus píxeles de chasis, que calzan con la capa de abajo.
+ *  - tiles: regiones clip-path del MISMO bike.webp — cada pieza vuela con
+ *    los píxeles exactos de la moto, sin sprites regenerados ni "pops".
+ *  - rayos de rin sueltos (spoke.webp) que estallan al volar cada caucho.
  *
- * Mobile (<768px): crossfade de los frames completos, sin vuelo por pieza.
- * prefers-reduced-motion: moto completa estática, sin pin ni timeline.
+ * Un solo timeline % / vw / vh: la misma mecánica sirve en desktop y mobile.
+ * prefers-reduced-motion: moto completa estática, sin pin ni vuelo.
  */
 
-// RNG determinista (semilla fija): los parámetros de vuelo se calculan en
-// módulo, idénticos en server y cliente — sin mismatch de hidratación.
-function mulberry32(seed: number) {
-  let a = seed;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-type Flight = {
-  sprite: SpriteBox;
-  /** desplazamiento final, en % del tamaño propio del sprite */
-  dx: number;
-  dy: number;
-  rz: number;
-  rx: number;
-  ry: number;
-  z: number;
-  /** ventana [inicio, fin] dentro del progreso 0–1 del timeline */
-  t0: number;
-  t1: number;
-};
-
-function buildFlights(
-  sprites: readonly SpriteBox[],
-  rand: () => number,
-  winStart: number,
-  winEnd: number
-): Flight[] {
-  return sprites.map((s) => {
-    // vector radial desde el centro óptico del frame hacia el centro de la
-    // pieza + jitter angular, para que ninguna salga en la misma dirección
-    const cx = s.x + s.w / 2 - 0.5;
-    const cy = s.y + s.h / 2 - 0.52;
-    const ang =
-      Math.hypot(cx, cy) < 0.05 ? rand() * Math.PI * 2 : Math.atan2(cy, cx) + (rand() - 0.5) * 0.6;
-    // proxy de profundidad: pieza grande = más cercana = viaja más y más rápido
-    const depth = 0.7 + Math.min(1, (s.w * s.h) / 0.06) * 0.8 + rand() * 0.5;
-    const dist = (140 + rand() * 180) * depth;
-    const t0 = winStart + rand() * 0.06;
-    const t1 = winEnd - rand() * 0.06;
-    return {
-      sprite: s,
-      dx: Math.cos(ang) * dist,
-      dy: Math.sin(ang) * dist * 0.9,
-      rz: (rand() - 0.5) * 80,
-      rx: (rand() - 0.5) * 55,
-      ry: (rand() - 0.5) * 55,
-      z: 40 + depth * 130,
-      t0,
-      t1: Math.max(t1, t0 + 0.12),
-    };
-  });
-}
-
-const rand = mulberry32(719);
-// Ventanas solapadas: apenas arranca el scroll todo empieza a moverse; las
-// capas se atraviesan en cascada carrocería → rodaje → motor → chasis.
-const BODYWORK = buildFlights(EXPLODED.bodywork.sprites, rand, 0.05, 0.48);
-const ROLLING = buildFlights(EXPLODED.rolling.sprites, rand, 0.17, 0.63);
-const POWERTRAIN = buildFlights(EXPLODED.powertrain.sprites, rand, 0.33, 0.82);
-
-// Tornillería: partículas lentas con blur fijo (profundidad de campo). Las
-// "keep" quedan dispersas alrededor del chasis final; el resto sale antes.
-const HW = EXPLODED.hardware.sprites.map((s, i) => {
-  const drift = 30 + rand() * 50;
-  const ang = rand() * Math.PI * 2;
-  return {
-    sprite: s,
-    dx: Math.cos(ang) * drift,
-    dy: Math.sin(ang) * drift - 18,
-    rz: (rand() - 0.5) * 120,
-    blur: i % 3 === 0 ? 2.2 : i % 3 === 1 ? 1.2 : 0.6,
-    front: i % 2 === 0,
-    keep: i % 5 !== 1,
-    scale: 0.5 + rand() * 0.45,
-  };
-});
-
-// Columnas laterales: las marcas que representa la casa — identidad
-// multimarca de Quality Bikes, no ficha técnica del modelo.
-const BRANDS_LEFT = siteConfig.brandsRepresented.slice(0, 4);
-const BRANDS_RIGHT = siteConfig.brandsRepresented.slice(4, 8);
-
 const HERO_DIR = "/images/hero-exploded";
+const BIKE_ALT =
+  "BMW R 1300 GS Adventure Option 719 verde esmeralda con escape Akrapovic, vista lateral";
 
 export default function ExplodedHero() {
   const trackRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  // Timelines activos (uno por breakpoint): el scrub es manual — framer-motion
-  // mide el progreso del track (mismo patrón probado de BlueprintReveal) y se
-  // escribe 1:1 en tl.progress(). Sin inercia: scroll = posición exacta.
-  const tls = useRef<gsap.core.Timeline[]>([]);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
   const reduce = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
@@ -132,12 +45,17 @@ export default function ExplodedHero() {
     offset: ["start start", "end end"],
   });
 
+  // Scrub manual 1:1 (patrón probado del sitio): framer mide el progreso del
+  // track y lo escribe en el timeline pausado — sin inercia.
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    for (const tl of tls.current) tl.progress(v);
+    // Promoción perezosa a capas GPU: recién al primer scroll (hacerlo desde
+    // SSR con will-change disparaba una tormenta de composición en la
+    // hidratación que retrasaba el registro del LCP en móvil).
+    stageRef.current?.style.setProperty("--qb-wc", "transform");
+    tlRef.current?.progress(v);
   });
 
-  // Altura del header sticky → --qbh, para encuadrar el stage justo debajo
-  // (mismo truco que BlueprintReveal).
+  // Altura del header sticky → --qbh, para pegar el stage justo debajo.
   useEffect(() => {
     const measure = () =>
       stageRef.current?.style.setProperty(
@@ -151,208 +69,246 @@ export default function ExplodedHero() {
 
   useLayoutEffect(() => {
     if (reduce) return;
-    const mm = gsap.matchMedia();
     const stage = stageRef.current;
     if (!stage) return;
-
     const q = gsap.utils.selector(stage);
-    const register = (tl: gsap.core.Timeline) => {
-      tl.progress(scrollYProgress.get()).pause();
-      tls.current.push(tl);
-      return () => {
-        tls.current = tls.current.filter((t) => t !== tl);
-        tl.kill();
-      };
-    };
 
-    mm.add("(min-width: 768px)", () => {
-      const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.in" } });
 
-      // La moto completa cede rápido mientras la primera capa ya vuela
-      tl.to(q("[data-hero-bike]"), { scale: 1.03, duration: 0.1 }, 0)
-        .to(q("[data-hero-bike]"), { autoAlpha: 0, duration: 0.12 }, 0.07)
-        // Tipografía inicial y pista de scroll
-        .to(q("[data-hero-title]"), { autoAlpha: 0, y: -36, duration: 0.1, ease: "power1.in" }, 0.02)
-        .to(q("[data-hero-hint]"), { autoAlpha: 0, duration: 0.04 }, 0);
+      // El chasis se enciende al primer soplo de scroll (antes de que vuele
+      // la primera pieza); tipografía inicial cede a la vez.
+      tl.set(q("[data-hero-chassis]"), { autoAlpha: 1 }, 0.008)
+        .to(q("[data-hero-title]"), { autoAlpha: 0, y: -28, duration: 0.09, ease: "power1.in" }, 0.015)
+        .to(q("[data-hero-hint]"), { autoAlpha: 0, duration: 0.04, ease: "none" }, 0);
 
-      // Vuelo de cada pieza: nace "recogida" hacia el centro (dentro de la
-      // silueta de la moto) y atraviesa su posición de collage hacia afuera,
-      // acelerando — power1.in lee como pieza que se desprende.
-      const flightGroups: Flight[][] = [BODYWORK, ROLLING, POWERTRAIN];
-      for (const group of flightGroups) {
-        for (let i = 0; i < group.length; i++) {
-          const f = group[i];
-          const el = q<HTMLElement>(`[data-flight="${f.sprite.file}"]`);
-          const dur = f.t1 - f.t0;
-          tl.fromTo(
-            el,
-            { xPercent: -f.dx * 0.14, yPercent: -f.dy * 0.14, scale: 0.93, rotationZ: 0, rotationX: 0, rotationY: 0, z: 0, transformPerspective: 1000 },
-            {
-              xPercent: f.dx,
-              yPercent: f.dy,
-              scale: 1 + f.z / 400,
-              rotationZ: f.rz,
-              rotationX: f.rx,
-              rotationY: f.ry,
-              z: f.z,
-              duration: dur,
-              ease: "power1.in",
-            },
-            f.t0
-          )
-            .to(el, { autoAlpha: 1, duration: 0.05 }, f.t0)
-            .to(el, { autoAlpha: 0, duration: dur * 0.28 }, f.t1 - dur * 0.28);
-        }
+      // Cada pieza: un solo tween acelerando (power2.in = se desprende y se
+      // va). La moto/chasis NUNCA se tocan — solo vuelan los tiles.
+      for (const tile of TILES) {
+        const [ox, oy] = centroid(tile.poly);
+        tl.to(
+          q(`[data-tile="${tile.id}"]`),
+          {
+            x: `${tile.vx}vw`,
+            y: `${tile.vy}vh`,
+            rotation: tile.rot,
+            transformOrigin: `${ox}% ${oy}%`,
+            duration: tile.t[1] - tile.t[0],
+          },
+          tile.t[0]
+        );
       }
 
-      // Partículas de tornillería: deriva lenta durante todo el recorrido
-      for (const p of HW) {
-        const el = q<HTMLElement>(`[data-flight="${p.sprite.file}"]`);
-        tl.to(el, { autoAlpha: 0.9, duration: 0.06 }, 0.1 + Math.abs(p.rz) / 3000)
-          .to(el, { xPercent: p.dx, yPercent: p.dy, rotationZ: p.rz, duration: 0.85, ease: "none" }, 0.12);
-        if (!p.keep) tl.to(el, { autoAlpha: 0, duration: 0.1 }, 0.5);
-      }
+      // Rayos: aparecen en el centro del rin y estallan radialmente
+      SPOKES.forEach((s, i) => {
+        const el = q(`[data-spoke="${i}"]`);
+        tl.to(el, { autoAlpha: 1, duration: 0.015, ease: "none" }, s.t0).to(
+          el,
+          { x: `${s.vx}vw`, y: `${s.vy}vh`, rotation: s.rot, duration: 0.17 },
+          s.t0 + 0.005
+        );
+      });
 
-      // El chasis se asienta al final; cierre tipográfico
+      // Cierre tipográfico sobre el chasis desnudo
       tl.fromTo(
-        q("[data-hero-chassis]"),
-        { autoAlpha: 0, scale: 1.05, y: 26 },
-        { autoAlpha: 1, scale: 1, y: 0, duration: 0.16, ease: "power2.out" },
-        0.68
-      ).fromTo(
         q("[data-hero-final]"),
-        { autoAlpha: 0, y: 18 },
-        { autoAlpha: 1, y: 0, duration: 0.1, ease: "power1.out" },
-        0.86
+        { autoAlpha: 0, y: 16 },
+        { autoAlpha: 1, y: 0, duration: 0.08, ease: "power1.out" },
+        0.9
       );
 
-      return register(tl);
-    });
+      tl.progress(scrollYProgress.get());
+      tlRef.current = tl;
+    }, stage);
 
-    // Mobile: crossfade de frames completos (sin vuelo por pieza), pin corto
-    mm.add("(max-width: 767px)", () => {
-      const layers = ["full", "bodywork", "rolling", "powertrain", "chassis"];
-      const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } });
-      tl.to(q("[data-hero-title]"), { autoAlpha: 0, y: -24, duration: 0.12, ease: "power1.in" }, 0.02)
-        .to(q("[data-hero-hint]"), { autoAlpha: 0, duration: 0.05 }, 0);
-      for (let i = 0; i < layers.length; i++) {
-        const el = q<HTMLElement>(`[data-mlayer="${layers[i]}"]`);
-        const at = (i / layers.length) * 0.86;
-        if (i > 0) tl.fromTo(el, { autoAlpha: 0, scale: 1.05 }, { autoAlpha: 1, scale: 1, duration: 0.14 }, at);
-        if (i < layers.length - 1) tl.to(el, { autoAlpha: 0, duration: 0.12 }, ((i + 1) / layers.length) * 0.86 + 0.02);
-      }
-      tl.fromTo(q("[data-hero-final]"), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.1 }, 0.88);
-      return register(tl);
-    });
-
-    return () => mm.revert();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- scrollYProgress es estable (ref del mismo hook)
+    return () => {
+      tlRef.current = null;
+      ctx.revert();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- scrollYProgress es estable
   }, [reduce]);
 
-  const sprite = (s: SpriteBox, extra?: string, blur?: number) => (
-    <div
-      key={s.file}
-      data-flight={s.file}
-      className={`invisible absolute opacity-0 will-change-transform ${extra ?? ""}`}
-      style={{
-        left: `${s.x * 100}%`,
-        top: `${s.y * 100}%`,
-        width: `${s.w * 100}%`,
-        height: `${s.h * 100}%`,
-        filter: blur ? `blur(${blur}px)` : undefined,
-      }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element -- sprite con alpha posicionado por manifest, next/image no aporta en export estático */}
-      <img
-        src={withBasePath(`${HERO_DIR}/${s.file}`)}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="h-full w-full"
-      />
-    </div>
-  );
+  const bikeSrc = withBasePath(`${HERO_DIR}/bike.webp`);
+  const bikeSmSrc = withBasePath(`${HERO_DIR}/bike-sm.webp`);
+  const bikeSrcSet = `${bikeSmSrc} 1200w, ${bikeSrc} 1800w`;
+  const bikeSizes = "(max-width: 767px) 132vw, 96vw";
 
   return (
+    <>
+      {/* React 19 lo iza al <head>: la moto se pide desde el HTML (LCP),
+          con el mismo srcset que usan los tiles para no duplicar descargas */}
+      <link
+        rel="preload"
+        as="image"
+        imageSrcSet={bikeSrcSet}
+        imageSizes={bikeSizes}
+        fetchPriority="high"
+      />
     <section
       ref={trackRef}
-      aria-label="BMW R 1300 GS Adventure Option 719 — despiece técnico"
-      // motion-reduce vive en CSS (no en JS): mismo markup en server y
-      // cliente, sin mismatch de hidratación para usuarios con reduced motion
-      className="relative h-[150vh] md:h-[185vh] motion-reduce:h-auto"
+      aria-label="BMW R 1300 GS Adventure Option 719 — la moto se desviste hasta el chasis"
+      // El fondo oscuro también en el track: si el pin deja ver un borde,
+      // que sea del mismo tono (nada de franjas blancas bajo el header)
+      className="relative h-[150vh] bg-[#24292f] md:h-[185vh] motion-reduce:h-auto"
     >
       <div
         ref={stageRef}
-        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-[#545b64] motion-reduce:static motion-reduce:h-svh"
+        // -1px de solape con el header: elimina la línea clara que dejaba el
+        // redondeo subpixel entre el borde del header y el stage
+        className="sticky top-[calc(var(--qbh,76px)-1px)] flex h-[calc(100svh-var(--qbh,76px)+1px)] w-full flex-col items-center justify-center overflow-hidden bg-[#31373d] motion-reduce:static motion-reduce:h-svh"
       >
-        {/* Fondo gris oscuro de estudio (sin plano técnico): degradé vertical
-            + viñeta para que la moto se despegue del fondo */}
+        {/* Estudio oscuro: degradé vertical + viñeta, la moto al frente */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(180deg,#666d76_0%,#545b64_45%,#3e454d_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(180deg,#3f464d_0%,#31373d_45%,#1d2126_100%)]"
         />
         <div
           aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(5,10,18,0.34)_100%)]"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_46%,rgba(3,7,14,0.42)_100%)]"
         />
 
-        {/* Isotipo QB en 3D — marca de la casa, arriba a la izquierda.
-            Balanceo lento (qb-logo-3d) con capa trasera como extrusión. */}
-        {/* hidden sm:block: en mobile el header ya muestra este mismo
-            isotipo justo arriba — evitamos el doble logo apilado */}
-        <div
-          aria-hidden
-          className="absolute top-5 left-5 z-20 hidden [perspective:600px] sm:top-8 sm:left-8 sm:block"
+        {/* Marca fina arriba: identidad, sin competir con la moto */}
+        <p
+          data-hero-title
+          className="absolute top-[4.5%] left-1/2 z-30 w-max max-w-[94vw] -translate-x-1/2 text-center font-light tracking-[0.42em] text-brand-red uppercase text-[11px] sm:text-sm"
         >
-          <div className="[animation:qb-logo-3d_9s_ease-in-out_infinite] [transform-style:preserve-3d] motion-reduce:animate-none">
-            {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca */}
-            <img
-              src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
-              alt=""
-              className="absolute inset-0 h-12 w-auto brightness-[0.45] [transform:translateZ(-5px)] sm:h-16"
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca */}
-            <img
-              src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
-              alt="Quality Bikes"
-              className="relative h-12 w-auto drop-shadow-[0_10px_18px_rgba(0,20,40,0.35)] sm:h-16"
-            />
-          </div>
+          Quality Bikes Venezuela • Caracas
+        </p>
+
+        {/* Isotipo QB vectorial, lado derecho, con draw-in + shimmer */}
+        <div className="absolute top-[9%] right-4 z-30 sm:top-[11%] sm:right-8">
+          <QbMark className="h-16 w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] sm:h-24" />
         </div>
 
-        {/* Escenario 16:9: todas las capas comparten este frame (misma cámara
-            en toda la serie), así el crossfade queda registrado. perspective
-            para que las rotaciones 3D de las piezas lean con fuga real. */}
-        <div className="relative aspect-[16/9] w-[132vw] shrink-0 [perspective:1300px] md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)]">
-          {/* Tipografía protagonista, detrás de la moto: LA MARCA de la casa
-              en grande y bien arriba, para que la moto no la tape */}
-          <div
-            data-hero-title
-            className="absolute top-[-42%] left-1/2 z-[1] w-screen -translate-x-1/2 px-4 text-center will-change-transform md:top-[-5%] md:w-full"
+        {/* Marcas representadas a los lados (salen con el título) */}
+        <div data-hero-title className="absolute top-1/2 left-6 z-[1] hidden -translate-y-1/2 space-y-3 lg:block">
+          {siteConfig.brandsRepresented.slice(0, 4).map((s) => (
+            <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/55 uppercase">
+              {s}
+            </p>
+          ))}
+        </div>
+        <div data-hero-title className="absolute top-1/2 right-6 z-[1] hidden -translate-y-1/2 space-y-3 text-right lg:block">
+          {siteConfig.brandsRepresented.slice(4, 8).map((s) => (
+            <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/55 uppercase">
+              {s}
+            </p>
+          ))}
+        </div>
+
+        {/* ——— Escenario 16:9: todas las capas comparten este frame ——— */}
+        <div className="relative aspect-[16/9] w-[132vw] shrink-0 md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)]">
+          {/* Capa base semántica y candidata LCP: la moto completa visible
+              desde el primer paint (los tiles encima muestran exactamente los
+              mismos píxeles). Es la imagen con alt del hero. */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- capa base del frame */}
+          <img
+            src={bikeSrc}
+            srcSet={bikeSrcSet}
+            sizes={bikeSizes}
+            alt={BIKE_ALT}
+            fetchPriority="high"
+            className="pointer-events-none absolute inset-0 h-full w-full"
+          />
+
+          {/* Capa 0 — chasis desnudo: el ancla. NUNCA se transforma. Nace con
+              opacity 0 (está 100% tapado por los tiles, y así Chrome no lo
+              registra como LCP) y el timeline lo enciende al primer soplo de
+              scroll, antes de que se desprenda la primera pieza. */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- capa registrada del frame */}
+          <img
+            data-hero-chassis
+            src={withBasePath(`${HERO_DIR}/chassis.webp`)}
+            alt=""
+            decoding="async"
+            className="absolute inset-0 h-full w-full opacity-0"
+          />
+
+          {/* Capa 1 — remainder: bike.webp con las regiones de TODAS las
+              piezas enmascaradas; lo que se ve son sus píxeles de chasis,
+              coincidentes con la capa 0. Estático. */}
+          <svg
+            data-hero-chassis
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            // opacity 0 inicial (está tapado por los tiles): fuera del LCP,
+            // el timeline lo enciende junto al chasis al primer scroll
+            className="absolute inset-0 h-full w-full opacity-0"
+            aria-hidden
           >
-            <h1 className="font-display text-[clamp(2.6rem,8.6vw,7.5rem)] leading-[0.95] tracking-wide text-white/95 uppercase drop-shadow-[0_2px_14px_rgba(10,20,35,0.35)]">
-              Quality Bikes
-            </h1>
-          </div>
+            <defs>
+              <mask id="qb-strip-mask">
+                <rect x="0" y="0" width="100" height="100" fill="#fff" />
+                {TILES.map((t) => (
+                  <polygon key={t.id} points={t.poly.map(([x, y]) => `${x},${y}`).join(" ")} fill="#000" />
+                ))}
+              </mask>
+            </defs>
+            {/* la variante liviana basta: solo se ven astillas de chasis */}
+            <image
+              href={bikeSmSrc}
+              x="0"
+              y="0"
+              width="100"
+              height="100"
+              preserveAspectRatio="none"
+              mask="url(#qb-strip-mask)"
+            />
+          </svg>
 
-          {/* Marcas representadas a los lados (salen con el título) */}
-          <div data-hero-title className="absolute top-1/2 left-0 z-[1] hidden -translate-y-1/2 space-y-3 lg:block">
-            {BRANDS_LEFT.map((s) => (
-              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/60 uppercase">
-                {s}
-              </p>
-            ))}
-          </div>
-          <div data-hero-title className="absolute top-1/2 right-0 z-[1] hidden -translate-y-1/2 space-y-3 text-right lg:block">
-            {BRANDS_RIGHT.map((s) => (
-              <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/60 uppercase">
-                {s}
-              </p>
-            ))}
-          </div>
+          {/* Capas 2..n — tiles: regiones clip-path del mismo bike.webp.
+              El navegador descarga/decodifica UNA sola imagen. */}
+          {TILES.map((t) => (
+            <div
+              key={t.id}
+              data-tile={t.id}
+              className="absolute inset-0 [will-change:var(--qb-wc,auto)]"
+              style={{ clipPath: polyToClip(t.poly) }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element -- misma imagen compartida entre tiles */}
+              <img
+                src={bikeSrc}
+                srcSet={bikeSrcSet}
+                sizes={bikeSizes}
+                alt=""
+                className="absolute inset-0 h-full w-full"
+              />
+            </div>
+          ))}
 
-          {/* Cierre (aparece con el chasis) */}
-          <div data-hero-final className="invisible absolute inset-x-[6%] bottom-[-30%] z-[1] opacity-0 md:bottom-[3%]">
+
+          {/* Rayos de rin sueltos: invisibles hasta que vuela su caucho */}
+          {SPOKES.map((s, i) => (
+            <div
+              key={i}
+              data-spoke={i}
+              className="invisible absolute opacity-0 will-change-transform"
+              style={{
+                left: `${s.cx - 1.2}%`,
+                top: `${s.cy - s.h / 2}%`,
+                width: "2.4%",
+                height: `${s.h}%`,
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element -- partícula */}
+              <img
+                src={withBasePath(`${HERO_DIR}/spoke.webp`)}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-contain"
+              />
+            </div>
+          ))}
+
+          {/* Sombra de piso sutil bajo la moto, estática */}
+          <div
+            aria-hidden
+            className="absolute bottom-[2%] left-1/2 h-5 w-3/5 -translate-x-1/2 rounded-[50%] bg-black/45 blur-xl"
+          />
+
+          {/* Cierre (aparece con el chasis desnudo) */}
+          <div data-hero-final className="invisible absolute inset-x-[6%] bottom-[-30%] z-20 opacity-0 md:bottom-[1%]">
             <p className="text-center font-mono text-[11px] tracking-[0.3em] text-brand-red uppercase">
               Caracas · Venezuela
             </p>
@@ -360,100 +316,24 @@ export default function ExplodedHero() {
               {siteConfig.slogan}
             </p>
           </div>
-
-          {/* ——— capas desktop: chasis + sprites por pieza ——— */}
-          {/* preserve-3d crea containing block: el wrapper debe cubrir el frame */}
-          <div className="absolute inset-0 hidden [transform-style:preserve-3d] md:block">
-            {/* Chasis: estado final */}
-            <div
-              data-hero-chassis
-              className="invisible absolute z-[2] opacity-0 will-change-transform"
-              style={{
-                left: `${EXPLODED.chassis.sprites[0].x * 100}%`,
-                top: `${EXPLODED.chassis.sprites[0].y * 100}%`,
-                width: `${EXPLODED.chassis.sprites[0].w * 100}%`,
-                height: `${EXPLODED.chassis.sprites[0].h * 100}%`,
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element -- ídem sprites */}
-              <img
-                src={withBasePath(`${HERO_DIR}/sprites/${"chassis-p1.webp"}`)}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full"
-              />
-              <div aria-hidden className="absolute -bottom-[6%] left-1/2 h-4 w-2/3 -translate-x-1/2 rounded-[50%] bg-brand-navy/25 blur-lg" />
-            </div>
-
-            {/* Tornillería trasera (z entre chasis y capas) */}
-            <div className="absolute inset-0 z-[3]">
-              {HW.filter((p) => !p.front).map((p) =>
-                sprite({ ...p.sprite, w: p.sprite.w * p.scale, h: p.sprite.h * p.scale }, "", p.blur)
-              )}
-            </div>
-
-            <div className="absolute inset-0 z-[4]">{POWERTRAIN.map((f) => sprite(f.sprite))}</div>
-            <div className="absolute inset-0 z-[5]">{ROLLING.map((f) => sprite(f.sprite))}</div>
-            <div className="absolute inset-0 z-[6]">{BODYWORK.map((f) => sprite(f.sprite))}</div>
-
-            {/* Tornillería delantera, más blur = más cerca de cámara */}
-            <div className="absolute inset-0 z-[8]">
-              {HW.filter((p) => p.front).map((p) =>
-                sprite({ ...p.sprite, w: p.sprite.w * p.scale, h: p.sprite.h * p.scale }, "", p.blur)
-              )}
-            </div>
-          </div>
-
-          {/* Moto completa: el único asset eager (LCP). Visible también como
-              estado estático bajo prefers-reduced-motion y primer frame mobile */}
-          <div data-hero-bike data-mlayer="full" className="absolute inset-0 z-[7] will-change-transform">
-            <Image
-              src={withBasePath(`${HERO_DIR}/layer-full.webp`)}
-              alt="BMW R 1300 GS Adventure Option 719 verde esmeralda con escape Akrapovic, vista lateral"
-              fill
-              preload
-              sizes="(max-width: 767px) 132vw, 1600px"
-              className="object-contain"
-            />
-            <div aria-hidden className="absolute bottom-[2%] left-1/2 h-5 w-3/5 -translate-x-1/2 rounded-[50%] bg-brand-navy/25 blur-xl" />
-          </div>
-
-          {/* ——— capas mobile: crossfade de frames completos ——— */}
-          <div className="md:hidden motion-reduce:hidden">
-              {(["bodywork", "rolling", "powertrain", "chassis"] as const).map((l) => (
-                <div key={l} data-mlayer={l} className="invisible absolute inset-0 z-[7] opacity-0 will-change-transform">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- frame completo con alpha */}
-                  <img
-                    src={withBasePath(`${HERO_DIR}/layer-${l}.webp`)}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-              ))}
-          </div>
         </div>
 
-        {/* Slogan de la casa, protagonista abajo a la izquierda (sale con el
-            título al arrancar el scroll) */}
+        {/* Slogan de la casa, abajo a la izquierda (sale al arrancar) */}
         <p
           data-hero-title
-          className="absolute bottom-16 left-5 z-30 max-w-[80vw] font-script text-3xl leading-tight text-white drop-shadow-[0_2px_10px_rgba(10,20,35,0.45)] sm:bottom-14 sm:left-10 sm:text-5xl"
+          className="absolute bottom-16 left-5 z-30 max-w-[80vw] font-script text-3xl leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:bottom-14 sm:left-10 sm:text-5xl"
         >
           {siteConfig.slogan}
         </p>
 
-        {/* Pista de scroll, pequeña, justo debajo del slogan */}
         <p
           data-hero-hint
           className="absolute bottom-6 left-6 z-30 font-mono text-[10px] tracking-[0.3em] text-white/55 uppercase sm:left-11 motion-reduce:hidden"
         >
           ↓ Scroll para despiezar
         </p>
-
       </div>
     </section>
+    </>
   );
 }

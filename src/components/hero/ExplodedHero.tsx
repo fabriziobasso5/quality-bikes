@@ -109,14 +109,6 @@ export default function ExplodedHero() {
         );
       });
 
-      // Cierre tipográfico sobre el chasis desnudo
-      tl.fromTo(
-        q("[data-hero-final]"),
-        { autoAlpha: 0, y: 16 },
-        { autoAlpha: 1, y: 0, duration: 0.08, ease: "power1.out" },
-        0.9
-      );
-
       tl.progress(scrollYProgress.get());
       tlRef.current = tl;
     }, stage);
@@ -170,7 +162,7 @@ export default function ExplodedHero() {
         {/* Marca fina arriba: identidad, sin competir con la moto */}
         <p
           data-hero-title
-          className="absolute top-[4.5%] left-1/2 z-30 w-max max-w-[94vw] -translate-x-1/2 text-center font-light tracking-[0.42em] text-brand-red uppercase text-[11px] sm:text-sm"
+          className="absolute top-[4.5%] left-1/2 z-30 w-max max-w-[94vw] -translate-x-1/2 text-center font-light tracking-[0.42em] text-brand-red uppercase text-xs sm:text-base"
         >
           Quality Bikes Venezuela • Caracas
         </p>
@@ -180,17 +172,18 @@ export default function ExplodedHero() {
           <QbMark className="h-16 w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] sm:h-24" />
         </div>
 
-        {/* Marcas representadas a los lados (salen con el título) */}
-        <div data-hero-title className="absolute top-1/2 left-6 z-[1] hidden -translate-y-1/2 space-y-3 lg:block">
+        {/* Marcas representadas a los lados: siempre visibles, sin animación
+            (antes tenían data-hero-title y se desvanecían con el título) */}
+        <div className="absolute top-1/2 left-6 z-[1] hidden -translate-y-1/2 space-y-3.5 lg:block">
           {siteConfig.brandsRepresented.slice(0, 4).map((s) => (
-            <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/55 uppercase">
+            <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
               {s}
             </p>
           ))}
         </div>
-        <div data-hero-title className="absolute top-1/2 right-6 z-[1] hidden -translate-y-1/2 space-y-3 text-right lg:block">
+        <div className="absolute top-1/2 right-6 z-[1] hidden -translate-y-1/2 space-y-3.5 text-right lg:block">
           {siteConfig.brandsRepresented.slice(4, 8).map((s) => (
-            <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/55 uppercase">
+            <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
               {s}
             </p>
           ))}
@@ -306,24 +299,17 @@ export default function ExplodedHero() {
             aria-hidden
             className="absolute bottom-[2%] left-1/2 h-5 w-3/5 -translate-x-1/2 rounded-[50%] bg-black/45 blur-xl"
           />
-
-          {/* Cierre (aparece con el chasis desnudo) */}
-          <div data-hero-final className="invisible absolute inset-x-[6%] bottom-[-30%] z-20 opacity-0 md:bottom-[1%]">
-            <p className="text-center font-mono text-[11px] tracking-[0.3em] text-brand-red uppercase">
-              Caracas · Venezuela
-            </p>
-            <p className="mt-2 text-center font-display text-xl font-medium tracking-wide text-white sm:text-2xl">
-              {siteConfig.slogan}
-            </p>
-          </div>
         </div>
 
-        {/* Slogan de la casa, abajo a la izquierda (sale al arrancar). Space
-            Grotesk (sistema de marca) en vez del script genérico: mismo
-            peso/tracking que los titulares, no una cursiva de plantilla. */}
+        {/* Cierre: eslogan fijo bajo el chasis, siempre visible y centrado,
+            sin animación. Flex item normal (no absolute) para que quede en
+            flujo justo debajo de la moto — nunca se solapa con las ruedas ni,
+            en móvil, con los botones flotantes de Instagram/WhatsApp, que
+            viven fuera de este stage. whitespace-nowrap + clamp() evita que
+            la frase corte a una segunda línea en cualquier viewport. */}
         <p
-          data-hero-title
-          className="absolute bottom-16 left-5 z-30 max-w-[80vw] font-display text-2xl font-medium tracking-wide text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:bottom-14 sm:left-10 sm:text-4xl"
+          className="z-20 mt-3 max-w-[92vw] px-4 text-center font-display font-medium whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-5"
+          style={{ fontSize: "clamp(1rem, 4.5vw, 1.75rem)", letterSpacing: "0.01em" }}
         >
           {siteConfig.slogan}
         </p>

@@ -59,7 +59,7 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10">
+    <header className="sticky top-0 z-40">
       {/* Misma familia visual que el footer: fibra de carbono forjada con un
           velo oscuro + viñeta radial encima. Sin overflow-hidden aquí: cada
           capa de fondo ya es "absolute inset-0" (se recorta sola a su caja,

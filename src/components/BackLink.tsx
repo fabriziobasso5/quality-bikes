@@ -14,10 +14,16 @@ export default function BackLink({
   fallbackHref = "/",
   label = "Volver",
   className = "",
+  forceFallback = false,
 }: {
   fallbackHref?: string;
   label?: string;
   className?: string;
+  // Ignora el historial y navega siempre a fallbackHref — para vistas donde
+  // "Volver" debe llevar a un destino fijo (ej. el selector de marcas de
+  // /productos) sin importar desde dónde se entró (ej. un link directo del
+  // mega-menú que salta el selector).
+  forceFallback?: boolean;
 }) {
   const router = useRouter();
 
@@ -25,7 +31,7 @@ export default function BackLink({
     <button
       type="button"
       onClick={() => {
-        if (typeof window !== "undefined" && window.history.length > 1) {
+        if (!forceFallback && typeof window !== "undefined" && window.history.length > 1) {
           router.back();
         } else {
           router.push(fallbackHref);

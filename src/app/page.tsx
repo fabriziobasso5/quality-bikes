@@ -24,19 +24,6 @@ export default function Home() {
     <>
       <ExplodedHero />
 
-      {/* Multimarca en una sola línea discreta */}
-      <section className="border-b border-black/5 py-10">
-        <RevealGroup className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-6">
-          {siteConfig.brandsRepresented.map((brand) => (
-            <RevealItem key={brand}>
-              <span className="font-display text-sm tracking-[0.25em] text-brand-text/40 uppercase">
-                {brand}
-              </span>
-            </RevealItem>
-          ))}
-        </RevealGroup>
-      </section>
-
       {/* En el showroom ahora — las unidades físicas reales, nada más */}
       <section className="mx-auto max-w-7xl px-6 py-24 sm:py-32">
         <Reveal>
@@ -120,7 +107,7 @@ export default function Home() {
       {/* Productos en tienda: marcas complementarias, mismos logos en placas
           idénticas. Divisor superior + eyebrow en rojo de marca para marcar
           que aquí empieza la zona de tienda. */}
-      <section className="border-t border-black/10 bg-brand-bg-soft">
+      <section className="border-t border-black/10 bg-[#1c2024]">
         <div className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
           <Reveal className="text-center">
             <span aria-hidden className="mx-auto mb-6 block h-px w-12 bg-brand-red" />
@@ -148,8 +135,8 @@ export default function Home() {
                       className="max-h-16 w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <p className="mt-4 text-sm text-brand-text/50">{product.description}</p>
-                  <p className="link-underline mt-2 inline-block text-xs tracking-widest text-brand-navy uppercase">
+                  <p className="mt-4 text-sm text-white/60">{product.description}</p>
+                  <p className="link-underline mt-2 inline-block text-xs tracking-widest text-white/85 uppercase">
                     Ver productos →
                   </p>
                 </Link>

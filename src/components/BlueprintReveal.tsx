@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { MOTO_SILHOUETTE_PATH, MOTO_SILHOUETTE_VIEWBOX } from "./logo3d/moto-silhouette-path";
-import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
 /**
@@ -316,17 +315,6 @@ export default function BlueprintReveal() {
             className="absolute bottom-[4%] left-1/2 h-6 w-3/4 -translate-x-1/2 rounded-[50%] bg-black/70 blur-xl"
           />
         </div>
-
-        {/* Cierre: el eslogan de la casa */}
-        <p
-          style={{
-            opacity: ramp(0.8, 0.9),
-            transform: `translateY(calc((1 - ${ramp(0.8, 0.9)}) * 14px))`,
-          }}
-          className="absolute bottom-16 px-6 text-center font-script text-3xl text-white sm:bottom-20 sm:text-4xl"
-        >
-          {siteConfig.slogan}
-        </p>
 
         {/* Pista de scroll: solo al inicio de la fase plano. bottom-20 en
             móvil: a bottom-6 chocaría con el cajetín, que en 390px cruza el

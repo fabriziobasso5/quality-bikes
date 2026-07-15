@@ -55,6 +55,18 @@ function lanesByGroup(items: Product[]): CatalogLane[] {
   return order.map((g) => ({ title: g, products: map.get(g)! }));
 }
 
+// Reordena los productos DENTRO de cada carril por octanaje descendente, sin
+// tocar el orden de los carriles (filas) en sí — solo VP "Combustibles de
+// Competencia", donde cada tarjeta trae `octane`. "101+" se lee como 101.
+function sortLanesByOctaneDesc(lanes: CatalogLane[]): CatalogLane[] {
+  return lanes.map((lane) => ({
+    ...lane,
+    products: [...lane.products].sort(
+      (a, b) => parseFloat(b.octane ?? "0") - parseFloat(a.octane ?? "0"),
+    ),
+  }));
+}
+
 // Subsecciones por tipo (tags) en el orden indicado; nada se queda fuera.
 function lanesByTag(items: Product[], tagOrder: string[]): CatalogLane[] {
   const lanes: CatalogLane[] = [];
@@ -208,7 +220,7 @@ function buildNodes(meta: ProductBrandMeta, products: Product[]): CatalogNode[] 
       (p) => p.group === "Aceites de motor diesel" || p.group === "Fluidos de maquinaria",
     );
     return [
-      leaf("combustibles", "Combustibles de Competencia", lanesByGroup(combustibles)),
+      leaf("combustibles", "Combustibles de Competencia", sortLanesByOctaneDesc(lanesByGroup(combustibles))),
       leaf("diesel", "Diesel y Maquinaria Pesada", lanesByGroup([...dieselMaquinaria, ...dieselAditivos, ...dieselTanque])),
       leaf("aditivos", "Aditivos", lanesByGroup(aditivos)),
       leaf("fluidos", "Aceites y Fluidos", lanesByGroup([...lubricantes, ...fluidos])),

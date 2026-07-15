@@ -312,16 +312,18 @@ export default function ExplodedHero() {
             <p className="text-center font-mono text-[11px] tracking-[0.3em] text-brand-red uppercase">
               Caracas · Venezuela
             </p>
-            <p className="font-script mt-2 text-center text-3xl text-white sm:text-4xl">
+            <p className="mt-2 text-center font-display text-xl font-medium tracking-wide text-white sm:text-2xl">
               {siteConfig.slogan}
             </p>
           </div>
         </div>
 
-        {/* Slogan de la casa, abajo a la izquierda (sale al arrancar) */}
+        {/* Slogan de la casa, abajo a la izquierda (sale al arrancar). Space
+            Grotesk (sistema de marca) en vez del script genérico: mismo
+            peso/tracking que los titulares, no una cursiva de plantilla. */}
         <p
           data-hero-title
-          className="absolute bottom-16 left-5 z-30 max-w-[80vw] font-script text-3xl leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:bottom-14 sm:left-10 sm:text-5xl"
+          className="absolute bottom-16 left-5 z-30 max-w-[80vw] font-display text-2xl font-medium tracking-wide text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:bottom-14 sm:left-10 sm:text-4xl"
         >
           {siteConfig.slogan}
         </p>

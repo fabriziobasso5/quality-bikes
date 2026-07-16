@@ -78,9 +78,6 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* Franja de datos de marca: respira entre el showroom y el lifestyle */}
-      <BrandStats />
-
       {/* Lifestyle a sangre #1 — BMW R 1300 GS Adventure en paisaje de montaña
           (foto de prensa oficial, alta resolución). Intercala marca con el
           bloque Triumph más abajo. */}
@@ -99,6 +96,9 @@ export default function Home() {
           </p>
         </Reveal>
       </section>
+
+      {/* Franja de datos de marca: respira entre el lifestyle y la tienda */}
+      <BrandStats />
 
       {/* Productos en tienda: marcas complementarias, mismos logos en placas
           idénticas. Fondo de fibra de carbono forjada — misma familia visual

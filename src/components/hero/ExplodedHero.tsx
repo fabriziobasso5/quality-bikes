@@ -163,7 +163,7 @@ export default function ExplodedHero() {
             superior del stage para no chocar nunca con el parabrisas/visera,
             que es la parte más alta de la moto en todo el recorrido. */}
         <p
-          className="absolute top-2 left-1/2 z-30 w-max max-w-[94vw] -translate-x-1/2 text-center font-light tracking-[0.42em] text-brand-red uppercase text-xs sm:top-4 sm:text-base"
+          className="absolute top-2 left-1/2 z-30 w-max max-w-[94vw] -translate-x-1/2 text-center font-light tracking-[0.42em] text-brand-red uppercase text-sm sm:top-4 sm:text-lg"
         >
           Quality Bikes Venezuela • Caracas
         </p>
@@ -195,7 +195,7 @@ export default function ExplodedHero() {
             sistema de coordenadas) usando el aire libre que quedaba entre el
             chasis y el eslogan de abajo, para separarla del título fijo de
             arriba sin tocar ni el título ni el eslogan. */}
-        <div className="relative aspect-[16/9] w-[94vw] shrink-0 translate-y-[3.5vh] md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)] md:translate-y-[4.5vh]">
+        <div className="relative aspect-[16/9] w-[94vw] shrink-0 translate-y-[5.5vh] md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)] md:translate-y-[6.5vh]">
           {/* Capa base semántica y candidata LCP: la moto completa visible
               desde el primer paint (los tiles encima muestran exactamente los
               mismos píxeles). Es la imagen con alt del hero. */}
@@ -314,7 +314,7 @@ export default function ExplodedHero() {
             la frase corte a una segunda línea en cualquier viewport. */}
         <p
           className="font-hero-script z-20 mt-3 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-5"
-          style={{ fontSize: "clamp(1.8rem, 7.5vw, 4.5rem)" }}
+          style={{ fontSize: "clamp(1.6rem, 6.8vw, 4.5rem)" }}
         >
           {siteConfig.slogan}
         </p>

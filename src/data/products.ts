@@ -58,6 +58,8 @@ export const productBrands: ProductBrandMeta[] = [
   { id: "mobil", name: "Mobil", tagline: "Aceites para moto, auto, transmisión e industria", logo: "/images/brands/mobil-1.svg", headerLogo: "/images/brands/mobil-pegasus.png", accent: "#0033A0", accent2: "#ED1C24", categories: ["lubricantes"] },
   { id: "bk3", name: "BK3", tagline: "Elevadores de octanaje, cetano y tratamiento marino", logo: "/images/brands/bk3.png", accent: "#E30613", accent2: "#111111", categories: ["aditivos"] },
   { id: "falken", name: "Falken", tagline: "Cauchos deportivos, de touring y todo terreno", logo: "/images/brands/falken.png", headerLogo: "/images/brands/falken-header.png", accent: "#0033A0", accent2: "#E4032E", categories: ["llantas"] },
+  // EWAY va de última: el home resuelve rutas de productsCarried por índice
+  // (0-3) y esos índices no deben moverse.
   { id: "eway", name: "EWAY", tagline: "Combustibles de competencia Gulf — potencia y octanaje certificado", logo: "/images/brands/eway-racing.png", headerLogo: "/images/brands/eway-racing.png", accent: "#C8202F", accent2: "#1C2B58", categories: ["gasolinas"] },
 ];
 

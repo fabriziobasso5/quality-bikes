@@ -310,7 +310,7 @@ export default function ExplodedHero() {
             la frase corte a una segunda línea en cualquier viewport. */}
         <p
           className="font-script z-20 mt-3 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-5"
-          style={{ fontSize: "clamp(1.2rem, 5.5vw, 2.25rem)" }}
+          style={{ fontSize: "clamp(1.5rem, 6.2vw, 3.5rem)" }}
         >
           {siteConfig.slogan}
         </p>

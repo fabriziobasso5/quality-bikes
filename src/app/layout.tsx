@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Inter, Space_Mono, Beau_Rivage } from "next/font/google";
+import { Space_Grotesk, Inter, Space_Mono, Beau_Rivage, Mrs_Saint_Delafield } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -32,6 +32,15 @@ const spaceMono = Space_Mono({
 
 const beauRivage = Beau_Rivage({
   variable: "--font-beau-rivage",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+// Eslogan del hero: script más humano/orgánico que Beau Rivage (trazo con más
+// variación, como caligrafía a mano) — solo para esa frase, no reemplaza
+// font-script (Beau Rivage) que ya usa la página Nosotros.
+const mrsSaintDelafield = Mrs_Saint_Delafield({
+  variable: "--font-hero-script",
   subsets: ["latin"],
   weight: "400",
 });
@@ -86,7 +95,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${beauRivage.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${beauRivage.variable} ${mrsSaintDelafield.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-brand-bg text-brand-text">
         <MotionProvider>

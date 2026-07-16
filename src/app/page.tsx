@@ -100,15 +100,30 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* Moto destacada rotativa (estilo CAKE): alterna cada ~5 s entre TODAS
-          las motos de próximo arribo — foto flotante, specs y "Reservar". */}
-      {upcoming.length > 0 && <FeaturedArrivals motos={upcoming} />}
-
       {/* Productos en tienda: marcas complementarias, mismos logos en placas
-          idénticas. Divisor superior + eyebrow en rojo de marca para marcar
-          que aquí empieza la zona de tienda. */}
-      <section className="border-t border-black/10 bg-[#1c2024]">
-        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-28">
+          idénticas. Fondo de fibra de carbono forjada — misma familia visual
+          que header/footer — con divisor superior + eyebrow en rojo de marca
+          para marcar que aquí empieza la zona de tienda. */}
+      <section className="relative overflow-hidden border-t border-black/10">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: `url("${withBasePath("/images/carbono-forjado.jpg")}")`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        />
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/55" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: "radial-gradient(120% 85% at 50% 0%, transparent 45%, rgba(0,0,0,0.55) 100%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-28">
           <Reveal className="text-center">
             <span aria-hidden className="mx-auto mb-6 block h-px w-12 bg-brand-red" />
             <p className="text-sm font-medium tracking-[0.3em] text-brand-red uppercase">
@@ -146,6 +161,10 @@ export default function Home() {
           </RevealGroup>
         </div>
       </section>
+
+      {/* Moto destacada rotativa (estilo CAKE): alterna cada ~5 s entre TODAS
+          las motos de próximo arribo — foto flotante, specs y "Reservar". */}
+      {upcoming.length > 0 && <FeaturedArrivals motos={upcoming} />}
 
       {/* La pieza de la casa: el plano técnico del isotipo se dibuja con el
           scroll y se materializa en la Multistrada V4 real — cierre visual de

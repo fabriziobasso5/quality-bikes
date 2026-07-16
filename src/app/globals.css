@@ -28,6 +28,7 @@
   --font-body: var(--font-inter);
   --font-mono: var(--font-space-mono);
   --font-script: var(--font-beau-rivage);
+  --font-hero-script: var(--font-hero-script);
 }
 
 body {
@@ -63,6 +64,10 @@ body::after {
 
 .font-script {
   font-family: var(--font-script), cursive;
+}
+
+.font-hero-script {
+  font-family: var(--font-hero-script), cursive;
 }
 
 /*

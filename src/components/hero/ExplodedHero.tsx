@@ -191,7 +191,11 @@ export default function ExplodedHero() {
         </div>
 
         {/* ——— Escenario 16:9: todas las capas comparten este frame ——— */}
-        <div className="relative aspect-[16/9] w-[94vw] shrink-0 md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)]">
+        {/* translate-y: baja la moto (y todo lo que vuela con ella, mismo
+            sistema de coordenadas) usando el aire libre que quedaba entre el
+            chasis y el eslogan de abajo, para separarla del título fijo de
+            arriba sin tocar ni el título ni el eslogan. */}
+        <div className="relative aspect-[16/9] w-[94vw] shrink-0 translate-y-[3.5vh] md:w-[min(96vw,calc((100svh-180px)*1.7778),1600px)] md:translate-y-[4.5vh]">
           {/* Capa base semántica y candidata LCP: la moto completa visible
               desde el primer paint (los tiles encima muestran exactamente los
               mismos píxeles). Es la imagen con alt del hero. */}
@@ -309,8 +313,8 @@ export default function ExplodedHero() {
             viven fuera de este stage. whitespace-nowrap + clamp() evita que
             la frase corte a una segunda línea en cualquier viewport. */}
         <p
-          className="font-script z-20 mt-3 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-5"
-          style={{ fontSize: "clamp(1.5rem, 6.2vw, 3.5rem)" }}
+          className="font-hero-script z-20 mt-3 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-5"
+          style={{ fontSize: "clamp(1.8rem, 7.5vw, 4.5rem)" }}
         >
           {siteConfig.slogan}
         </p>

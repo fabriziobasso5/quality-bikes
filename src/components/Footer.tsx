@@ -92,12 +92,16 @@ export default function Footer() {
       />
 
       <div className="relative mx-auto flex max-w-3xl flex-col items-center px-6 py-16 text-center sm:py-20">
-        {/* Logo en versión clara (blanco) sobre el carbón */}
+        {/* Logo en versión clara (blanco) sobre el carbón — pegado al borde
+            izquierdo de la columna (self-start invierte el centrado del
+            flex-col) en vez de centrado: así queda a distancia fija del
+            costado izquierdo en cualquier dispositivo, igual que el header,
+            en lugar de "flotar" más o menos separado según el ancho. */}
         {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
         <img
           src={withBasePath("/assets/logo/quality-bikes-logo-venezuela.svg")}
           alt={siteConfig.name}
-          className="h-20 w-auto max-w-full sm:h-24"
+          className="h-20 w-auto max-w-full self-start sm:h-24"
           style={{ filter: "brightness(0) invert(1)" }}
         />
 

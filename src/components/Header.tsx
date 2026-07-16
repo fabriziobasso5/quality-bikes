@@ -121,6 +121,11 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                // Cierra el panel de Catálogo YA al hacer click, en vez de
+                // esperar a que cambie el pathname: si no, la salida
+                // animada del panel (0.22s) se cruza con la entrada de la
+                // página nueva y el click "parece" no hacer nada.
+                onClick={() => setOpenMenu(null)}
                 className="text-white/85 transition hover:text-brand-red"
               >
                 {item.label}

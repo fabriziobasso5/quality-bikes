@@ -1,5 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Inter, Space_Mono, Beau_Rivage, Alex_Brush } from "next/font/google";
+import {
+  Space_Grotesk,
+  Inter,
+  Space_Mono,
+  Beau_Rivage,
+  Alex_Brush,
+  Montserrat,
+} from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -43,6 +50,14 @@ const alexBrush = Alex_Brush({
   variable: "--font-hero-script",
   subsets: ["latin"],
   weight: "400",
+});
+
+// Título de la portada: sans geométrica moderna (elegida como equivalente de
+// licencia limpia a "Moderne Sans") — solo para la marca grande del hero.
+const montserrat = Montserrat({
+  variable: "--font-title-sans",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const viewport: Viewport = {
@@ -95,7 +110,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${beauRivage.variable} ${alexBrush.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${beauRivage.variable} ${alexBrush.variable} ${montserrat.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-brand-bg text-brand-text">
         <MotionProvider>

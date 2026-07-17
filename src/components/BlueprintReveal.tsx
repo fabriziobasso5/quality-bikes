@@ -105,7 +105,18 @@ export default function BlueprintReveal() {
     >
       <div
         ref={stageRef}
-        style={{ "--bp": 0 } as React.CSSProperties}
+        // --bpw: ancho del escenario de la moto, LA variable maestra de la
+        // composición — de ella derivan el font-size del título (×1.05/R) y
+        // el padding-top del stage (alto real del título + colchón). R =
+        // ratio medido ancho-texto/font-size del título en Montserrat con
+        // tracking 0.4em. El término en svh sale de resolver el presupuesto
+        // vertical: pt + alto caja − solape eslogan + eslogan = stage.
+        style={
+          {
+            "--bp": 0,
+            "--bpw": "min(88vw, calc(100svh * 1.3247 - 273px), 820px)",
+          } as React.CSSProperties
+        }
         /* Fija bajo el header sticky (altura medida en --qbh): al engancharse
            el pin, la lámina completa — rótulo arriba, cajetín abajo — queda
            contenida en el viewport en todos los breakpoints */
@@ -113,7 +124,7 @@ export default function BlueprintReveal() {
         // arriba (justify-start) con un pt que sigue el alto real del título
         // (que crece con el viewport) — así la moto puede crecer FULL hacia
         // abajo, hacia el eslogan, sin tocar nunca el título.
-        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-brand-navy pt-[6vh] motion-reduce:static motion-reduce:h-svh sm:justify-start sm:pt-[calc(30px+(100svh-340px)*0.075)]"
+        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-brand-navy pt-[6vh] motion-reduce:static motion-reduce:h-svh sm:justify-start sm:pt-[calc(40px+var(--bpw)*0.0475)]"
       >
         {/* Anochecer: entra con la moto — cielo que cae a negro azulado y un
             resplandor cálido de horizonte hacia donde apunta el faro */}
@@ -138,15 +149,15 @@ export default function BlueprintReveal() {
         {/* Marco del plano, siempre visible (el cajetín se eliminó a pedido) */}
         <div aria-hidden className="absolute inset-4 border border-white/15 sm:inset-6" />
 
-        {/* Marca protagonista: mismo título rojo del hero anterior. Su
-            font-size quedó CONGELADO en la fórmula original (a pedido: la
-            moto creció full hacia abajo sin tocar el título), por eso ya no
-            coincide con la fórmula de ancho del escenario. */}
+        {/* Marca protagonista en Montserrat (equivalente licencia-limpia de
+            "Moderne Sans"): font-size = --bpw × 1.05 / R ⇒ la línea mide
+            siempre un pelo más que la moto, y el pt del stage (derivado del
+            mismo --bpw) garantiza que nunca la toque. */}
         <p
-          className="absolute top-6 left-1/2 z-30 w-max -translate-x-1/2 text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-8"
+          className="font-title-sans absolute top-6 left-1/2 z-30 w-max -translate-x-1/2 text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-8"
           style={{
-            fontSize:
-              "calc(min(88vw, (100svh - 340px) * 1.4137, 780px) * 1.05 / 32.7)",
+            // 1.05 / R, con R = 32.48 medido (Montserrat, tracking 0.4em)
+            fontSize: "calc(var(--bpw) * 0.0323)",
             color: "#ff2230",
             textShadow: "0 0 24px rgba(255,34,48,0.4), 0 2px 14px rgba(0,0,0,0.5)",
           }}
@@ -175,7 +186,7 @@ export default function BlueprintReveal() {
             que el crossfade quede registrado en el mismo punto. El término de
             altura ocupa TODO el aire disponible entre el título y el eslogan
             (presupuesto: pt del stage + cota bajo la caja + eslogan). */}
-        <div className="relative aspect-[827/585] w-[min(88vw,calc(100svh*1.3077-241px),820px)]">
+        <div className="relative aspect-[827/585] w-[var(--bpw)]">
           {/* Wireframe del isotipo: se dibuja en 0.04–0.36 y cede en 0.44–0.58,
               exactamente la misma ventana en la que aparece la moto */}
           <svg

@@ -70,6 +70,11 @@ body::after {
   font-family: var(--font-hero-script), cursive;
 }
 
+/* Título de la portada (Montserrat): sans geométrica para la marca grande */
+.font-title-sans {
+  font-family: var(--font-title-sans), system-ui, sans-serif;
+}
+
 /*
   Subrayado que se dibuja de izquierda a derecha en hover, para links de
   texto (no para botones pill). transform-only, respeta reduced motion.

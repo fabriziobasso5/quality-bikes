@@ -175,7 +175,7 @@ export default function BlueprintReveal() {
             que el crossfade quede registrado en el mismo punto. El término de
             altura ocupa TODO el aire disponible entre el título y el eslogan
             (presupuesto: pt del stage + cota bajo la caja + eslogan). */}
-        <div className="relative aspect-[827/585] w-[min(88vw,calc(100svh*1.3077-329px),780px)]">
+        <div className="relative aspect-[827/585] w-[min(88vw,calc(100svh*1.3077-241px),820px)]">
           {/* Wireframe del isotipo: se dibuja en 0.04–0.36 y cede en 0.44–0.58,
               exactamente la misma ventana en la que aparece la moto */}
           <svg
@@ -211,12 +211,14 @@ export default function BlueprintReveal() {
             style={{ opacity: `min(${ramp(0.16, 0.28)}, ${fade(0.4, 0.52)})` }}
             className="absolute inset-0"
           >
-            {/* Cota compacta: rótulo sobre la línea (estilo lámina) para no
-                robar altura al escenario ni pisar el eslogan */}
-            <div className="absolute -bottom-6 left-[4%] right-[4%] border-t border-white/40" />
-            <div className="absolute -bottom-7 left-[4%] h-2 border-l border-white/40" />
-            <div className="absolute -bottom-7 right-[4%] h-2 border-r border-white/40" />
-            <p className="absolute -bottom-5 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.25em] text-white/50">
+            {/* Cota DENTRO del escenario (franja libre bajo la silueta, cuyas
+                ruedas llegan al ~90% de alto): así no roba ni un píxel de
+                altura a la moto ni pisa el eslogan que ahora solapa el borde
+                inferior de la caja */}
+            <div className="absolute bottom-8 left-[4%] right-[4%] border-t border-white/40" />
+            <div className="absolute bottom-6 left-[4%] h-2 border-l border-white/40" />
+            <div className="absolute bottom-6 right-[4%] h-2 border-r border-white/40" />
+            <p className="absolute bottom-9 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.25em] text-white/50">
               2.270 mm
             </p>
             <div className="absolute -right-6 top-[6%] bottom-[12%] border-r border-white/40 max-sm:hidden" />
@@ -253,7 +255,7 @@ export default function BlueprintReveal() {
               alt="BMW R 1250 GS Adventure Triple Black Option 719 con luces ámbar encendidas, materializada sobre el plano técnico"
               fill
               priority
-              sizes="(max-width: 640px) 88vw, 780px"
+              sizes="(max-width: 640px) 88vw, 820px"
               className="object-contain"
             />
           </div>
@@ -304,10 +306,11 @@ export default function BlueprintReveal() {
         </div>
 
         {/* Eslogan de la casa: SIEMPRE visible, centrado bajo la moto, en
-            flujo. mt generoso para no pisar la cota "2.270 mm" que vive a
-            -bottom-14 del escenario durante la fase plano. */}
+            flujo. En sm+ solapa 24px el borde inferior de la caja (la foto y
+            la silueta tienen ese margen interno vacío): la moto gana toda esa
+            altura sin que nada visible choque. */}
         <p
-          className="font-hero-script z-20 mt-20 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-9"
+          className="font-hero-script z-20 mt-20 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:-mt-6"
           style={{ fontSize: "clamp(1.6rem, 6.8vw, 4.5rem)" }}
         >
           {siteConfig.slogan}

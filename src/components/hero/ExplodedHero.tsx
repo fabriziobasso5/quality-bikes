@@ -156,9 +156,9 @@ export default function ExplodedHero() {
             className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_46%,rgba(3,7,14,0.42)_100%)]"
           />
 
-          {/* Isotipo QB vectorial (draw-in + shimmer), esquina superior
-              izquierda — movido aquí desde la portada a pedido */}
-          <div className="absolute top-[9%] left-4 z-30 sm:top-[11%] sm:left-8">
+          {/* Isotipo QB vectorial (draw-in + shimmer), pegado a la esquina
+              superior izquierda del fondo gris del estudio */}
+          <div className="absolute top-3 left-4 z-30 sm:top-5 sm:left-8">
             <QbMark className="h-16 w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] sm:h-24" />
           </div>
 

@@ -3,10 +3,8 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
-import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 import { PHASES, SPRITES, spriteBox } from "./hero7-choreo";
-import QbMark from "./QbMark";
 
 /**
  * Hero "despiece en 6 fases": la R 1300 GS Adventure se desarma con el
@@ -19,8 +17,9 @@ import QbMark from "./QbMark";
  *
  * Scrub 1:1 (GSAP timeline pausado + tl.progress del useScroll de framer,
  * sin inercia): scroll lento permite detallar cada pieza; scroll rápido da
- * un despiece corrido. El título y el slogan de la casa quedan SIEMPRE
- * visibles (pedido explícito).
+ * un despiece corrido. La identidad de la casa (título, eslogan, isotipo,
+ * marcas) vive en la portada (BlueprintReveal): esta sección es la
+ * animación pura, como cierre visual de la página.
  *
  * prefers-reduced-motion: moto completa estática, sin pin ni vuelo.
  */
@@ -131,15 +130,6 @@ export default function ExplodedHero() {
 
   return (
     <>
-      {/* React 19 lo iza al <head>: la moto completa se pide desde el HTML
-          (candidata LCP), las demás fases llegan detrás sin prioridad */}
-      <link
-        rel="preload"
-        as="image"
-        imageSrcSet={phaseSrcSet(1)}
-        imageSizes={phaseSizes}
-        fetchPriority="high"
-      />
       <section
         ref={trackRef}
         aria-label="BMW R 1300 GS Adventure — despiece en 6 fases hasta el chasis con el motor"
@@ -165,49 +155,10 @@ export default function ExplodedHero() {
             className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_46%,rgba(3,7,14,0.42)_100%)]"
           />
 
-          {/* Marca protagonista arriba: SIEMPRE visible durante todo el
-              despiece, pegada al borde superior para no chocar con el
-              parabrisas. El font-size deriva de la MISMA fórmula de ancho de
-              la caja de la moto × 1.05: la línea queda siempre un pelo más
-              larga que la moto, en cualquier viewport (medido: ancho del
-              texto = 32.7 × font-size con tracking 0.4em). Rojo más luminoso
-              que brand-red (que se apaga sobre el gris del estudio) con glow
-              sutil para notarse a simple vista. */}
-          <p
-            className="absolute top-2 left-1/2 z-30 w-max -translate-x-1/2 text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-4"
-            style={{
-              fontSize:
-                "calc(min(92vw, (100svh - 190px) * 1.5333, 1500px) * 1.05 / 32.7)",
-              color: "#ff2230",
-              textShadow: "0 0 24px rgba(255,34,48,0.4), 0 2px 14px rgba(0,0,0,0.5)",
-            }}
-          >
-            Quality Bikes Venezuela • Caracas
-          </p>
-
-          {/* Isotipo QB vectorial, lado derecho, con draw-in + shimmer */}
-          <div className="absolute top-[9%] right-4 z-30 sm:top-[11%] sm:right-8">
-            <QbMark className="h-16 w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] sm:h-24" />
-          </div>
-
-          {/* Marcas representadas a los lados (quedan, como el título) */}
-          <div className="absolute top-1/2 left-6 z-[1] hidden -translate-y-1/2 space-y-3.5 lg:block">
-            {siteConfig.brandsRepresented.slice(0, 4).map((s) => (
-              <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
-                {s}
-              </p>
-            ))}
-          </div>
-          <div className="absolute top-1/2 right-6 z-[1] hidden -translate-y-1/2 space-y-3 text-right lg:block">
-            {siteConfig.brandsRepresented.slice(4, 8).map((s) => (
-              <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
-                {s}
-              </p>
-            ))}
-          </div>
-
-          {/* ——— Escenario: las 7 fases comparten este frame, registradas ——— */}
-          <div className="relative aspect-[15333/10000] w-[94vw] shrink-0 translate-y-[5.5vh] md:w-[min(92vw,calc((100svh-190px)*1.5333),1500px)] md:translate-y-[6.5vh]">
+          {/* ——— Escenario: las fases comparten este frame, registradas ——— */}
+          {/* Sin título ni eslogan en esta sección (viven en la portada): la
+              moto se centra plena en el stage */}
+          <div className="relative aspect-[15333/10000] w-[94vw] shrink-0 md:w-[min(92vw,calc((100svh-140px)*1.5333),1500px)]">
             {/* Sombra de piso sutil bajo la moto */}
             <div
               data-hero-shadow
@@ -241,7 +192,8 @@ export default function ExplodedHero() {
               srcSet={phaseSrcSet(1)}
               sizes={phaseSizes}
               alt={BIKE_ALT}
-              fetchPriority="high"
+              loading="lazy"
+              decoding="async"
               // Registro con la fase 2: la foto 1 (beauty shot) viene ~1.8%
               // más grande y ~1% más alta que la sesión de despiece (2-7).
               // Corrección medida por optimización de diferencia en canvas
@@ -270,15 +222,6 @@ export default function ExplodedHero() {
               </div>
             ))}
           </div>
-
-          {/* Eslogan de la casa: SIEMPRE visible, centrado bajo el chasis,
-              en flujo para no solaparse nunca con las ruedas ni los flotantes */}
-          <p
-            className="font-hero-script z-20 mt-3 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-5"
-            style={{ fontSize: "clamp(1.6rem, 6.8vw, 4.5rem)" }}
-          >
-            {siteConfig.slogan}
-          </p>
 
           <p
             data-hero-hint

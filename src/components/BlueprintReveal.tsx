@@ -4,10 +4,12 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { MOTO_SILHOUETTE_PATH, MOTO_SILHOUETTE_VIEWBOX } from "./logo3d/moto-silhouette-path";
+import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
+import QbMark from "./hero/QbMark";
 
 /**
- * Pieza de cierre "del plano al asfalto": sección pinned (150–170vh de
+ * PORTADA "del plano al asfalto": sección pinned (150–170vh de
  * recorrido, corto para que el efecto sea ágil) sobre fondo navy de plano
  * técnico. Con el scroll: (1) la silueta del isotipo se dibuja como plano —
  * trazo blanco, retícula, cotas y cajetín; (2) en una misma ventana de
@@ -22,6 +24,13 @@ import { withBasePath } from "@/lib/base-path";
  * useSpring bajo React 19) y cada capa deriva opacidad/transform con
  * clamp()/calc() en CSS puro. Bajo prefers-reduced-motion se fija --bp:1:
  * composición final estática, sin pin.
+ *
+ * Como portada, lleva la identidad de la casa: título rojo protagonista
+ * (mismo tratamiento que tenía el hero del despiece: 1.05× el ancho de la
+ * moto, medido ancho de texto = 32.7 × font-size con tracking 0.4em),
+ * isotipo QB, marcas representadas a los lados y el eslogan bajo la moto.
+ * Las specs del plano se recogen a las esquinas inferiores para no chocar
+ * con las marcas.
  */
 
 // Rampa 0→1 entre a y b sobre --bp, como string CSS (divisor literal, válido
@@ -108,7 +117,9 @@ export default function BlueprintReveal() {
         /* Fija bajo el header sticky (altura medida en --qbh): al engancharse
            el pin, la lámina completa — rótulo arriba, cajetín abajo — queda
            contenida en el viewport en todos los breakpoints */
-        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-brand-navy motion-reduce:static motion-reduce:h-svh"
+        // pt-[6vh]: baja el conjunto escenario+eslogan para que la punta del
+        // wireframe nunca cruce el título fijo de arriba
+        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-brand-navy pt-[6vh] motion-reduce:static motion-reduce:h-svh"
       >
         {/* Anochecer: entra con la moto — cielo que cae a negro azulado y un
             resplandor cálido de horizonte hacia donde apunta el faro */}
@@ -141,14 +152,50 @@ export default function BlueprintReveal() {
           </p>
         </div>
 
-        <p className="absolute top-8 text-xs tracking-[0.3em] text-white/50 uppercase sm:top-12">
-          Quality Bikes · Venezuela
+        {/* Marca protagonista: mismo título rojo del hero anterior, con el
+            font-size derivado de la fórmula de ancho del escenario × 1.05 —
+            un pelo más largo que la moto en cualquier viewport. Dentro del
+            marco del plano (top-6) para no pisar su borde. */}
+        <p
+          className="absolute top-6 left-1/2 z-30 w-max -translate-x-1/2 text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-8"
+          style={{
+            fontSize:
+              "calc(min(88vw, (100svh - 340px) * 1.4137, 780px) * 1.05 / 32.7)",
+            color: "#ff2230",
+            textShadow: "0 0 24px rgba(255,34,48,0.4), 0 2px 14px rgba(0,0,0,0.5)",
+          }}
+        >
+          Quality Bikes Venezuela • Caracas
         </p>
 
-        {/* Specs laterales, minimalistas: entran con la moto y no compiten */}
+        {/* Isotipo QB vectorial, lado derecho, con draw-in + shimmer */}
+        <div className="absolute top-[11%] right-6 z-30 sm:top-[13%] sm:right-10">
+          <QbMark className="h-16 w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] sm:h-24" />
+        </div>
+
+        {/* Marcas representadas a los lados: siempre visibles, como en la
+            portada anterior */}
+        <div className="absolute top-1/2 left-6 z-[1] hidden -translate-y-1/2 space-y-3.5 lg:block">
+          {siteConfig.brandsRepresented.slice(0, 4).map((s) => (
+            <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
+              {s}
+            </p>
+          ))}
+        </div>
+        <div className="absolute top-1/2 right-6 z-[1] hidden -translate-y-1/2 space-y-3.5 text-right lg:block">
+          {siteConfig.brandsRepresented.slice(4, 8).map((s) => (
+            <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
+              {s}
+            </p>
+          ))}
+        </div>
+
+        {/* Specs laterales, minimalistas: entran con la moto. Recogidas a las
+            esquinas inferiores (las marcas representadas ocupan ahora el
+            centro de los laterales); la derecha por encima del cajetín. */}
         <div
           style={{ opacity: `calc(${ramp(0.58, 0.72)} * 0.9)` }}
-          className="absolute left-10 top-1/2 hidden -translate-y-1/2 space-y-3 lg:block"
+          className="absolute bottom-8 left-10 hidden space-y-3 lg:block"
         >
           {SPECS_LEFT.map((s) => (
             <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/35 uppercase">
@@ -158,7 +205,7 @@ export default function BlueprintReveal() {
         </div>
         <div
           style={{ opacity: `calc(${ramp(0.58, 0.72)} * 0.9)` }}
-          className="absolute right-10 top-1/2 hidden -translate-y-1/2 space-y-3 text-right lg:block"
+          className="absolute right-10 bottom-28 hidden space-y-3 text-right lg:block"
         >
           {SPECS_RIGHT.map((s) => (
             <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/35 uppercase">
@@ -192,8 +239,9 @@ export default function BlueprintReveal() {
         </div>
 
         {/* Escenario central: silueta y moto real comparten la misma caja para
-            que el crossfade quede registrado en el mismo punto */}
-        <div className="relative aspect-[827/585] w-[min(88vw,780px)]">
+            que el crossfade quede registrado en el mismo punto. El término de
+            altura reserva aire para título arriba y eslogan abajo. */}
+        <div className="relative aspect-[827/585] w-[min(88vw,calc((100svh-340px)*1.4137),780px)]">
           {/* Wireframe del isotipo: se dibuja en 0.04–0.36 y cede en 0.44–0.58,
               exactamente la misma ventana en la que aparece la moto */}
           <svg
@@ -266,6 +314,7 @@ export default function BlueprintReveal() {
               src={withBasePath("/images/blueprint/gs-adventure-719.webp")}
               alt="BMW R 1250 GS Adventure Triple Black Option 719 con luces ámbar encendidas, materializada sobre el plano técnico"
               fill
+              priority
               sizes="(max-width: 640px) 88vw, 780px"
               className="object-contain"
             />
@@ -315,6 +364,16 @@ export default function BlueprintReveal() {
             className="absolute bottom-[4%] left-1/2 h-6 w-3/4 -translate-x-1/2 rounded-[50%] bg-black/70 blur-xl"
           />
         </div>
+
+        {/* Eslogan de la casa: SIEMPRE visible, centrado bajo la moto, en
+            flujo. mt generoso para no pisar la cota "2.270 mm" que vive a
+            -bottom-14 del escenario durante la fase plano. */}
+        <p
+          className="font-hero-script z-20 mt-20 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-24"
+          style={{ fontSize: "clamp(1.6rem, 6.8vw, 4.5rem)" }}
+        >
+          {siteConfig.slogan}
+        </p>
 
         {/* Pista de scroll: solo al inicio de la fase plano. bottom-20 en
             móvil: a bottom-6 chocaría con el cajetín, que en 390px cruza el

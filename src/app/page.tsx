@@ -22,7 +22,11 @@ export default function Home() {
 
   return (
     <>
-      <ExplodedHero />
+      {/* Portada: la R 1250 GS Adventure Triple Black materializándose sobre
+          el plano técnico, con la identidad de la casa (título rojo, isotipo,
+          marcas y eslogan). Intercambiada con el despiece de la R 1300, que
+          ahora cierra la página. */}
+      <BlueprintReveal />
 
       {/* En el showroom ahora — las unidades físicas reales, nada más */}
       <section className="mx-auto max-w-7xl px-6 py-24 sm:py-32">
@@ -166,10 +170,11 @@ export default function Home() {
           las motos de próximo arribo — foto flotante, specs y "Reservar". */}
       {upcoming.length > 0 && <FeaturedArrivals motos={upcoming} />}
 
-      {/* La pieza de la casa: el plano técnico del isotipo se dibuja con el
-          scroll y se materializa en la Multistrada V4 real — cierre visual de
-          la página, después de productos y antes del bloque de contacto */}
-      <BlueprintReveal />
+      {/* La pieza de la casa: el despiece en fases de la R 1300 GS Adventure
+          — cierre visual de la página, después de productos y antes del
+          bloque de contacto (intercambiado con el plano, que ahora es la
+          portada) */}
+      <ExplodedHero />
 
       {/* (a) Invitación: bloque de texto extraído de la antigua sección de
           ubicación, ahora protagonista y centrado. Compacto — menos aire

@@ -165,15 +165,17 @@ export default function ExplodedHero() {
 
           {/* Marca protagonista arriba: SIEMPRE visible durante todo el
               despiece, pegada al borde superior para no chocar con el
-              parabrisas. Tamaño fluido: 2.7vw + tracking 0.4em ⇒ la línea
-              abarca ~88vw en todos los breakpoints (medido: ancho = 32.7 ×
-              font-size); piso de 9px para no desbordar en 320px. Rojo más
-              luminoso que brand-red (que se apaga sobre el gris del estudio)
-              con glow sutil para notarse a simple vista. */}
+              parabrisas. El font-size deriva de la MISMA fórmula de ancho de
+              la caja de la moto × 1.05: la línea queda siempre un pelo más
+              larga que la moto, en cualquier viewport (medido: ancho del
+              texto = 32.7 × font-size con tracking 0.4em). Rojo más luminoso
+              que brand-red (que se apaga sobre el gris del estudio) con glow
+              sutil para notarse a simple vista. */}
           <p
-            className="absolute top-2 left-1/2 z-30 w-max max-w-[96vw] -translate-x-1/2 text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-4"
+            className="absolute top-2 left-1/2 z-30 w-max -translate-x-1/2 text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-4"
             style={{
-              fontSize: "clamp(9px, 2.7vw, 2.9rem)",
+              fontSize:
+                "calc(min(92vw, (100svh - 190px) * 1.5333, 1500px) * 1.05 / 32.7)",
               color: "#ff2230",
               textShadow: "0 0 24px rgba(255,34,48,0.4), 0 2px 14px rgba(0,0,0,0.5)",
             }}

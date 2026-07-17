@@ -157,8 +157,8 @@ export default function ExplodedHero() {
           />
 
           {/* Isotipo QB vectorial (draw-in + shimmer), pegado a la esquina
-              superior izquierda del fondo gris del estudio */}
-          <div className="absolute top-3 left-4 z-30 sm:top-5 sm:left-8">
+              superior derecha del fondo gris del estudio */}
+          <div className="absolute top-3 right-4 z-30 sm:top-5 sm:right-8">
             <QbMark className="h-16 w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] sm:h-24" />
           </div>
 

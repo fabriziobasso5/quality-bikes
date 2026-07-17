@@ -117,9 +117,11 @@ export default function BlueprintReveal() {
         /* Fija bajo el header sticky (altura medida en --qbh): al engancharse
            el pin, la lámina completa — rótulo arriba, cajetín abajo — queda
            contenida en el viewport en todos los breakpoints */
-        // pt-[6vh]: baja el conjunto escenario+eslogan para que la punta del
-        // wireframe nunca cruce el título fijo de arriba
-        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-brand-navy pt-[6vh] motion-reduce:static motion-reduce:h-svh"
+        // Móvil: conjunto centrado con un pt suave. En sm+: contenido anclado
+        // arriba (justify-start) con un pt que sigue el alto real del título
+        // (que crece con el viewport) — así la moto puede crecer FULL hacia
+        // abajo, hacia el eslogan, sin tocar nunca el título.
+        className="sticky top-[var(--qbh,76px)] flex h-[calc(100svh-var(--qbh,76px))] w-full flex-col items-center justify-center overflow-hidden bg-brand-navy pt-[6vh] motion-reduce:static motion-reduce:h-svh sm:justify-start sm:pt-[calc(30px+(100svh-340px)*0.075)]"
       >
         {/* Anochecer: entra con la moto — cielo que cae a negro azulado y un
             resplandor cálido de horizonte hacia donde apunta el faro */}
@@ -152,10 +154,10 @@ export default function BlueprintReveal() {
           </p>
         </div>
 
-        {/* Marca protagonista: mismo título rojo del hero anterior, con el
-            font-size derivado de la fórmula de ancho del escenario × 1.05 —
-            un pelo más largo que la moto en cualquier viewport. Dentro del
-            marco del plano (top-6) para no pisar su borde. */}
+        {/* Marca protagonista: mismo título rojo del hero anterior. Su
+            font-size quedó CONGELADO en la fórmula original (a pedido: la
+            moto creció full hacia abajo sin tocar el título), por eso ya no
+            coincide con la fórmula de ancho del escenario. */}
         <p
           className="absolute top-6 left-1/2 z-30 w-max -translate-x-1/2 text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-8"
           style={{
@@ -240,8 +242,9 @@ export default function BlueprintReveal() {
 
         {/* Escenario central: silueta y moto real comparten la misma caja para
             que el crossfade quede registrado en el mismo punto. El término de
-            altura reserva aire para título arriba y eslogan abajo. */}
-        <div className="relative aspect-[827/585] w-[min(88vw,calc((100svh-340px)*1.4137),780px)]">
+            altura ocupa TODO el aire disponible entre el título y el eslogan
+            (presupuesto: pt del stage + cota bajo la caja + eslogan). */}
+        <div className="relative aspect-[827/585] w-[min(88vw,calc(100svh*1.3077-329px),780px)]">
           {/* Wireframe del isotipo: se dibuja en 0.04–0.36 y cede en 0.44–0.58,
               exactamente la misma ventana en la que aparece la moto */}
           <svg
@@ -277,10 +280,12 @@ export default function BlueprintReveal() {
             style={{ opacity: `min(${ramp(0.16, 0.28)}, ${fade(0.4, 0.52)})` }}
             className="absolute inset-0"
           >
-            <div className="absolute -bottom-8 left-[4%] right-[4%] border-t border-white/40" />
-            <div className="absolute -bottom-9 left-[4%] h-2 border-l border-white/40" />
-            <div className="absolute -bottom-9 right-[4%] h-2 border-r border-white/40" />
-            <p className="absolute -bottom-14 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.25em] text-white/50">
+            {/* Cota compacta: rótulo sobre la línea (estilo lámina) para no
+                robar altura al escenario ni pisar el eslogan */}
+            <div className="absolute -bottom-6 left-[4%] right-[4%] border-t border-white/40" />
+            <div className="absolute -bottom-7 left-[4%] h-2 border-l border-white/40" />
+            <div className="absolute -bottom-7 right-[4%] h-2 border-r border-white/40" />
+            <p className="absolute -bottom-5 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.25em] text-white/50">
               2.270 mm
             </p>
             <div className="absolute -right-6 top-[6%] bottom-[12%] border-r border-white/40 max-sm:hidden" />
@@ -290,9 +295,11 @@ export default function BlueprintReveal() {
           </div>
 
           {/* Anotaciones de la fase plano */}
+          {/* Dentro del escenario (esquina sup. izq.): arriba chocaba con el
+              título ahora que la moto ocupa todo el alto disponible */}
           <p
             style={{ opacity: `min(${ramp(0.06, 0.14)}, ${fade(0.4, 0.52)})` }}
-            className="absolute -top-10 left-0 font-mono text-[10px] tracking-[0.25em] text-white/50 uppercase"
+            className="absolute top-2 left-2 font-mono text-[10px] tracking-[0.25em] text-white/50 uppercase"
           >
             Fig. 01 — R 1250 GS Adventure
           </p>
@@ -369,18 +376,18 @@ export default function BlueprintReveal() {
             flujo. mt generoso para no pisar la cota "2.270 mm" que vive a
             -bottom-14 del escenario durante la fase plano. */}
         <p
-          className="font-hero-script z-20 mt-20 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-24"
+          className="font-hero-script z-20 mt-20 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:mt-9"
           style={{ fontSize: "clamp(1.6rem, 6.8vw, 4.5rem)" }}
         >
           {siteConfig.slogan}
         </p>
 
-        {/* Pista de scroll: solo al inicio de la fase plano. bottom-20 en
-            móvil: a bottom-6 chocaría con el cajetín, que en 390px cruza el
-            centro; el eslogan no coexiste (sale en bp 0.8). */}
+        {/* Pista de scroll: solo al inicio de la fase plano, en la esquina
+            inferior izquierda para no pisar el eslogan (las specs de esa
+            esquina entran mucho después, nunca coexisten). */}
         <p
           style={{ opacity: fade(0, 0.06) }}
-          className="absolute bottom-20 font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase sm:bottom-6 motion-reduce:hidden"
+          className="absolute bottom-4 left-6 font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase sm:left-10 motion-reduce:hidden"
         >
           ↓ Scroll
         </p>

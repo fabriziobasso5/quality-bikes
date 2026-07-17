@@ -9,10 +9,10 @@ import { PHASES, SPRITES, spriteBox } from "./hero7-choreo";
 import QbMark from "./QbMark";
 
 /**
- * Hero "despiece en 7 fases": la R 1300 GS Adventure se desarma con el
- * scroll pasando por 7 fotografías reales del desmontaje (completa → sin
+ * Hero "despiece en 6 fases": la R 1300 GS Adventure se desarma con el
+ * scroll pasando por 6 fotografías reales del desmontaje (completa → sin
  * carrocería → tanque desnudo → sin manubrio → sin tren de rodaje → motor
- * pelado → chasis tubular). Las 7 fotos están registradas al píxel con el
+ * y chasis pelados, el final). Las fotos están registradas al píxel con el
  * chasis como ancla absoluta: entre fase y fase NADA se mueve, solo se
  * desprenden las piezas que faltan en la siguiente foto, como sprites
  * generados desde las mismas fotos que salen volando con sutileza.
@@ -27,7 +27,7 @@ import QbMark from "./QbMark";
 
 const HERO_DIR = "/images/hero7";
 const BIKE_ALT =
-  "BMW R 1300 GS Adventure verde esmeralda con escape Akrapovic despiezándose hasta el chasis, vista lateral";
+  "BMW R 1300 GS Adventure verde esmeralda con escape Akrapovic despiezándose hasta el chasis con el motor, vista lateral";
 
 export default function ExplodedHero() {
   const trackRef = useRef<HTMLElement>(null);
@@ -142,10 +142,12 @@ export default function ExplodedHero() {
       />
       <section
         ref={trackRef}
-        aria-label="BMW R 1300 GS Adventure — despiece en 7 fases hasta el chasis desnudo"
+        aria-label="BMW R 1300 GS Adventure — despiece en 6 fases hasta el chasis con el motor"
         // El fondo oscuro también en el track: si el pin deja ver un borde,
         // que sea del mismo tono (nada de franjas blancas bajo el header)
-        className="relative h-[132vh] bg-[#24292f] md:h-[152vh] motion-reduce:h-auto"
+        // El timeline ahora termina en ~0.87 (última pieza de T5): el track
+        // se recorta en proporción para no dejar scroll muerto al final.
+        className="relative h-[129vh] bg-[#24292f] md:h-[147vh] motion-reduce:h-auto"
       >
         <div
           ref={stageRef}
@@ -213,10 +215,10 @@ export default function ExplodedHero() {
               className="absolute bottom-[1%] left-1/2 h-5 w-3/5 -translate-x-1/2 rounded-[50%] bg-black/45 blur-xl"
             />
 
-            {/* Fases 7→2, de abajo hacia arriba: cada una muestra exactamente
-                lo que queda cuando la de encima se funde. El chasis (7) es el
-                fondo permanente. */}
-            {[7, 6, 5, 4, 3, 2].map((n) => (
+            {/* Fases 6→2, de abajo hacia arriba: cada una muestra exactamente
+                lo que queda cuando la de encima se funde. El chasis con el
+                motor (6) es el fondo permanente — el final del despiece. */}
+            {[6, 5, 4, 3, 2].map((n) => (
               /* eslint-disable-next-line @next/next/no-img-element -- capas registradas del despiece */
               <img
                 key={n}

@@ -1,5 +1,5 @@
-// Coreografía del despiece en 7 fases reales (fotos BMW alineadas por
-// chasis): 6 transiciones; en cada una la fase superior se funde rápido y
+// Coreografía del despiece en 6 fases reales (fotos BMW alineadas por
+// chasis): 5 transiciones; en cada una la fase superior se funde rápido y
 // las piezas que YA NO están en la siguiente foto salen volando como sprites
 // (generados 1:1 desde las mismas fotos, recortados en cuadrado).
 //
@@ -21,14 +21,15 @@ export type HeroPhase = {
   fadeAt: number;
 };
 
-// La fase 7 (chasis desnudo) nunca se funde: es el final.
+// La fase 6 (chasis con el bloque del motor) nunca se funde: es el final.
+// (La transición 6→7 al chasis tubular solo se eliminó a pedido del cliente;
+// phase-7.webp queda sin usar en /public.)
 export const PHASES: HeroPhase[] = [
   { n: 1, fadeAt: 0.055 },
   { n: 2, fadeAt: 0.225 },
   { n: 3, fadeAt: 0.415 },
   { n: 4, fadeAt: 0.525 },
   { n: 5, fadeAt: 0.745 },
-  { n: 6, fadeAt: 0.895 },
 ];
 
 export type HeroSprite = {
@@ -79,8 +80,6 @@ export const SPRITES: HeroSprite[] = [
   { id: "airbox",     cx: 42.5, cy: 58.5, w: 15, vx: -50, vy: -45, rot: -35,  t: [0.75, 0.86] },
   { id: "headcover",  cx: 59.0, cy: 67.0, w: 17, vx: 60,  vy: 25,  rot: 35,   t: [0.76, 0.87] },
   { id: "ancillaries",cx: 40.5, cy: 69.0, w: 11, vx: -45, vy: 45,  rot: -55,  t: [0.76, 0.87] },
-  // ---- T6: → solo el chasis tubular ----
-  { id: "engine",     cx: 52.0, cy: 62.0, w: 31, vx: 12,  vy: 85,  rot: -14,  t: [0.89, 0.98] },
 ];
 
 /** layout precalculado del sprite (posición estática; GSAP solo transforma) */

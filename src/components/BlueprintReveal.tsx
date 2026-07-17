@@ -6,7 +6,6 @@ import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion"
 import { MOTO_SILHOUETTE_PATH, MOTO_SILHOUETTE_VIEWBOX } from "./logo3d/moto-silhouette-path";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
-import QbMark from "./hero/QbMark";
 
 /**
  * PORTADA "del plano al asfalto": sección pinned (150–170vh de
@@ -28,9 +27,9 @@ import QbMark from "./hero/QbMark";
  * Como portada, lleva la identidad de la casa: título rojo protagonista
  * (mismo tratamiento que tenía el hero del despiece: 1.05× el ancho de la
  * moto, medido ancho de texto = 32.7 × font-size con tracking 0.4em),
- * isotipo QB, marcas representadas a los lados y el eslogan bajo la moto.
- * Las specs del plano se recogen a las esquinas inferiores para no chocar
- * con las marcas.
+ * marcas representadas a los lados y el eslogan bajo la moto. (El isotipo
+ * QB vive en el despiece del cierre; cajetín y specs de la moto se
+ * eliminaron a pedido.)
  */
 
 // Rampa 0→1 entre a y b sobre --bp, como string CSS (divisor literal, válido
@@ -43,13 +42,6 @@ const fade = (a: number, b: number) =>
 
 // Factor del lerp por frame: alto = respuesta rápida, bajo = más flotado.
 const SMOOTH = 0.16;
-
-const SPECS_LEFT = [
-  "R 1250 GS Adventure",
-  "Option 719 · Triple Black",
-  "1.254 cc · Bóxer",
-];
-const SPECS_RIGHT = ["136 cv", "219 km/h · Vel. máx", "2.270 mm · Longitud", "890 mm · Asiento"];
 
 export default function BlueprintReveal() {
   const trackRef = useRef<HTMLElement>(null);
@@ -143,16 +135,8 @@ export default function BlueprintReveal() {
           className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,10,25,0.6)_100%)]"
         />
 
-        {/* Marco del plano con cajetín, siempre visible */}
+        {/* Marco del plano, siempre visible (el cajetín se eliminó a pedido) */}
         <div aria-hidden className="absolute inset-4 border border-white/15 sm:inset-6" />
-        <div className="absolute bottom-4 right-4 border border-white/15 bg-brand-navy/80 px-4 py-2 text-right sm:bottom-6 sm:right-6">
-          <p className="font-mono text-[9px] tracking-[0.2em] text-white/50 uppercase sm:text-[10px]">
-            Plano N.º 001 · QB-GSA-719
-          </p>
-          <p className="font-mono text-[9px] tracking-[0.2em] text-white/30 uppercase sm:text-[10px]">
-            Esc 1:1 · Caracas, Venezuela
-          </p>
-        </div>
 
         {/* Marca protagonista: mismo título rojo del hero anterior. Su
             font-size quedó CONGELADO en la fórmula original (a pedido: la
@@ -170,11 +154,6 @@ export default function BlueprintReveal() {
           Quality Bikes Venezuela • Caracas
         </p>
 
-        {/* Isotipo QB vectorial, lado derecho, con draw-in + shimmer */}
-        <div className="absolute top-[11%] right-6 z-30 sm:top-[13%] sm:right-10">
-          <QbMark className="h-16 w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] sm:h-24" />
-        </div>
-
         {/* Marcas representadas a los lados: siempre visibles, como en la
             portada anterior */}
         <div className="absolute top-1/2 left-6 z-[1] hidden -translate-y-1/2 space-y-3.5 lg:block">
@@ -190,54 +169,6 @@ export default function BlueprintReveal() {
               {s}
             </p>
           ))}
-        </div>
-
-        {/* Specs laterales, minimalistas: entran con la moto. Recogidas a las
-            esquinas inferiores (las marcas representadas ocupan ahora el
-            centro de los laterales); la derecha por encima del cajetín. */}
-        <div
-          style={{ opacity: `calc(${ramp(0.58, 0.72)} * 0.9)` }}
-          className="absolute bottom-8 left-10 hidden space-y-3 lg:block"
-        >
-          {SPECS_LEFT.map((s) => (
-            <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/35 uppercase">
-              {s}
-            </p>
-          ))}
-        </div>
-        <div
-          style={{ opacity: `calc(${ramp(0.58, 0.72)} * 0.9)` }}
-          className="absolute right-10 bottom-28 hidden space-y-3 text-right lg:block"
-        >
-          {SPECS_RIGHT.map((s) => (
-            <p key={s} className="font-mono text-[10px] tracking-[0.22em] text-white/35 uppercase">
-              {s}
-            </p>
-          ))}
-        </div>
-
-        {/* Mismos datos técnicos en móvil/tablet (< lg), donde no hay espacio
-            para las columnas laterales: bloque centrado arriba, con la misma
-            ventana de aparición (no cambia el efecto, solo se vuelve visible y
-            responsive). */}
-        <div
-          style={{ opacity: `calc(${ramp(0.58, 0.72)} * 0.9)` }}
-          className="absolute inset-x-0 top-16 flex flex-col items-center gap-1.5 px-8 text-center lg:hidden sm:top-20"
-        >
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
-            {SPECS_LEFT.map((s) => (
-              <span key={s} className="font-mono text-[10px] tracking-[0.18em] text-white/45 uppercase">
-                {s}
-              </span>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
-            {SPECS_RIGHT.map((s) => (
-              <span key={s} className="font-mono text-[10px] tracking-[0.18em] text-white/45 uppercase">
-                {s}
-              </span>
-            ))}
-          </div>
         </div>
 
         {/* Escenario central: silueta y moto real comparten la misma caja para

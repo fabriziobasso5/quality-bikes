@@ -24,25 +24,42 @@ export default function QbMark({ className }: { className?: string }) {
       gsap.set(svg.querySelectorAll("[data-qb-fill]"), { fillOpacity: 1 });
       return;
     }
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.9 }); // arranca al cerrar el IntroLoader
-      tl.fromTo(
-        svg.querySelectorAll("[data-qb-stroke]"),
-        { strokeDashoffset: 1 },
-        { strokeDashoffset: 0, duration: 1.3, ease: "power2.inOut", stagger: 0.14 },
-        0
-      )
-        .to(svg.querySelectorAll("[data-qb-fill]"), { fillOpacity: 1, duration: 0.55, ease: "none" }, 0.95)
-        .to(svg.querySelectorAll("[data-qb-stroke]"), { opacity: 0, duration: 0.4 }, 1.25)
-        // shimmer: barrido diagonal en loop lento, recortado al logo
-        .fromTo(
-          svg.querySelector("[data-qb-shimmer]"),
-          { x: "-120%" },
-          { x: "220%", duration: 1.6, ease: "power1.inOut", repeat: -1, repeatDelay: 5.5 },
-          1.7
-        );
-    }, svg);
-    return () => ctx.revert();
+    // El draw-in arranca cuando el isotipo ENTRA al viewport (vive a mitad
+    // de página, en el despiece): con el delay fijo post-mount de antes la
+    // animación corría fuera de pantalla y podía quedar en estado a medias.
+    const ctx = gsap.context(() => {}, svg);
+    let played = false;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (played || !entries.some((e) => e.isIntersecting)) return;
+        played = true;
+        io.disconnect();
+        ctx.add(() => {
+          const tl = gsap.timeline({ delay: 0.15 });
+          tl.fromTo(
+            svg.querySelectorAll("[data-qb-stroke]"),
+            { strokeDashoffset: 1 },
+            { strokeDashoffset: 0, duration: 1.3, ease: "power2.inOut", stagger: 0.14 },
+            0
+          )
+            .to(svg.querySelectorAll("[data-qb-fill]"), { fillOpacity: 1, duration: 0.55, ease: "none" }, 0.95)
+            .to(svg.querySelectorAll("[data-qb-stroke]"), { opacity: 0, duration: 0.4 }, 1.25)
+            // shimmer: barrido diagonal en loop lento, recortado al logo
+            .fromTo(
+              svg.querySelector("[data-qb-shimmer]"),
+              { x: "-120%" },
+              { x: "220%", duration: 1.6, ease: "power1.inOut", repeat: -1, repeatDelay: 5.5 },
+              1.7
+            );
+        });
+      },
+      { threshold: 0.3 }
+    );
+    io.observe(svg);
+    return () => {
+      io.disconnect();
+      ctx.revert();
+    };
   }, []);
 
   return (

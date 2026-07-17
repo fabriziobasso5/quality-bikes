@@ -49,11 +49,15 @@ export type HeroSprite = {
 
 export const SPRITES: HeroSprite[] = [
   // ---- T1: moto completa → sin carrocería (la fase 1 se funde en 0.055) ----
-  { id: "windscreen", cx: 71.0, cy: 15.3, w: 26, vx: 45,  vy: -70, rot: 35,   t: [0.05, 0.17] },
-  { id: "seat",       cx: 36.0, cy: 40.5, w: 34, vx: -55, vy: -60, rot: -25,  t: [0.06, 0.19] },
-  { id: "exhaust",    cx: 22.5, cy: 61.0, w: 26, vx: -70, vy: 25,  rot: -30,  t: [0.07, 0.21] },
-  { id: "beak",       cx: 81.5, cy: 52.0, w: 15, vx: 65,  vy: -20, rot: 40,   t: [0.08, 0.20] },
-  { id: "tail",       cx: 12.5, cy: 32.0, w: 15, vx: -60, vy: -35, rot: -45,  t: [0.09, 0.22] },
+  // Coordenadas en el frame de la fase 1 CORREGIDA (translate -0.33%,-1.02%
+  // + scale 0.982 aplicados en ExplodedHero para registrarla con la sesión
+  // de despiece): cx' = 50+(cx-50)·0.982-0.33, cy' = 50+(cy-50)·0.982-1.02,
+  // w' = w·0.982.
+  { id: "windscreen", cx: 70.3, cy: 14.9, w: 25.5, vx: 45,  vy: -70, rot: 35,   t: [0.05, 0.17] },
+  { id: "seat",       cx: 35.9, cy: 39.7, w: 33.4, vx: -55, vy: -60, rot: -25,  t: [0.06, 0.19] },
+  { id: "exhaust",    cx: 22.7, cy: 59.8, w: 25.5, vx: -70, vy: 25,  rot: -30,  t: [0.07, 0.21] },
+  { id: "beak",       cx: 80.6, cy: 50.9, w: 14.7, vx: 65,  vy: -20, rot: 40,   t: [0.08, 0.20] },
+  { id: "tail",       cx: 12.9, cy: 31.3, w: 14.7, vx: -60, vy: -35, rot: -45,  t: [0.09, 0.22] },
   // ---- T2: → tanque de aluminio desnudo ----
   { id: "tankcover",  cx: 52.5, cy: 35.5, w: 27, vx: 40,  vy: -70, rot: 25,   t: [0.22, 0.35] },
   { id: "silverpanel",cx: 61.5, cy: 40.0, w: 13, vx: 70,  vy: -25, rot: 50,   t: [0.23, 0.35] },

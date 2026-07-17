@@ -145,7 +145,7 @@ export default function ExplodedHero() {
         aria-label="BMW R 1300 GS Adventure — despiece en 7 fases hasta el chasis desnudo"
         // El fondo oscuro también en el track: si el pin deja ver un borde,
         // que sea del mismo tono (nada de franjas blancas bajo el header)
-        className="relative h-[165vh] bg-[#24292f] md:h-[205vh] motion-reduce:h-auto"
+        className="relative h-[132vh] bg-[#24292f] md:h-[152vh] motion-reduce:h-auto"
       >
         <div
           ref={stageRef}
@@ -163,9 +163,21 @@ export default function ExplodedHero() {
             className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_46%,rgba(3,7,14,0.42)_100%)]"
           />
 
-          {/* Marca fina arriba: SIEMPRE visible durante todo el despiece,
-              pegada al borde superior para no chocar con el parabrisas */}
-          <p className="absolute top-2 left-1/2 z-30 w-max max-w-[94vw] -translate-x-1/2 text-center font-light tracking-[0.42em] text-brand-red uppercase text-sm sm:top-4 sm:text-lg">
+          {/* Marca protagonista arriba: SIEMPRE visible durante todo el
+              despiece, pegada al borde superior para no chocar con el
+              parabrisas. Tamaño fluido: 2.7vw + tracking 0.4em ⇒ la línea
+              abarca ~88vw en todos los breakpoints (medido: ancho = 32.7 ×
+              font-size); piso de 9px para no desbordar en 320px. Rojo más
+              luminoso que brand-red (que se apaga sobre el gris del estudio)
+              con glow sutil para notarse a simple vista. */}
+          <p
+            className="absolute top-2 left-1/2 z-30 w-max max-w-[96vw] -translate-x-1/2 text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-4"
+            style={{
+              fontSize: "clamp(9px, 2.7vw, 2.9rem)",
+              color: "#ff2230",
+              textShadow: "0 0 24px rgba(255,34,48,0.4), 0 2px 14px rgba(0,0,0,0.5)",
+            }}
+          >
             Quality Bikes Venezuela • Caracas
           </p>
 
@@ -226,6 +238,12 @@ export default function ExplodedHero() {
               sizes={phaseSizes}
               alt={BIKE_ALT}
               fetchPriority="high"
+              // Registro con la fase 2: la foto 1 (beauty shot) viene ~1.8%
+              // más grande y ~1% más alta que la sesión de despiece (2-7).
+              // Corrección medida por optimización de diferencia en canvas
+              // (ejes de rueda/tenedor/motor); los sprites T1 llevan la misma
+              // corrección en hero7-choreo.ts.
+              style={{ transform: "translate(-0.33%, -1.02%) scale(0.982)" }}
               className="pointer-events-none absolute inset-0 h-full w-full [will-change:var(--qb-wc,auto)]"
             />
 

@@ -113,6 +113,15 @@ export default function ExplodedHero() {
         0.05
       );
 
+      // A mitad del desarme el estudio "apaga las luces": el gris showroom
+      // cae de golpe a un azul noche profundo con un cenital frío sobre el
+      // chasis. Solo cambia el fondo — la coreografía de piezas no se toca.
+      tl.to(
+        q("[data-hero-bg-dark]"),
+        { autoAlpha: 1, duration: 0.16, ease: "power2.inOut" },
+        0.4
+      );
+
       tl.progress(scrollYProgress.get());
       tlRef.current = tl;
     }, stage);
@@ -144,7 +153,8 @@ export default function ExplodedHero() {
           ref={stageRef}
           // -1px de solape con el header: elimina la línea clara que dejaba el
           // redondeo subpixel entre el borde del header y el stage
-          className="sticky top-[calc(var(--qbh,76px)-1px)] flex h-[calc(100svh-var(--qbh,76px)+1px)] w-full flex-col items-center justify-center overflow-hidden bg-[#31373d] motion-reduce:static motion-reduce:h-svh"
+          // pb: reserva una franja de "piso" bajo la moto para el reflejo
+          className="sticky top-[calc(var(--qbh,76px)-1px)] flex h-[calc(100svh-var(--qbh,76px)+1px)] w-full flex-col items-center justify-center overflow-hidden bg-[#31373d] pb-8 motion-reduce:static motion-reduce:h-svh md:pb-12"
         >
           {/* Estudio oscuro: degradé vertical + viñeta, la moto al frente */}
           <div
@@ -154,6 +164,14 @@ export default function ExplodedHero() {
           <div
             aria-hidden
             className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_46%,rgba(3,7,14,0.42)_100%)]"
+          />
+          {/* Estudio nocturno: overlay que el timeline enciende de golpe a
+              mitad del desarme (data-hero-bg-dark) — azul noche + cenital
+              frío sobre el chasis */}
+          <div
+            data-hero-bg-dark
+            aria-hidden
+            className="invisible absolute inset-0 opacity-0 bg-[radial-gradient(ellipse_58%_44%_at_50%_40%,rgba(80,120,170,0.16),transparent_72%),linear-gradient(180deg,#16222e_0%,#0d1722_55%,#070d14_100%)]"
           />
 
           {/* Isotipo QB vectorial (draw-in + shimmer), pegado a la esquina
@@ -165,7 +183,10 @@ export default function ExplodedHero() {
           {/* ——— Escenario: las fases comparten este frame, registradas ——— */}
           {/* Sin título ni eslogan en esta sección (viven en la portada): la
               moto se centra plena en el stage */}
-          <div className="relative aspect-[15333/10000] w-[94vw] shrink-0 md:w-[min(92vw,calc((100svh-140px)*1.5333),1500px)]">
+          {/* El término en svh baja de -140px a -190px: cede ~50px de altura
+              al piso reflectante sin tocar el registro de las fases (los
+              sprites se posicionan en % de esta caja y escalan con ella) */}
+          <div className="relative aspect-[15333/10000] w-[94vw] shrink-0 md:w-[min(92vw,calc((100svh-190px)*1.5333),1500px)]">
             {/* Sombra de piso sutil bajo la moto */}
             <div
               data-hero-shadow
@@ -228,6 +249,74 @@ export default function ExplodedHero() {
                 />
               </div>
             ))}
+
+            {/* Piso reflectante de estudio: duplicado espejado de TODAS las
+                capas (fases y sprites), pegado bajo la caja. GSAP selecciona
+                por data-phase/data-sprite, así que estas copias se animan
+                solas en sincronía exacta con las originales — el reflejo se
+                despieza igual que la moto. Máscara corta el reflejo a una
+                franja corta; blur + opacidad bajos venden el "piso pulido". */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-full left-0 h-full w-full origin-top -scale-y-100 opacity-30 blur-[2px]"
+              style={{
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 10%, transparent 30%)",
+                maskImage:
+                  "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 10%, transparent 30%)",
+              }}
+            >
+              {[6, 5, 4, 3, 2].map((n) => (
+                /* eslint-disable-next-line @next/next/no-img-element -- reflejo del despiece */
+                <img
+                  key={n}
+                  data-phase={n}
+                  src={phaseSrc(n)}
+                  srcSet={phaseSrcSet(n)}
+                  sizes={phaseSizes}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className="pointer-events-none invisible absolute inset-0 h-full w-full opacity-0 motion-reduce:hidden [will-change:var(--qb-wc,auto)]"
+                />
+              ))}
+              {/* eslint-disable-next-line @next/next/no-img-element -- reflejo del despiece */}
+              <img
+                data-phase={1}
+                src={phaseSrc(1)}
+                srcSet={phaseSrcSet(1)}
+                sizes={phaseSizes}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                style={{ transform: "translate(-0.33%, -1.02%) scale(0.982)" }}
+                className="pointer-events-none absolute inset-0 h-full w-full [will-change:var(--qb-wc,auto)]"
+              />
+              {SPRITES.map((s) => (
+                <div
+                  key={s.id}
+                  data-sprite={s.id}
+                  className="invisible absolute z-10 opacity-0 [will-change:var(--qb-wc,auto)]"
+                  style={spriteBox(s)}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- reflejo de pieza */}
+                  <img
+                    src={withBasePath(`${HERO_DIR}/sprites/${s.id}.webp`)}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Brillo especular del piso: vende la superficie pulida bajo la
+                línea de contacto de las ruedas */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-[8%] top-full h-16 bg-[radial-gradient(ellipse_55%_100%_at_50%_0%,rgba(255,255,255,0.05),transparent_70%)]"
+            />
           </div>
 
           <p

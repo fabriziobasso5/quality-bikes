@@ -282,13 +282,13 @@ export default function BlueprintReveal() {
               {/* Faro principal: corona sobre la óptica. El aro ámbar del
                   faro está en el píxel (1305, 292) del asset 1600x1066 →
                   (81.6%, 28.7%) de la caja (object-contain con letterbox). */}
-              <div className="absolute left-[77.5%] top-[22.5%] h-[13%] w-[9%] animate-pulse rounded-full bg-orange-300/85 blur-xl" />
+              <div className="absolute left-[77.5%] top-[22.5%] h-[13%] w-[9%] animate-pulse rounded-full bg-orange-300/70 blur-xl" />
               {/* Haz del faro superior: vértice clavado en la óptica; al
                   llegar al borde de la pantalla cubre del ~20% al ~81% del
                   alto del frame (geometría medida del boceto). El ancho llega
                   exactamente al borde del viewport: 50vw − 0.31×--bpw. */}
               <div
-                className="absolute mix-blend-screen bg-gradient-to-r from-orange-300/65 via-orange-300/22 to-transparent blur-md"
+                className="absolute mix-blend-screen bg-gradient-to-r from-orange-400/50 via-orange-400/15 to-transparent blur-md"
                 style={{
                   left: "81%",
                   top: "20.5%",
@@ -300,36 +300,27 @@ export default function BlueprintReveal() {
 
               {/* Denali del crash bar — óptica en (1120, 610) del asset →
                   (70%, 56.5%) de la caja: corona + núcleo */}
-              <div className="absolute left-[66.5%] top-[51%] h-[11%] w-[7%] rounded-full bg-orange-400/75 blur-lg" />
-              <div className="absolute left-[68.2%] top-[53.5%] h-[6%] w-[3.6%] rounded-full bg-amber-100/85 blur-sm" />
-              {/* Haz bajo del Denali: nace en su óptica y se abre en abanico
-                  completo — desde casi la horizontal (donde se encuentra con
-                  el haz superior) hasta el piso, sin dejar cuña oscura entre
-                  ambos haces */}
+              <div className="absolute left-[66.5%] top-[51%] h-[11%] w-[7%] rounded-full bg-orange-400/60 blur-lg" />
+              <div className="absolute left-[68.2%] top-[53.5%] h-[6%] w-[3.6%] rounded-full bg-amber-100/70 blur-sm" />
+              {/* Haz bajo del Denali: nace en su óptica y cae en diagonal
+                  reforzando la base del abanico principal, como en el boceto */}
               <div
-                className="absolute mix-blend-screen bg-gradient-to-r from-orange-400/55 via-orange-300/20 to-transparent blur-lg"
+                className="absolute mix-blend-screen bg-gradient-to-r from-orange-500/40 via-orange-400/12 to-transparent blur-lg"
                 style={{
                   left: "69.5%",
-                  top: "30%",
-                  height: "60%",
+                  top: "53%",
+                  height: "37%",
                   width: "calc(50vw - var(--bpw) * 0.195)",
-                  clipPath: "polygon(0 43%, 35% -2%, 100% 0%, 100% 102%, 0 46%)",
+                  clipPath: "polygon(0 8%, 100% 60%, 100% 104%, 0 13%)",
                 }}
               />
 
-              {/* Luz trasera: núcleo discreto sobre el piloto real (≈6%, 35%
-                  del frame) + haz cónico proyectado hacia atrás — la luz de
-                  freno "emite" en abanico difuso, no un punto */}
-              <div className="absolute left-[4%] top-[33%] h-[5.5%] w-[3.8%] rounded-full bg-red-500/75 blur-md" />
+              {/* Luz trasera: núcleo en el piloto real (≈6%, 35% del frame,
+                  no sobre la parrilla) + estela difusa hacia atrás */}
+              <div className="absolute left-[3.5%] top-[32.5%] h-[6.5%] w-[4.5%] rounded-full bg-red-400/70 blur-md" />
               <div
-                className="absolute mix-blend-screen bg-gradient-to-l from-red-500/60 via-red-500/22 to-transparent blur-lg"
-                style={{
-                  left: "-15%",
-                  top: "25.5%",
-                  height: "19%",
-                  width: "20.5%",
-                  clipPath: "polygon(100% 42%, 0 -8%, 0 108%, 100% 58%)",
-                }}
+                className="absolute rounded-full mix-blend-screen bg-gradient-to-l from-red-500/50 via-red-500/15 to-transparent blur-lg"
+                style={{ left: "-7%", top: "30.5%", height: "10%", width: "14.5%" }}
               />
             </div>
           </div>
@@ -348,7 +339,7 @@ export default function BlueprintReveal() {
             altura sin que nada visible choque. */}
         <p
           className="font-hero-script z-20 mt-20 max-w-[92vw] px-4 text-center whitespace-nowrap text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:-mt-6"
-          style={{ fontSize: "clamp(1.6rem, 6.8vw, 4.5rem)" }}
+          style={{ fontSize: "clamp(1.35rem, 5.4vw, 3.5rem)" }}
         >
           {siteConfig.slogan}
         </p>

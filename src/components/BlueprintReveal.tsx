@@ -228,12 +228,31 @@ export default function BlueprintReveal() {
 
         {/* Marcas representadas a los lados: siempre visibles, como en la
             portada anterior */}
-        <div className="absolute top-1/2 left-6 z-[1] hidden -translate-y-1/2 space-y-3.5 lg:block">
-          {siteConfig.brandsRepresented.slice(0, 4).map((s) => (
-            <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
-              {s}
-            </p>
-          ))}
+        <div className="absolute top-1/2 left-6 z-[1] hidden -translate-y-1/2 lg:block">
+          <div className="space-y-3.5">
+            {siteConfig.brandsRepresented.slice(0, 4).map((s) => (
+              <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
+                {s}
+              </p>
+            ))}
+          </div>
+          {/* Duplicado "alcanzado por la luz trasera": la columna izquierda
+              queda del lado del piloto rojo, así que al encender toma un
+              tono rojizo suave — espejo del ámbar de la derecha. */}
+          <div
+            aria-hidden
+            style={{ opacity: ramp(0.48, 0.64) }}
+            className="absolute inset-0 space-y-3.5"
+          >
+            {siteConfig.brandsRepresented.slice(0, 4).map((s) => (
+              <p
+                key={s}
+                className="font-mono text-sm tracking-[0.22em] text-red-200 uppercase [text-shadow:0_0_14px_rgba(255,110,110,0.45)]"
+              >
+                {s}
+              </p>
+            ))}
+          </div>
         </div>
         <div className="absolute top-1/2 right-6 z-[1] hidden -translate-y-1/2 text-right lg:block">
           <div className="space-y-3.5">

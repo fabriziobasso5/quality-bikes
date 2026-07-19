@@ -62,14 +62,19 @@ body::after {
   font-family: var(--font-mono), ui-monospace, monospace;
 }
 
+/* Eslogan: Cormorant Garamond Italic con un skew extra de -7° — conserva
+   los trazos cursivos reales de la itálica pero con más caída, sin perder
+   legibilidad (pedido del cliente: "un poquito más cursivo"). */
 .font-script {
   font-family: var(--font-script), serif;
   font-style: italic;
+  transform: skewX(-7deg);
 }
 
 .font-hero-script {
   font-family: var(--font-hero-script), serif;
   font-style: italic;
+  transform: skewX(-7deg);
 }
 
 /* Título de la portada (Montserrat): sans geométrica para la marca grande */

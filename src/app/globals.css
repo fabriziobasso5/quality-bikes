@@ -128,3 +128,41 @@ body::after {
     opacity: 0.86;
   }
 }
+
+/* Chispazo de encendido de la portada: parpadeo corto (como al girar la
+   llave) que se dispara por JS al cruzar el umbral donde entran las luces.
+   Termina en 1 y sin fill: al acabar, manda otra vez la rampa de scroll. */
+@keyframes qb-ignite {
+  0% {
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  26% {
+    opacity: 0.2;
+  }
+  42% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    opacity: 1;
+  }
+}
+.qb-ignite {
+  animation: qb-ignite 0.6s ease-out;
+}
+
+/* CTA de la portada: invisible (rampa CSS) hasta que la moto enciende; el
+   pointer-events lo gobierna la clase qb-lit que JS pone sobre el stage
+   para que el link no sea clicable/enfocable mientras no se ve. */
+.qb-cta {
+  pointer-events: none;
+}
+.qb-lit .qb-cta {
+  pointer-events: auto;
+}

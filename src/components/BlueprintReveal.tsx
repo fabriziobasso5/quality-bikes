@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { MOTO_SILHOUETTE_PATH, MOTO_SILHOUETTE_VIEWBOX } from "./logo3d/moto-silhouette-path";
 import { siteConfig } from "@/lib/site-config";
@@ -43,9 +44,15 @@ const fade = (a: number, b: number) =>
 // Factor del lerp por frame: alto = respuesta rápida, bajo = más flotado.
 const SMOOTH = 0.16;
 
+// Umbral de --bp donde "gira la llave": coincide con la entrada de las
+// luces (ramp 0.62–0.76). Cruzarlo hacia arriba dispara el parpadeo.
+const IGNITE_AT = 0.63;
+
 export default function BlueprintReveal() {
   const trackRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const lightsRef = useRef<HTMLDivElement>(null);
+  const ignited = useRef(false);
   const reduce = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
@@ -62,10 +69,26 @@ export default function BlueprintReveal() {
   // encadenado de frames; solo lee refs, así que no captura estado obsoleto.
   function step() {
     const t = target.current;
-    const next = current.current + (t - current.current) * SMOOTH;
+    const prev = current.current;
+    const next = prev + (t - prev) * SMOOTH;
     const done = Math.abs(t - next) < 0.0008;
     current.current = done ? t : next;
     stageRef.current?.style.setProperty("--bp", current.current.toFixed(4));
+    // qb-lit habilita el pointer-events del CTA solo cuando ya es visible
+    stageRef.current?.classList.toggle("qb-lit", current.current >= 0.7);
+    // Chispazo de encendido: al cruzar el umbral de las luces hacia arriba,
+    // (re)dispara el parpadeo; se rearma solo si el scroll baja del todo.
+    if (!ignited.current && prev < IGNITE_AT && current.current >= IGNITE_AT) {
+      ignited.current = true;
+      const el = lightsRef.current;
+      if (el) {
+        el.classList.remove("qb-ignite");
+        void el.offsetWidth; // reinicia la animación si ya corrió antes
+        el.classList.add("qb-ignite");
+      }
+    } else if (ignited.current && current.current < 0.56) {
+      ignited.current = false;
+    }
     raf.current = done ? null : requestAnimationFrame(step);
   }
 
@@ -83,6 +106,7 @@ export default function BlueprintReveal() {
     target.current = v;
     current.current = v;
     stageRef.current?.style.setProperty("--bp", String(v));
+    stageRef.current?.classList.toggle("qb-lit", v >= 0.7);
     const measure = () =>
       stageRef.current?.style.setProperty(
         "--qbh",
@@ -95,6 +119,40 @@ export default function BlueprintReveal() {
       if (raf.current != null) cancelAnimationFrame(raf.current);
     };
   }, [reduce, scrollYProgress]);
+
+  // Parallax sutil con el cursor (solo desktop con puntero fino, nunca bajo
+  // reduced motion): lerp propio por rAF que escribe --par-x/--par-y (−1…1)
+  // en el stage; la moto y el título derivan su translate en CSS puro.
+  useEffect(() => {
+    if (reduce) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const tgt = { x: 0, y: 0 };
+    const cur = { x: 0, y: 0 };
+    let id: number | null = null;
+    function tick() {
+      cur.x += (tgt.x - cur.x) * 0.08;
+      cur.y += (tgt.y - cur.y) * 0.08;
+      const settled =
+        Math.abs(tgt.x - cur.x) < 0.002 && Math.abs(tgt.y - cur.y) < 0.002;
+      if (settled) {
+        cur.x = tgt.x;
+        cur.y = tgt.y;
+      }
+      stageRef.current?.style.setProperty("--par-x", cur.x.toFixed(3));
+      stageRef.current?.style.setProperty("--par-y", cur.y.toFixed(3));
+      id = settled ? null : requestAnimationFrame(tick);
+    }
+    const onMove = (e: MouseEvent) => {
+      tgt.x = (e.clientX / window.innerWidth) * 2 - 1;
+      tgt.y = (e.clientY / window.innerHeight) * 2 - 1;
+      if (id == null) id = requestAnimationFrame(tick);
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      if (id != null) cancelAnimationFrame(id);
+    };
+  }, [reduce]);
 
   return (
     <section
@@ -154,12 +212,15 @@ export default function BlueprintReveal() {
             siempre un pelo más que la moto, y el pt del stage (derivado del
             mismo --bpw) garantiza que nunca la toque. */}
         <p
-          className="font-title-sans absolute top-6 left-1/2 z-30 w-max -translate-x-1/2 text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-8"
+          className="font-title-sans absolute top-6 left-1/2 z-30 w-max text-center font-normal tracking-[0.4em] whitespace-nowrap uppercase sm:top-8"
           style={{
             // 1.05 / R, con R = 32.48 medido (Montserrat, tracking 0.4em)
             fontSize: "calc(var(--bpw) * 0.0323)",
             color: "#ff2230",
             textShadow: "0 0 24px rgba(255,34,48,0.4), 0 2px 14px rgba(0,0,0,0.5)",
+            // -50% del centrado + contraparte suave del parallax de la moto
+            transform:
+              "translate(calc(-50% - var(--par-x, 0) * 4px), calc(var(--par-y, 0) * -3px))",
           }}
         >
           Quality Bikes Venezuela • Caracas
@@ -174,19 +235,45 @@ export default function BlueprintReveal() {
             </p>
           ))}
         </div>
-        <div className="absolute top-1/2 right-6 z-[1] hidden -translate-y-1/2 space-y-3.5 text-right lg:block">
-          {siteConfig.brandsRepresented.slice(4, 8).map((s) => (
-            <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
-              {s}
-            </p>
-          ))}
+        <div className="absolute top-1/2 right-6 z-[1] hidden -translate-y-1/2 text-right lg:block">
+          <div className="space-y-3.5">
+            {siteConfig.brandsRepresented.slice(4, 8).map((s) => (
+              <p key={s} className="font-mono text-sm tracking-[0.22em] text-white/70 uppercase">
+                {s}
+              </p>
+            ))}
+          </div>
+          {/* Duplicado "alcanzado por el haz": la columna derecha queda dentro
+              del cono del faro, así que se enciende (ámbar cálido + glow) al
+              mismo ritmo que las luces. Solo estético: aria-hidden. */}
+          <div
+            aria-hidden
+            style={{ opacity: ramp(0.62, 0.76) }}
+            className="absolute inset-0 space-y-3.5"
+          >
+            {siteConfig.brandsRepresented.slice(4, 8).map((s) => (
+              <p
+                key={s}
+                className="font-mono text-sm tracking-[0.22em] text-amber-100 uppercase [text-shadow:0_0_14px_rgba(255,190,120,0.45)]"
+              >
+                {s}
+              </p>
+            ))}
+          </div>
         </div>
 
         {/* Escenario central: silueta y moto real comparten la misma caja para
             que el crossfade quede registrado en el mismo punto. El término de
             altura ocupa TODO el aire disponible entre el título y el eslogan
             (presupuesto: pt del stage + cota bajo la caja + eslogan). */}
-        <div className="relative aspect-[827/585] w-[var(--bpw)]">
+        <div
+          className="relative aspect-[827/585] w-[var(--bpw)]"
+          // Parallax: la moto (y sus luces) flotan 1–2% siguiendo el cursor
+          style={{
+            transform:
+              "translate3d(calc(var(--par-x, 0) * 9px), calc(var(--par-y, 0) * 6px), 0)",
+          }}
+        >
           {/* Wireframe del isotipo: se dibuja en 0.04–0.36 y cede en 0.44–0.58,
               exactamente la misma ventana en la que aparece la moto */}
           <svg
@@ -271,13 +358,16 @@ export default function BlueprintReveal() {
             />
           </div>
 
-          {/* Encendido: SOLO las dos luces delanteras emiten (patrón calcado
-              del boceto del cliente) — cada haz nace EXACTO en su óptica y se
-              abre en abanico hacia el borde derecho de la pantalla. Sin bloom
-              ambiental, sin charco de piso, sin bandas sueltas. Atrás, el
-              piloto deja una estela roja difusa hacia atrás. mix-blend-screen
-              suma luz sobre el navy y el conjunto respira (qb-breathe). */}
+          {/* Encendido: las dos luces delanteras emiten (patrón calcado del
+              boceto del cliente) — cada haz nace EXACTO en su óptica y se
+              abre en abanico hacia el borde derecho de la pantalla. Atrás, el
+              piloto deja una estela roja difusa hacia atrás; abajo, un charco
+              de reflejo muy sutil ancla la luz al asfalto. mix-blend-screen
+              suma luz sobre el navy y el conjunto respira (qb-breathe). El
+              wrapper lightsRef recibe .qb-ignite desde step(): parpadeo de
+              "giro de llave" al cruzar el umbral de encendido. */}
           <div aria-hidden style={{ opacity: ramp(0.62, 0.76) }} className="absolute inset-0">
+            <div ref={lightsRef} className="absolute inset-0">
             <div className="absolute inset-0 animate-[qb-breathe_4.5s_ease-in-out_infinite] motion-reduce:animate-none">
               {/* Faro principal: corona sobre la óptica. El aro ámbar del
                   faro está en el píxel (1305, 292) del asset 1600x1066 →
@@ -315,6 +405,10 @@ export default function BlueprintReveal() {
                 }}
               />
 
+              {/* Charco de reflejo en el "asfalto": elipse cálida muy tenue
+                  delante de la rueda delantera, donde caen los haces */}
+              <div className="absolute left-[68%] top-[86%] h-[9%] w-[38%] rounded-[50%] mix-blend-screen bg-orange-400/25 blur-xl" />
+
               {/* Luz trasera: núcleo en el piloto real (≈6%, 35% del frame,
                   no sobre la parrilla) + estela difusa hacia atrás */}
               <div className="absolute left-[3.5%] top-[32.5%] h-[6.5%] w-[4.5%] rounded-full bg-red-400/70 blur-md" />
@@ -322,6 +416,7 @@ export default function BlueprintReveal() {
                 className="absolute rounded-full mix-blend-screen bg-gradient-to-l from-red-500/50 via-red-500/15 to-transparent blur-lg"
                 style={{ left: "-7%", top: "30.5%", height: "10%", width: "14.5%" }}
               />
+            </div>
             </div>
           </div>
 
@@ -353,6 +448,22 @@ export default function BlueprintReveal() {
         >
           ↓ Scroll
         </p>
+
+        {/* CTA al catálogo: ocupa la esquina del scroll-hint cuando la moto
+            ya encendió (el hint muere en bp 0.06, nunca coexisten). El
+            pointer-events lo gobierna .qb-lit para que no sea clicable ni
+            enfocable mientras es invisible. */}
+        <div
+          style={{ opacity: ramp(0.7, 0.8) }}
+          className="qb-cta absolute bottom-4 left-6 z-30 sm:left-10"
+        >
+          <Link
+            href="/catalogo/inventario"
+            className="inline-block border border-white/25 px-5 py-2.5 font-mono text-[11px] tracking-[0.3em] text-white/80 uppercase transition-colors hover:border-brand-red hover:text-white"
+          >
+            Ver catálogo →
+          </Link>
+        </div>
       </div>
     </section>
   );

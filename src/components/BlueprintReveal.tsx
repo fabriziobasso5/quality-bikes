@@ -360,7 +360,7 @@ export default function BlueprintReveal() {
               className="object-contain"
               // Luz de estudio frontal difusa: sube el brillo de toda la moto
               // de forma uniforme y sutil, revelando el detalle del negro
-              style={{ filter: "brightness(1.12) saturate(1.03)" }}
+              style={{ filter: "brightness(1.22) saturate(1.04)" }}
             />
           </div>
 

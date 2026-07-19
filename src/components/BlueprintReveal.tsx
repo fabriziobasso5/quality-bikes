@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { MOTO_SILHOUETTE_PATH, MOTO_SILHOUETTE_VIEWBOX } from "./logo3d/moto-silhouette-path";
 import { siteConfig } from "@/lib/site-config";
@@ -499,12 +498,15 @@ export default function BlueprintReveal() {
           style={{ opacity: ramp(0.58, 0.7) }}
           className="qb-cta absolute bottom-4 left-6 z-30 sm:left-10"
         >
-          <Link
-            href="/catalogo/inventario"
-            className="inline-block border border-white/25 px-5 py-2.5 font-mono text-[11px] tracking-[0.3em] text-white/80 uppercase transition-colors hover:border-brand-red hover:text-white"
+          {/* Abre el MISMO mega-menú del header (evento qb:open-catalog),
+              como si se tocara "Catálogo" en la barra — no navega. */}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("qb:open-catalog"))}
+            className="inline-block cursor-pointer border border-white/25 px-5 py-2.5 font-mono text-[11px] tracking-[0.3em] text-white/80 uppercase transition-colors hover:border-brand-red hover:text-white"
           >
             Ver catálogo →
-          </Link>
+          </button>
         </div>
       </div>
     </section>

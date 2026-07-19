@@ -3,8 +3,7 @@ import {
   Space_Grotesk,
   Inter,
   Space_Mono,
-  Beau_Rivage,
-  Alex_Brush,
+  Cormorant_Garamond,
   Montserrat,
 } from "next/font/google";
 import "./globals.css";
@@ -37,19 +36,13 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
 });
 
-const beauRivage = Beau_Rivage({
-  variable: "--font-beau-rivage",
+// Eslogan de la casa (portada y Nosotros): serif itálica de lujo, legible a
+// cualquier tamaño — sustituye a las caligrafías Beau Rivage y Alex Brush.
+const cormorant = Cormorant_Garamond({
+  variable: "--font-slogan",
   subsets: ["latin"],
-  weight: "400",
-});
-
-// Eslogan del hero: brush script premium, más legible y pulido que Beau
-// Rivage sin perder el trazo cursivo/fluido — solo para esa frase, no
-// reemplaza font-script (Beau Rivage) que ya usa la página Nosotros.
-const alexBrush = Alex_Brush({
-  variable: "--font-hero-script",
-  subsets: ["latin"],
-  weight: "400",
+  weight: ["500", "600"],
+  style: "italic",
 });
 
 // Título de la portada: sans geométrica moderna (elegida como equivalente de
@@ -110,7 +103,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${beauRivage.variable} ${alexBrush.variable} ${montserrat.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${cormorant.variable} ${montserrat.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-brand-bg text-brand-text">
         <MotionProvider>

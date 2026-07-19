@@ -27,8 +27,8 @@
   --font-display: var(--font-space-grotesk);
   --font-body: var(--font-inter);
   --font-mono: var(--font-space-mono);
-  --font-script: var(--font-beau-rivage);
-  --font-hero-script: var(--font-hero-script);
+  --font-script: var(--font-slogan);
+  --font-hero-script: var(--font-slogan);
 }
 
 body {
@@ -63,11 +63,13 @@ body::after {
 }
 
 .font-script {
-  font-family: var(--font-script), cursive;
+  font-family: var(--font-script), serif;
+  font-style: italic;
 }
 
 .font-hero-script {
-  font-family: var(--font-hero-script), cursive;
+  font-family: var(--font-hero-script), serif;
+  font-style: italic;
 }
 
 /* Título de la portada (Montserrat): sans geométrica para la marca grande */

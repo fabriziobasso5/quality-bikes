@@ -9,14 +9,14 @@ import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
 
 /**
- * PORTADA "del plano al asfalto": sección pinned (150–170vh de
- * recorrido, corto para que el efecto sea ágil) sobre fondo navy de plano
- * técnico. Con el scroll: (1) la silueta del isotipo se dibuja como plano —
- * trazo blanco, retícula, cotas y cajetín; (2) en una misma ventana de
- * progreso el wireframe se desvanece mientras la R 1250 GS Adventure Triple
- * Black real "se materializa" registrada sobre la silueta, y el fondo cae a
- * un anochecer; (3) se encienden las luces ámbar proyectando el haz hacia la
- * derecha y entran las specs minimalistas; (4) cierra el eslogan.
+ * PORTADA "del plano al asfalto": sección pinned (120–135vh de recorrido)
+ * sobre fondo navy de plano técnico. La silueta se dibuja SOLA al cargar
+ * (animación CSS por tiempo, ~2.2s: clases qb-sil-draw / qb-sil-fill /
+ * qb-late-fade en globals.css) y queda fija como lámina. Con el scroll:
+ * (1) el wireframe se desvanece mientras la R 1250 GS Adventure Triple
+ * Black real "se materializa" registrada sobre la silueta y el fondo cae a
+ * un anochecer; (2) se encienden las luces ámbar proyectando el haz hacia
+ * la derecha; (3) cierra el eslogan.
  *
  * El progreso vive en la variable CSS --bp (0→1): una suscripción a
  * scrollYProgress alimenta un lerp por rAF (mismo truco que
@@ -45,8 +45,8 @@ const fade = (a: number, b: number) =>
 const SMOOTH = 0.16;
 
 // Umbral de --bp donde "gira la llave": coincide con la entrada de las
-// luces (ramp 0.62–0.76). Cruzarlo hacia arriba dispara el parpadeo.
-const IGNITE_AT = 0.63;
+// luces (ramp 0.48–0.64). Cruzarlo hacia arriba dispara el parpadeo.
+const IGNITE_AT = 0.5;
 
 export default function BlueprintReveal() {
   const trackRef = useRef<HTMLElement>(null);
@@ -75,7 +75,7 @@ export default function BlueprintReveal() {
     current.current = done ? t : next;
     stageRef.current?.style.setProperty("--bp", current.current.toFixed(4));
     // qb-lit habilita el pointer-events del CTA solo cuando ya es visible
-    stageRef.current?.classList.toggle("qb-lit", current.current >= 0.7);
+    stageRef.current?.classList.toggle("qb-lit", current.current >= 0.58);
     // Chispazo de encendido: al cruzar el umbral de las luces hacia arriba,
     // (re)dispara el parpadeo; se rearma solo si el scroll baja del todo.
     if (!ignited.current && prev < IGNITE_AT && current.current >= IGNITE_AT) {
@@ -86,7 +86,7 @@ export default function BlueprintReveal() {
         void el.offsetWidth; // reinicia la animación si ya corrió antes
         el.classList.add("qb-ignite");
       }
-    } else if (ignited.current && current.current < 0.56) {
+    } else if (ignited.current && current.current < 0.4) {
       ignited.current = false;
     }
     raf.current = done ? null : requestAnimationFrame(step);
@@ -106,7 +106,7 @@ export default function BlueprintReveal() {
     target.current = v;
     current.current = v;
     stageRef.current?.style.setProperty("--bp", String(v));
-    stageRef.current?.classList.toggle("qb-lit", v >= 0.7);
+    stageRef.current?.classList.toggle("qb-lit", v >= 0.58);
     const measure = () =>
       stageRef.current?.style.setProperty(
         "--qbh",
@@ -159,7 +159,7 @@ export default function BlueprintReveal() {
       ref={trackRef}
       // motion-reduce en CSS y no en JS: el markup del server no depende del
       // media query del cliente (evita mismatch de hidratación)
-      className="relative h-[150vh] sm:h-[170vh] motion-reduce:h-auto"
+      className="relative h-[120vh] sm:h-[135vh] motion-reduce:h-auto"
     >
       <div
         ref={stageRef}
@@ -188,14 +188,14 @@ export default function BlueprintReveal() {
             resplandor cálido de horizonte hacia donde apunta el faro */}
         <div
           aria-hidden
-          style={{ opacity: ramp(0.44, 0.68) }}
+          style={{ opacity: ramp(0.18, 0.42) }}
           className="absolute inset-0 bg-[radial-gradient(ellipse_55%_20%_at_72%_74%,rgba(255,170,80,0.16),transparent_70%),linear-gradient(180deg,#04101f_0%,#0a1d33_55%,#16304b_78%,#0a1626_100%)]"
         />
         {/* Retícula de plano técnico: línea menor cada 24px, mayor cada 120px.
             Cede casi por completo cuando la moto toma la escena. */}
         <div
           aria-hidden
-          style={{ opacity: `calc(1 - ${ramp(0.5, 0.8)} * 0.75)` }}
+          style={{ opacity: `calc(1 - ${ramp(0.22, 0.55)} * 0.75)` }}
           className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.09)_1px,transparent_1px)] bg-[size:24px_24px,24px_24px,120px_120px,120px_120px]"
         />
         {/* Viñeta para que el centro respire y las esquinas caigan */}
@@ -248,7 +248,7 @@ export default function BlueprintReveal() {
               mismo ritmo que las luces. Solo estético: aria-hidden. */}
           <div
             aria-hidden
-            style={{ opacity: ramp(0.62, 0.76) }}
+            style={{ opacity: ramp(0.48, 0.64) }}
             className="absolute inset-0 space-y-3.5"
           >
             {siteConfig.brandsRepresented.slice(4, 8).map((s) => (
@@ -274,8 +274,9 @@ export default function BlueprintReveal() {
               "translate3d(calc(var(--par-x, 0) * 9px), calc(var(--par-y, 0) * 6px), 0)",
           }}
         >
-          {/* Wireframe del isotipo: se dibuja en 0.04–0.36 y cede en 0.44–0.58,
-              exactamente la misma ventana en la que aparece la moto */}
+          {/* Wireframe del isotipo: se dibuja SOLO al cargar (qb-sil-draw,
+              ~2.2s por tiempo) y cede con el scroll en 0.18–0.32, la misma
+              ventana en la que aparece la moto */}
           <svg
             viewBox={MOTO_SILHOUETTE_VIEWBOX}
             fill="none"
@@ -283,12 +284,13 @@ export default function BlueprintReveal() {
             className="absolute inset-0 h-full w-full"
             /* translate/scale: registra la silueta sobre la carrocería de la
                GS medida en overlay — así el crossfade solapa en el mismo punto */
-            style={{ opacity: fade(0.44, 0.58), transform: "translate(-1.5%, 4.5%) scale(0.96)" }}
+            style={{ opacity: fade(0.18, 0.32), transform: "translate(-1.5%, 4.5%) scale(0.96)" }}
           >
             <path
               d={MOTO_SILHOUETTE_PATH}
               fill="#ffffff"
-              style={{ fillOpacity: `calc(${ramp(0.28, 0.4)} * 0.07)` }}
+              className="qb-sil-fill"
+              style={{ fillOpacity: 0.07 }}
             />
             <path
               d={MOTO_SILHOUETTE_PATH}
@@ -299,15 +301,16 @@ export default function BlueprintReveal() {
               strokeLinejoin="round"
               strokeLinecap="round"
               strokeDasharray="1 1"
-              style={{ strokeDashoffset: fade(0.04, 0.36) }}
+              className="qb-sil-draw"
             />
           </svg>
 
-          {/* Cotas de plano (datos reales del GS Adventure) */}
+          {/* Cotas de plano (datos reales del GS Adventure): entran solas al
+              final del dibujo (qb-late-fade) y mueren cuando llega la moto */}
           <div
             aria-hidden
-            style={{ opacity: `min(${ramp(0.16, 0.28)}, ${fade(0.4, 0.52)})` }}
-            className="absolute inset-0"
+            style={{ opacity: fade(0.16, 0.28) }}
+            className="qb-late-fade absolute inset-0"
           >
             {/* Cota DENTRO del escenario (franja libre bajo la silueta, cuyas
                 ruedas llegan al ~90% de alto): así no roba ni un píxel de
@@ -329,19 +332,19 @@ export default function BlueprintReveal() {
           {/* Dentro del escenario (esquina sup. izq.): arriba chocaba con el
               título ahora que la moto ocupa todo el alto disponible */}
           <p
-            style={{ opacity: `min(${ramp(0.06, 0.14)}, ${fade(0.4, 0.52)})` }}
-            className="absolute top-2 left-2 font-mono text-[10px] tracking-[0.25em] text-white/50 uppercase"
+            style={{ opacity: fade(0.16, 0.28) }}
+            className="qb-late-fade absolute top-2 left-2 font-mono text-[10px] tracking-[0.25em] text-white/50 uppercase"
           >
             Fig. 01 — R 1250 GS Adventure
           </p>
 
-          {/* La moto real se materializa sobre la silueta en 0.44–0.58 y
-              asienta hasta 0.72. --bike-t es el progreso local. */}
+          {/* La moto real se materializa sobre la silueta en 0.18–0.32 y
+              asienta hasta 0.45. --bike-t es el progreso local. */}
           <div
             style={
               {
-                "--bike-t": ramp(0.44, 0.72),
-                opacity: ramp(0.44, 0.58),
+                "--bike-t": ramp(0.18, 0.45),
+                opacity: ramp(0.18, 0.32),
                 transform:
                   "translateY(calc((1 - var(--bike-t)) * 18px)) scale(calc(1 + (1 - var(--bike-t)) * 0.05))",
               } as React.CSSProperties
@@ -355,6 +358,9 @@ export default function BlueprintReveal() {
               priority
               sizes="(max-width: 640px) 88vw, 820px"
               className="object-contain"
+              // Luz de estudio frontal difusa: sube el brillo de toda la moto
+              // de forma uniforme y sutil, revelando el detalle del negro
+              style={{ filter: "brightness(1.12) saturate(1.03)" }}
             />
           </div>
 
@@ -366,7 +372,7 @@ export default function BlueprintReveal() {
               suma luz sobre el navy y el conjunto respira (qb-breathe). El
               wrapper lightsRef recibe .qb-ignite desde step(): parpadeo de
               "giro de llave" al cruzar el umbral de encendido. */}
-          <div aria-hidden style={{ opacity: ramp(0.62, 0.76) }} className="absolute inset-0">
+          <div aria-hidden style={{ opacity: ramp(0.48, 0.64) }} className="absolute inset-0">
             <div ref={lightsRef} className="absolute inset-0">
             <div className="absolute inset-0 animate-[qb-breathe_4.5s_ease-in-out_infinite] motion-reduce:animate-none">
               {/* Faro principal: corona sobre la óptica. El aro ámbar del
@@ -423,7 +429,7 @@ export default function BlueprintReveal() {
           {/* Sombra elíptica bajo la moto: la ancla al "piso" */}
           <div
             aria-hidden
-            style={{ opacity: `calc(${ramp(0.5, 0.68)} * 0.45)` }}
+            style={{ opacity: `calc(${ramp(0.25, 0.45)} * 0.45)` }}
             className="absolute bottom-[4%] left-1/2 h-6 w-3/4 -translate-x-1/2 rounded-[50%] bg-black/70 blur-xl"
           />
         </div>
@@ -454,7 +460,7 @@ export default function BlueprintReveal() {
             pointer-events lo gobierna .qb-lit para que no sea clicable ni
             enfocable mientras es invisible. */}
         <div
-          style={{ opacity: ramp(0.7, 0.8) }}
+          style={{ opacity: ramp(0.58, 0.7) }}
           className="qb-cta absolute bottom-4 left-6 z-30 sm:left-10"
         >
           <Link

@@ -129,6 +129,53 @@ body::after {
   }
 }
 
+/* Intro de la portada: la silueta se dibuja SOLA al cargar (por tiempo, no
+   por scroll). El trazo anima stroke-dashoffset; el relleno y las cotas
+   entran después. qb-late-fade anima filter:opacity() — NO la propiedad
+   opacity — para no pisar la opacidad inline que gobierna el scroll. Bajo
+   prefers-reduced-motion las animaciones se apagan y quedan los valores
+   finales (offset 0 por defecto, fill-opacity inline). */
+@keyframes qb-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.qb-sil-draw {
+  animation: qb-draw 2.2s ease-out both;
+}
+@keyframes qb-fill-in {
+  from {
+    fill-opacity: 0;
+  }
+  to {
+    fill-opacity: 0.07;
+  }
+}
+.qb-sil-fill {
+  animation: qb-fill-in 0.8s ease-out 1.7s both;
+}
+@keyframes qb-late-fade {
+  from {
+    filter: opacity(0%);
+  }
+  to {
+    filter: opacity(100%);
+  }
+}
+.qb-late-fade {
+  animation: qb-late-fade 0.7s ease-out 1.5s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .qb-sil-draw,
+  .qb-sil-fill,
+  .qb-late-fade {
+    animation: none;
+  }
+}
+
 /* Chispazo de encendido de la portada: parpadeo corto (como al girar la
    llave) que se dispara por JS al cruzar el umbral donde entran las luces.
    Termina en 1 y sin fill: al acabar, manda otra vez la rampa de scroll. */

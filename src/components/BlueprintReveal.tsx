@@ -271,40 +271,57 @@ export default function BlueprintReveal() {
             />
           </div>
 
-          {/* Encendido: solo capas de luz sobre el render (la moto y el fondo
-              no se tocan). Cada fuente lleva corona suave + núcleo caliente;
-              los dos haces delanteros convergen a lo lejos y el bajo baña el
-              piso. mix-blend-screen suma luz sobre el navy como bloom real, y
-              el conjunto "respira" con un latido sutil (qb-breathe). */}
+          {/* Encendido: SOLO las dos luces delanteras emiten (patrón calcado
+              del boceto del cliente) — cada haz nace EXACTO en su óptica y se
+              abre en abanico hacia el borde derecho de la pantalla. Sin bloom
+              ambiental, sin charco de piso, sin bandas sueltas. Atrás, el
+              piloto deja una estela roja difusa hacia atrás. mix-blend-screen
+              suma luz sobre el navy y el conjunto respira (qb-breathe). */}
           <div aria-hidden style={{ opacity: ramp(0.62, 0.76) }} className="absolute inset-0">
             <div className="absolute inset-0 animate-[qb-breathe_4.5s_ease-in-out_infinite] motion-reduce:animate-none">
-              {/* Bloom ambiental cálido alrededor del frontal */}
-              <div className="absolute left-[56%] top-[6%] h-[64%] w-[54%] bg-[radial-gradient(ellipse_at_42%_32%,rgba(255,176,80,0.15),transparent_65%)] blur-2xl" />
-
               {/* Faro principal: corona sobre la óptica. El aro ámbar del
                   faro está en el píxel (1305, 292) del asset 1600x1066 →
-                  (81.6%, 28.7%) de la caja (imagen object-contain con
-                  letterbox de 16px): todo el grupo se ancla a ese punto. */}
+                  (81.6%, 28.7%) de la caja (object-contain con letterbox). */}
               <div className="absolute left-[77.5%] top-[22.5%] h-[13%] w-[9%] animate-pulse rounded-full bg-orange-300/70 blur-xl" />
-              {/* Haz principal: una sola capa horizontal con el vértice
-                  clavado en la óptica, para que la luz nazca del faro */}
-              <div className="absolute left-[81%] top-[12.5%] h-[32%] w-[70vw] mix-blend-screen bg-gradient-to-r from-orange-400/50 via-orange-400/15 to-transparent blur-md [clip-path:polygon(0_46%,100%_2%,100%_98%,0_54%)]" />
+              {/* Haz del faro superior: vértice clavado en la óptica; al
+                  llegar al borde de la pantalla cubre del ~20% al ~81% del
+                  alto del frame (geometría medida del boceto). El ancho llega
+                  exactamente al borde del viewport: 50vw − 0.31×--bpw. */}
+              <div
+                className="absolute mix-blend-screen bg-gradient-to-r from-orange-400/50 via-orange-400/15 to-transparent blur-md"
+                style={{
+                  left: "81%",
+                  top: "20.5%",
+                  height: "60.5%",
+                  width: "calc(50vw - var(--bpw) * 0.31)",
+                  clipPath: "polygon(0 12%, 100% 0%, 100% 100%, 0 16%)",
+                }}
+              />
 
-              {/* Denali del crash bar — óptica medida en (1120, 610) del
-                  asset → (70%, 56.5%) de la caja: corona + núcleo, y haz bajo
-                  que cae al piso cruzándose con el principal */}
+              {/* Denali del crash bar — óptica en (1120, 610) del asset →
+                  (70%, 56.5%) de la caja: corona + núcleo */}
               <div className="absolute left-[66.5%] top-[51%] h-[11%] w-[7%] rounded-full bg-orange-400/60 blur-lg" />
               <div className="absolute left-[68.2%] top-[53.5%] h-[6%] w-[3.6%] rounded-full bg-amber-100/70 blur-sm" />
-              <div className="absolute left-[70.5%] top-[48%] h-[18%] w-[55vw] origin-left rotate-[5deg] mix-blend-screen bg-gradient-to-r from-orange-500/35 via-orange-400/12 to-transparent blur-lg [clip-path:polygon(0_38%,100%_0,100%_100%,0_62%)]" />
+              {/* Haz bajo del Denali: nace en su óptica y cae en diagonal
+                  reforzando la base del abanico principal, como en el boceto */}
+              <div
+                className="absolute mix-blend-screen bg-gradient-to-r from-orange-500/40 via-orange-400/12 to-transparent blur-lg"
+                style={{
+                  left: "69.5%",
+                  top: "53%",
+                  height: "37%",
+                  width: "calc(50vw - var(--bpw) * 0.195)",
+                  clipPath: "polygon(0 8%, 100% 60%, 100% 104%, 0 13%)",
+                }}
+              />
 
-              {/* Charco de luz en el piso: mancha amplia + punto caliente donde
-                  aterriza el haz bajo */}
-              <div className="absolute -right-[26%] bottom-[-4%] h-[22%] w-[95%] mix-blend-screen bg-[radial-gradient(ellipse_at_center,rgba(255,170,70,0.42),rgba(255,150,50,0.14)_55%,transparent_78%)] blur-xl" />
-              <div className="absolute right-[2%] bottom-[-1%] h-[10%] w-[44%] mix-blend-screen bg-[radial-gradient(ellipse_at_center,rgba(255,205,120,0.5),transparent_70%)] blur-lg" />
-
-              {/* Luz trasera: glow rojo premium — halo difuso + núcleo vivo */}
-              <div className="absolute left-[1.5%] top-[25%] h-[14%] w-[9%] rounded-full bg-red-500/35 blur-xl" />
-              <div className="absolute left-[4%] top-[29%] h-[7%] w-[4%] rounded-full bg-red-400/70 blur-md" />
+              {/* Luz trasera: núcleo en el piloto real (≈6%, 35% del frame,
+                  no sobre la parrilla) + estela difusa hacia atrás */}
+              <div className="absolute left-[3.5%] top-[32.5%] h-[6.5%] w-[4.5%] rounded-full bg-red-400/70 blur-md" />
+              <div
+                className="absolute rounded-full mix-blend-screen bg-gradient-to-l from-red-500/50 via-red-500/15 to-transparent blur-lg"
+                style={{ left: "-7%", top: "30.5%", height: "10%", width: "14.5%" }}
+              />
             </div>
           </div>
 

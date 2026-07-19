@@ -362,6 +362,23 @@ export default function BlueprintReveal() {
               // de forma uniforme y sutil, revelando el detalle del negro
               style={{ filter: "brightness(1.38) saturate(1.05)" }}
             />
+            {/* Luz de estudio desde abajo: duplicado de la foto aún más
+                brillante, enmascarado a la franja inferior — ilumina motor,
+                escape y ruedas de abajo hacia arriba sin tocar el fondo (la
+                máscara respeta la transparencia del asset). */}
+            <Image
+              src={withBasePath("/images/blueprint/gs-adventure-719.webp")}
+              alt=""
+              aria-hidden
+              fill
+              sizes="(max-width: 640px) 88vw, 820px"
+              className="object-contain"
+              style={{
+                filter: "brightness(1.8) saturate(1.05)",
+                WebkitMaskImage: "linear-gradient(to top, black 20%, transparent 62%)",
+                maskImage: "linear-gradient(to top, black 20%, transparent 62%)",
+              }}
+            />
           </div>
 
           {/* Encendido: las dos luces delanteras emiten (patrón calcado del

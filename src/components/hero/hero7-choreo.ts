@@ -11,8 +11,9 @@
 // Vuelo deliberadamente sutil: velocidades moderadas y giros MUY sutiles
 // (±10°, pedido del cliente: las piezas mantienen la orientación que tienen
 // montadas; las ruedas ruedan un cuarto de vuelta). Los sprites se recortan
-// de las MISMAS fotos de fase por diferencia N→N+1 (scratchpad
-// regen_sprites2.py), así cada pieza nace idéntica a como se ve montada.
+// de las MISMAS fotos de fase por diferencia N→N+1 (pipeline en
+// scripts/regen-hero-sprites.py), así cada pieza nace idéntica a como se
+// ve montada.
 // El scrub es 1:1 con el scroll: scroll lento = se puede detallar cada
 // pieza; scroll rápido = despiece corrido y limpio.
 

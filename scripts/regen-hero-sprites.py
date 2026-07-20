@@ -22,8 +22,11 @@ RATIO = 1.5333
 SPRITES = [
     ("windscreen", 70.3, 14.9, 25.5, 1, 2),
     ("seat", 35.9, 39.7, 33.4, 1, 2),
-    ("exhaust", 22.7, 59.8, 25.5, 1, 2),
-    ("beak", 80.6, 50.9, 14.7, 1, 2),
+    # exhaust y beak: cajas re-medidas a mano contra la foto real (19-jul) —
+    # las originales (por diff bruto) recortaban la punta del escape/tubo
+    # conector y casi todo el guardabarros delantero
+    ("exhaust", 24, 73, 30, 1, 2),
+    ("beak", 87, 56, 25, 1, 2),
     ("tail", 12.9, 31.3, 14.7, 1, 2),
     ("tankcover", 52.5, 35.5, 27, 2, 3),
     ("silverpanel", 61.5, 40.0, 13, 2, 3),
@@ -184,15 +187,18 @@ ERASE_PATCHES = {
                    (0.00, 0.50, 0.09, 0.80), (0.00, 0.74, 1.00, 1.00)],
     "seat":       [(0.72, 0.00, 1.00, 0.42), (0.00, 0.72, 0.52, 1.00),
                    (0.72, 0.40, 1.00, 1.00)],
-    # escape: fuera el subchasis/panel gris de la derecha, el estribo, el
-    # motor de abajo y el disco de la izquierda — quedan los dos
-    # silenciadores completos con su bracket
-    "exhaust":    [(0.72, 0.00, 1.00, 1.00), (0.40, 0.00, 0.72, 0.30),
-                   (0.00, 0.00, 0.40, 0.24), (0.00, 0.85, 1.00, 1.00),
-                   (0.00, 0.60, 0.14, 1.00), (0.60, 0.55, 0.72, 0.75),
-                   (0.55, 0.28, 0.80, 0.55)],
-    "beak":       [(0.00, 0.00, 1.00, 0.42), (0.00, 0.42, 0.22, 1.00),
-                   (0.24, 0.78, 0.46, 1.00), (0.46, 0.74, 1.00, 1.00)],
+    # escape: caja re-medida (24,73,30) contra la foto real — quedan los
+    # DOS silenciadores Akrapovic completos + el tubo conector con su
+    # punta de carbono; fuera solo la rueda trasera y el subchasis
+    "exhaust":    [(0.63, 0.00, 1.00, 0.40), (0.88, 0.40, 1.00, 1.00),
+                   (0.00, 0.62, 1.00, 1.00), (0.00, 0.30, 0.35, 0.66)],
+    # guardabarros delantero: caja re-medida (87,56,25) — fuera visera,
+    # espejo+mástil completo (se extiende horizontal, no solo el borde
+    # izquierdo), horquilla/reflector y rueda/disco/aro
+    "beak":       [(0.00, 0.00, 1.00, 0.13), (0.00, 0.00, 0.62, 0.22),
+                   (0.00, 0.15, 0.16, 0.32), (0.00, 0.32, 0.22, 1.00),
+                   (0.55, 0.62, 1.00, 1.00), (0.10, 0.72, 0.55, 1.00),
+                   (0.28, 0.58, 0.60, 1.00)],
     "hugger":     [(0.00, 0.00, 0.50, 1.00), (0.50, 0.45, 1.00, 1.00)],
     "tankcover":  [(0.76, 0.42, 1.00, 0.78), (0.55, 0.00, 1.00, 0.20),
                    (0.00, 0.80, 1.00, 1.00), (0.00, 0.55, 0.10, 1.00),
@@ -229,3 +235,30 @@ def apply_patches():
         print(sid, "parcheado")
 
 apply_patches()
+
+
+# ---------------------------------------------------------------------------
+# Logo BMW del tanque: el overlay foto2/foto3 confirma que la insignia NO se
+# mueve entre las dos fotos — está atornillada al tanque de aluminio, no al
+# panel plástico que la rodea. Si se deja en "silverpanel" (T2), el logo
+# "vuela" y luego reaparece en la foto 3 en el mismo punto, dando la
+# sensación de que nunca se fue. Se borra del sprite con un círculo preciso.
+# ---------------------------------------------------------------------------
+def erase_badge():
+    from PIL import ImageDraw
+    im = Image.open(f"{OUT}/silverpanel.webp").convert("RGBA")
+    s = im.size[0]
+    hole = Image.new("L", im.size, 0)
+    d = ImageDraw.Draw(hole)
+    cx, cy, r = 0.565 * s, 0.53 * s, 0.155 * s
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=255)
+    hole = hole.filter(ImageFilter.GaussianBlur(4))
+    a = np.asarray(im, dtype=np.float32)
+    h = np.asarray(hole, dtype=np.float32) / 255.0
+    a[..., 3] = a[..., 3] * (1.0 - h)
+    Image.fromarray(a.astype(np.uint8)).save(
+        f"{OUT}/silverpanel.webp", "WEBP", quality=92, method=6
+    )
+    print("silverpanel: logo BMW eliminado (no se mueve, queda en el tanque)")
+
+erase_badge()

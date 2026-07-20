@@ -60,8 +60,8 @@ export const SPRITES: HeroSprite[] = [
   // w' = w·0.982.
   { id: "windscreen", cx: 70.3, cy: 14.9, w: 25.5, vx: 45,  vy: -70, rot: 9,   t: [0.05, 0.17] },
   { id: "seat",       cx: 35.9, cy: 39.7, w: 33.4, vx: -55, vy: -60, rot: -7,  t: [0.06, 0.19] },
-  { id: "exhaust",    cx: 22.7, cy: 59.8, w: 25.5, vx: -70, vy: 25,  rot: -8,  t: [0.07, 0.21] },
-  { id: "beak",       cx: 80.6, cy: 50.9, w: 14.7, vx: 65,  vy: -20, rot: 10,  t: [0.08, 0.20] },
+  { id: "exhaust",    cx: 24,   cy: 73,   w: 30,   vx: -70, vy: 25,  rot: -8,  t: [0.07, 0.21] },
+  { id: "beak",       cx: 87,   cy: 56,   w: 25,   vx: 65,  vy: -20, rot: 10,  t: [0.08, 0.20] },
   { id: "tail",       cx: 12.9, cy: 31.3, w: 14.7, vx: -60, vy: -35, rot: -10, t: [0.09, 0.22] },
   // ---- T2: → tanque de aluminio desnudo ----
   { id: "tankcover",  cx: 52.5, cy: 35.5, w: 27, vx: 40,  vy: -70, rot: 7,   t: [0.22, 0.35] },

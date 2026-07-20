@@ -222,11 +222,13 @@ export default function ExplodedHero() {
               loading="lazy"
               decoding="async"
               // Registro con la fase 2: la foto 1 (beauty shot) viene ~1.6%
-              // más grande y ~0.8% más alta que la sesión de despiece (2-7).
-              // Corrección re-optimizada por búsqueda de rejilla sobre la
-              // zona estática (regen_sprites2.py); los sprites T1 se
-              // recortaron con esta MISMA corrección.
-              style={{ transform: "translate(-0.33%, -0.82%) scale(0.984)" }}
+              // más grande que la sesión de despiece (2-7). Corrección
+              // re-optimizada por búsqueda de rejilla en dos etapas sobre
+              // TRES zonas estáticas — tapa del tanque, rueda trasera y
+              // delantera (scripts/regen-hero-sprites.py) — para que el
+              // tanque no salte de tamaño/altura entre fase 1 y 2. Los
+              // sprites T1 se recortaron con esta MISMA corrección.
+              style={{ transform: "translate(-0.1%, 0.2%) scale(0.984)" }}
               className="pointer-events-none absolute inset-0 h-full w-full [will-change:var(--qb-wc,auto)]"
             />
 

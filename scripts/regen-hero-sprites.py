@@ -58,26 +58,49 @@ def correct_p1(img, scale, dx_pct, dy_pct):
     return canvas
 
 
-# --- Registro fino de la fase 1: rejilla alrededor de los valores medidos.
-# Se evalúa a media resolución sobre la zona delantera (rueda/tenedor),
-# estática en 1→2, para no premiar alineaciones que "apaguen" la pieza.
+# --- Registro fino de la fase 1: rejilla en dos etapas (gruesa + fina)
+# sobre TRES regiones estáticas en 1→2 — tapa del tanque (el salto que más
+# se nota), rueda trasera y rueda delantera/horquilla. Así el tanque queda
+# clavado al píxel entre la foto 1 y la 2.
+REGIONS = [
+    (0.40, 0.25, 0.70, 0.48),  # tapa del tanque
+    (0.05, 0.55, 0.28, 0.92),  # rueda trasera
+    (0.76, 0.45, 0.95, 0.92),  # rueda delantera + horquilla
+]
 ref = phases[2].resize((W // 2, H // 2), Image.BILINEAR)
 ref_a = np.asarray(ref, dtype=np.int16)
-# zona estática: rueda delantera y tren (60-95% x, 40-95% y)
-sx0, sx1 = int(0.60 * W / 2), int(0.95 * W / 2)
-sy0, sy1 = int(0.40 * H / 2), int(0.95 * H / 2)
+
+
+def reg_err(scale, dx, dy):
+    c = correct_p1(phases[1], scale, dx, dy).resize((W // 2, H // 2), Image.BILINEAR)
+    ca = np.asarray(c, dtype=np.int16)
+    total = 0.0
+    for rx0, ry0, rx1, ry1 in REGIONS:
+        x0, x1 = int(rx0 * W / 2), int(rx1 * W / 2)
+        y0, y1 = int(ry0 * H / 2), int(ry1 * H / 2)
+        total += float(np.abs(ca[y0:y1, x0:x1, :3] - ref_a[y0:y1, x0:x1, :3]).mean())
+    return total
+
 
 best = None
-for scale in [0.978, 0.980, 0.982, 0.984, 0.986]:
-    for dx in [-0.53, -0.43, -0.33, -0.23, -0.13]:
-        for dy in [-1.22, -1.12, -1.02, -0.92, -0.82]:
-            c = correct_p1(phases[1], scale, dx, dy).resize((W // 2, H // 2), Image.BILINEAR)
-            ca = np.asarray(c, dtype=np.int16)
-            d = np.abs(ca[sy0:sy1, sx0:sx1, :3] - ref_a[sy0:sy1, sx0:sx1, :3]).mean()
+for scale in np.arange(0.980, 0.9985, 0.002):
+    for dx in np.arange(-0.75, 0.16, 0.1):
+        for dy in np.arange(-1.25, 0.26, 0.1):
+            d = reg_err(scale, dx, dy)
             if best is None or d < best[0]:
                 best = (d, scale, dx, dy)
+# etapa fina alrededor del mejor
+_, S0, DX0, DY0 = best
+for scale in np.arange(S0 - 0.002, S0 + 0.0021, 0.001):
+    for dx in np.arange(DX0 - 0.1, DX0 + 0.11, 0.05):
+        for dy in np.arange(DY0 - 0.1, DY0 + 0.11, 0.05):
+            d = reg_err(scale, dx, dy)
+            if d < best[0]:
+                best = (d, scale, dx, dy)
 _, S, DX, DY = best
+S, DX, DY = round(float(S), 4), round(float(DX), 2), round(float(DY), 2)
 print(f"registro fase 1: scale={S} dx={DX}% dy={DY}%  (err={best[0]:.2f})")
+print(f">>> actualizar en ExplodedHero.tsx: transform: translate({DX}%, {DY}%) scale({S})")
 phases[1] = correct_p1(phases[1], S, DX, DY)
 
 
@@ -161,15 +184,23 @@ ERASE_PATCHES = {
                    (0.00, 0.50, 0.09, 0.80), (0.00, 0.74, 1.00, 1.00)],
     "seat":       [(0.72, 0.00, 1.00, 0.42), (0.00, 0.72, 0.52, 1.00),
                    (0.72, 0.40, 1.00, 1.00)],
-    "exhaust":    [(0.00, 0.00, 1.00, 0.24), (0.00, 0.60, 0.20, 1.00),
-                   (0.62, 0.74, 1.00, 1.00), (0.20, 0.93, 0.62, 1.00)],
+    # escape: fuera el subchasis/panel gris de la derecha, el estribo, el
+    # motor de abajo y el disco de la izquierda — quedan los dos
+    # silenciadores completos con su bracket
+    "exhaust":    [(0.72, 0.00, 1.00, 1.00), (0.40, 0.00, 0.72, 0.30),
+                   (0.00, 0.00, 0.40, 0.24), (0.00, 0.85, 1.00, 1.00),
+                   (0.00, 0.60, 0.14, 1.00), (0.60, 0.55, 0.72, 0.75),
+                   (0.55, 0.28, 0.80, 0.55)],
     "beak":       [(0.00, 0.00, 1.00, 0.42), (0.00, 0.42, 0.22, 1.00),
                    (0.24, 0.78, 0.46, 1.00), (0.46, 0.74, 1.00, 1.00)],
     "hugger":     [(0.00, 0.00, 0.50, 1.00), (0.50, 0.45, 1.00, 1.00)],
     "tankcover":  [(0.76, 0.42, 1.00, 0.78), (0.55, 0.00, 1.00, 0.20),
                    (0.00, 0.80, 1.00, 1.00), (0.00, 0.55, 0.10, 1.00),
                    (0.74, 0.40, 1.00, 1.00)],
-    "silverpanel":[(0.00, 0.00, 0.42, 1.00), (0.68, 0.72, 1.00, 1.00)],
+    # panel plateado: el corte izquierdo NO puede tocar el logo BMW (el
+    # roundel empieza en x≈0.35) — fuera solo la franja dorada y el verde
+    "silverpanel":[(0.00, 0.00, 0.33, 1.00), (0.20, 0.00, 1.00, 0.12),
+                   (0.68, 0.72, 1.00, 1.00)],
     "deflector":  [(0.00, 0.00, 1.00, 0.16), (0.00, 0.55, 1.00, 1.00)],
     "handguards": [(0.30, 0.00, 0.62, 0.30), (0.00, 0.68, 1.00, 1.00),
                    (0.26, 0.00, 0.68, 0.34)],

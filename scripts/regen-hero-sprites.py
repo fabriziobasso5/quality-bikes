@@ -147,3 +147,54 @@ for sid, cx, cy, w, na, nb in SPRITES:
     print(f"{sid:12s} T{na}->{nb} cobertura={cov:.1f}%")
 
 print("OK")
+
+
+# ---------------------------------------------------------------------------
+# FRONTERAS DE PRECISIÓN (aplicar DESPUÉS de la generación por diff):
+# cada sprite conserva SOLO su pieza — sin fragmentos de piezas vecinas ni
+# de partes que se quedan en la moto. Rectángulos (x0,y0,x1,y1) en fracción
+# del lienzo del sprite, borde plumado con blur 5-6.
+# Pedido del cliente (19-jul-2026): "que esté cada pieza separada de la otra".
+# ---------------------------------------------------------------------------
+ERASE_PATCHES = {
+    "windscreen": [(0.00, 0.08, 0.25, 0.55), (0.05, 0.52, 0.42, 0.80),
+                   (0.00, 0.50, 0.09, 0.80), (0.00, 0.74, 1.00, 1.00)],
+    "seat":       [(0.72, 0.00, 1.00, 0.42), (0.00, 0.72, 0.52, 1.00),
+                   (0.72, 0.40, 1.00, 1.00)],
+    "exhaust":    [(0.00, 0.00, 1.00, 0.24), (0.00, 0.60, 0.20, 1.00),
+                   (0.62, 0.74, 1.00, 1.00), (0.20, 0.93, 0.62, 1.00)],
+    "beak":       [(0.00, 0.00, 1.00, 0.42), (0.00, 0.42, 0.22, 1.00),
+                   (0.24, 0.78, 0.46, 1.00), (0.46, 0.74, 1.00, 1.00)],
+    "hugger":     [(0.00, 0.00, 0.50, 1.00), (0.50, 0.45, 1.00, 1.00)],
+    "tankcover":  [(0.76, 0.42, 1.00, 0.78), (0.55, 0.00, 1.00, 0.20),
+                   (0.00, 0.80, 1.00, 1.00), (0.00, 0.55, 0.10, 1.00),
+                   (0.74, 0.40, 1.00, 1.00)],
+    "silverpanel":[(0.00, 0.00, 0.42, 1.00), (0.68, 0.72, 1.00, 1.00)],
+    "deflector":  [(0.00, 0.00, 1.00, 0.16), (0.00, 0.55, 1.00, 1.00)],
+    "handguards": [(0.30, 0.00, 0.62, 0.30), (0.00, 0.68, 1.00, 1.00),
+                   (0.26, 0.00, 0.68, 0.34)],
+    "tank":       [(0.00, 0.86, 1.00, 1.00)],
+    "sidepanels": [(0.00, 0.00, 1.00, 0.30), (0.00, 0.30, 0.28, 1.00),
+                   (0.86, 0.00, 1.00, 1.00)],
+    "swingarm":   [(0.00, 0.00, 0.62, 1.00), (0.62, 0.00, 1.00, 0.28)],
+}
+
+def apply_patches():
+    from PIL import ImageDraw
+    for sid, rects in ERASE_PATCHES.items():
+        im = Image.open(f"{OUT}/{sid}.webp").convert("RGBA")
+        s = im.size[0]
+        hole = Image.new("L", im.size, 0)
+        d = ImageDraw.Draw(hole)
+        for x0, y0, x1, y1 in rects:
+            d.rectangle([x0 * s, y0 * s, x1 * s, y1 * s], fill=255)
+        hole = hole.filter(ImageFilter.GaussianBlur(5))
+        a = np.asarray(im, dtype=np.float32)
+        h = np.asarray(hole, dtype=np.float32) / 255.0
+        a[..., 3] = a[..., 3] * (1.0 - h)
+        Image.fromarray(a.astype(np.uint8)).save(
+            f"{OUT}/{sid}.webp", "WEBP", quality=92, method=6
+        )
+        print(sid, "parcheado")
+
+apply_patches()

@@ -73,21 +73,19 @@ export default function ExplodedHero() {
 
       tl.to(q("[data-hero-hint]"), { autoAlpha: 0, duration: 0.04, ease: "none" }, 0);
 
-      // Fundido CRUZADO suave entre fases (pedido del cliente: sin saltos
-      // notables): la entrante se enciende en rampa un poco antes y la
-      // saliente se apaga en una ventana del doble de largo que antes.
-      // Nunca hay más de dos capas visibles (la transición anterior cierra
-      // mucho antes de que abra la siguiente) y el registro al píxel de las
-      // fotos hace el resto.
+      // Fundido cruzado "punto medio" (elección del cliente): suave pero lo
+      // bastante corto para que la pieza que vuela casi no se vea doble
+      // (montada desvaneciéndose + sprite). Nunca hay más de dos capas
+      // visibles y el registro al píxel de las fotos hace el resto.
       for (const p of PHASES) {
         tl.fromTo(
           q(`[data-phase="${p.n + 1}"]`),
           { autoAlpha: 0 },
-          { autoAlpha: 1, duration: 0.06, ease: "power1.out" },
-          Math.max(p.fadeAt - 0.03, 0)
+          { autoAlpha: 1, duration: 0.05, ease: "power1.out" },
+          Math.max(p.fadeAt - 0.02, 0)
         ).to(
           q(`[data-phase="${p.n}"]`),
-          { autoAlpha: 0, duration: 0.1, ease: "power1.inOut" },
+          { autoAlpha: 0, duration: 0.07, ease: "power1.inOut" },
           Math.max(p.fadeAt - 0.01, 0)
         );
       }

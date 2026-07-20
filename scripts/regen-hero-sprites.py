@@ -1,11 +1,29 @@
 """Regeneración v2: registro fino de la fase 1 + limpieza más agresiva.
 
-Mejoras sobre v1:
+OBSOLETO para los 5 sprites de T1 (windscreen, seat, exhaust, beak, tail):
+el 20-jul-2026 se confirmó por block-matching que phase-1.webp (la "beauty
+shot" con la moto completa) es de OTRA SESIÓN DE FOTOS que phase-2..6 (el
+despiece real) — el desfase de las ruedas es de ~150px incluso con el mejor
+ajuste de escala/traslación posible (vs. ~20-30px de ruido normal entre
+fases de la MISMA sesión, ver phase-2 vs phase-3). Ninguna corrección
+afín puede alinear el tanque Y las ruedas a la vez, así que la extracción
+por diferencia de píxeles contra phase-2 (este script) siempre producía
+sprites con fragmentos de piezas vecinas o cortes irregulares para esas 5.
+
+Esas 5 piezas ahora se recortan con CONTORNOS DIBUJADOS A MANO directo
+sobre phase-1 (sin comparar contra phase-2) — ver polygons-t1-sprites.json
+y el bloque `extract_t1_polygons()` al final de este archivo. La transición
+foto1→foto2 en ExplodedHero.tsx se resolvió por separado con un corte
+rápido (no un fundido largo) cronometrado a mitad del vuelo de las piezas,
+para no exponer el desfase de las ruedas.
+
+Mejoras sobre v1 (siguen aplicando a T2-T5, que SÍ son la misma sesión):
 1. La corrección de la fase 1 (scale/translate) se OPTIMIZA por búsqueda
    de rejilla minimizando la diferencia global con la fase 2 (la mayor
    parte del cuadro es estática en 1→2), en vez de usar los valores
    medidos a ojo — elimina el ruido de registro que metía pedazos de
-   rueda en los sprites T1.
+   rueda en los sprites T1. (Nota: esto queda vigente para T2-T5, que sí
+   registran bien entre sí; para T1 ver el aviso de arriba.)
 2. Umbral adaptativo + limpieza morfológica más fuerte, y etiquetado de
    componentes conexas (BFS numpy) para descartar motas pequeñas lejos
    del cuerpo principal de la pieza.
@@ -20,14 +38,8 @@ OUT = f"{DIR}/sprites"
 RATIO = 1.5333
 
 SPRITES = [
-    ("windscreen", 70.3, 14.9, 25.5, 1, 2),
-    ("seat", 35.9, 39.7, 33.4, 1, 2),
-    # exhaust y beak: cajas re-medidas a mano contra la foto real (19-jul) —
-    # las originales (por diff bruto) recortaban la punta del escape/tubo
-    # conector y casi todo el guardabarros delantero
-    ("exhaust", 24, 73, 30, 1, 2),
-    ("beak", 87, 56, 25, 1, 2),
-    ("tail", 12.9, 31.3, 14.7, 1, 2),
+    # windscreen/seat/exhaust/beak/tail (T1) YA NO se generan aquí — ver
+    # aviso al inicio del archivo y extract_t1_polygons() al final.
     ("tankcover", 52.5, 35.5, 27, 2, 3),
     ("silverpanel", 61.5, 40.0, 13, 2, 3),
     ("deflector", 58.5, 32.0, 11, 2, 3),
@@ -183,22 +195,6 @@ print("OK")
 # Pedido del cliente (19-jul-2026): "que esté cada pieza separada de la otra".
 # ---------------------------------------------------------------------------
 ERASE_PATCHES = {
-    "windscreen": [(0.00, 0.08, 0.25, 0.55), (0.05, 0.52, 0.42, 0.80),
-                   (0.00, 0.50, 0.09, 0.80), (0.00, 0.74, 1.00, 1.00)],
-    "seat":       [(0.72, 0.00, 1.00, 0.42), (0.00, 0.72, 0.52, 1.00),
-                   (0.72, 0.40, 1.00, 1.00)],
-    # escape: caja re-medida (24,73,30) contra la foto real — quedan los
-    # DOS silenciadores Akrapovic completos + el tubo conector con su
-    # punta de carbono; fuera solo la rueda trasera y el subchasis
-    "exhaust":    [(0.63, 0.00, 1.00, 0.40), (0.88, 0.40, 1.00, 1.00),
-                   (0.00, 0.62, 1.00, 1.00), (0.00, 0.30, 0.35, 0.66)],
-    # guardabarros delantero: caja re-medida (87,56,25) — fuera visera,
-    # espejo+mástil completo (se extiende horizontal, no solo el borde
-    # izquierdo), horquilla/reflector y rueda/disco/aro
-    "beak":       [(0.00, 0.00, 1.00, 0.13), (0.00, 0.00, 0.62, 0.22),
-                   (0.00, 0.15, 0.16, 0.32), (0.00, 0.32, 0.22, 1.00),
-                   (0.55, 0.62, 1.00, 1.00), (0.10, 0.72, 0.55, 1.00),
-                   (0.28, 0.58, 0.60, 1.00)],
     "hugger":     [(0.00, 0.00, 0.50, 1.00), (0.50, 0.45, 1.00, 1.00)],
     "tankcover":  [(0.76, 0.42, 1.00, 0.78), (0.55, 0.00, 1.00, 0.20),
                    (0.00, 0.80, 1.00, 1.00), (0.00, 0.55, 0.10, 1.00),
@@ -262,3 +258,47 @@ def erase_badge():
     print("silverpanel: logo BMW eliminado (no se mueve, queda en el tanque)")
 
 erase_badge()
+
+
+# ---------------------------------------------------------------------------
+# T1 (windscreen, seat, exhaust, beak, tail): recorte por CONTORNO A MANO
+# directo sobre phase-1.webp (SIN diferencia contra phase-2 — ver aviso al
+# inicio del archivo). Las cajas (cx,cy,w) son las mismas que en
+# src/components/hero/hero7-choreo.ts.
+# ---------------------------------------------------------------------------
+T1_BOXES = {
+    "windscreen": (70.3, 14.9, 25.5),
+    "seat": (35.9, 39.7, 33.4),
+    "exhaust": (24, 73, 30),
+    "beak": (87, 56, 25),
+    "tail": (12.9, 31.3, 14.7),
+}
+
+
+def extract_t1_polygons():
+    import json
+    from PIL import ImageDraw
+
+    with open(f"{DIR}/../../../scripts/polygons-t1-sprites.json") as f:
+        polys = json.load(f)
+    p1 = Image.open(f"{DIR}/phase-1.webp").convert("RGBA")
+    for name, (cx, cy, w) in T1_BOXES.items():
+        size = round(w / 100 * W)
+        left = round((cx - w / 2) / 100 * W)
+        top = round((cy - w * RATIO / 2) / 100 * H)
+        crop = p1.crop((left, top, left + size, top + size))
+        mask = Image.new("L", (size, size), 0)
+        d = ImageDraw.Draw(mask)
+        pts = [(x * size, y * size) for x, y in polys[name]]
+        d.polygon(pts, fill=255)
+        mask = mask.filter(ImageFilter.GaussianBlur(3))
+        a = np.asarray(crop, dtype=np.float32)
+        m = np.asarray(mask, dtype=np.float32) / 255.0
+        a[..., 3] = a[..., 3] * m
+        Image.fromarray(a.astype(np.uint8)).save(
+            f"{OUT}/{name}.webp", "WEBP", quality=92, method=6
+        )
+        print(name, "extraído por contorno, caja:", left, top, size)
+
+
+extract_t1_polygons()

@@ -73,20 +73,34 @@ export default function ExplodedHero() {
 
       tl.to(q("[data-hero-hint]"), { autoAlpha: 0, duration: 0.04, ease: "none" }, 0);
 
-      // Fundido cruzado "punto medio" (elección del cliente): suave pero lo
-      // bastante corto para que la pieza que vuela casi no se vea doble
-      // (montada desvaneciéndose + sprite). Nunca hay más de dos capas
-      // visibles y el registro al píxel de las fotos hace el resto.
+      // Fundido cruzado "punto medio" (elección del cliente) entre fases —
+      // EXCEPTO fase 1→2: esas dos fotos son de dos sesiones distintas (la
+      // "beauty shot" completa vs. la sesión real del despiece) y no
+      // registran al píxel entre sí — cualquier fundido con ambas visibles
+      // a la vez expone el salto de tamaño de ruedas/chasis. Se resuelve
+      // con un corte CASI instantáneo, cronometrado a mitad del vuelo de
+      // las 5 piezas (0.11-0.13, cuando ya están lejos de su posición
+      // original): la atención está en las piezas volando, no en el fondo.
       for (const p of PHASES) {
+        const isSessionSwap = p.n === 1;
+        const swapAt = isSessionSwap ? 0.12 : p.fadeAt;
         tl.fromTo(
           q(`[data-phase="${p.n + 1}"]`),
           { autoAlpha: 0 },
-          { autoAlpha: 1, duration: 0.05, ease: "power1.out" },
-          Math.max(p.fadeAt - 0.02, 0)
+          {
+            autoAlpha: 1,
+            duration: isSessionSwap ? 0.015 : 0.05,
+            ease: isSessionSwap ? "none" : "power1.out",
+          },
+          Math.max(swapAt - (isSessionSwap ? 0.008 : 0.02), 0)
         ).to(
           q(`[data-phase="${p.n}"]`),
-          { autoAlpha: 0, duration: 0.07, ease: "power1.inOut" },
-          Math.max(p.fadeAt - 0.01, 0)
+          {
+            autoAlpha: 0,
+            duration: isSessionSwap ? 0.015 : 0.07,
+            ease: isSessionSwap ? "none" : "power1.inOut",
+          },
+          Math.max(swapAt - (isSessionSwap ? 0.008 : 0.01), 0)
         );
       }
 

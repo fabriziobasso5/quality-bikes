@@ -158,8 +158,7 @@ export default function ExplodedHero() {
           ref={stageRef}
           // -1px de solape con el header: elimina la línea clara que dejaba el
           // redondeo subpixel entre el borde del header y el stage
-          // pb: reserva una franja de "piso" bajo la moto para el reflejo
-          className="sticky top-[calc(var(--qbh,76px)-1px)] flex h-[calc(100svh-var(--qbh,76px)+1px)] w-full flex-col items-center justify-center overflow-hidden bg-[#262b31] pb-12 motion-reduce:static motion-reduce:h-svh md:pb-16"
+          className="sticky top-[calc(var(--qbh,76px)-1px)] flex h-[calc(100svh-var(--qbh,76px)+1px)] w-full flex-col items-center justify-center overflow-hidden bg-[#262b31] motion-reduce:static motion-reduce:h-svh"
         >
           {/* Estudio oscuro: degradé vertical + viñeta, la moto al frente */}
           <div
@@ -188,10 +187,7 @@ export default function ExplodedHero() {
           {/* ——— Escenario: las fases comparten este frame, registradas ——— */}
           {/* Sin título ni eslogan en esta sección (viven en la portada): la
               moto se centra plena en el stage */}
-          {/* El término en svh baja de -140px a -230px: cede ~90px de altura
-              al piso reflectante sin tocar el registro de las fases (los
-              sprites se posicionan en % de esta caja y escalan con ella) */}
-          <div className="relative aspect-[15333/10000] w-[94vw] shrink-0 md:w-[min(92vw,calc((100svh-230px)*1.5333),1500px)]">
+          <div className="relative aspect-[15333/10000] w-[94vw] shrink-0 md:w-[min(92vw,calc((100svh-140px)*1.5333),1500px)]">
             {/* Sombra de piso sutil bajo la moto */}
             <div
               data-hero-shadow
@@ -227,12 +223,12 @@ export default function ExplodedHero() {
               alt={BIKE_ALT}
               loading="lazy"
               decoding="async"
-              // Registro con la fase 2: la foto 1 (beauty shot) viene ~1.8%
-              // más grande y ~1% más alta que la sesión de despiece (2-7).
-              // Corrección medida por optimización de diferencia en canvas
-              // (ejes de rueda/tenedor/motor); los sprites T1 llevan la misma
-              // corrección en hero7-choreo.ts.
-              style={{ transform: "translate(-0.33%, -1.02%) scale(0.982)" }}
+              // Registro con la fase 2: la foto 1 (beauty shot) viene ~1.6%
+              // más grande y ~0.8% más alta que la sesión de despiece (2-7).
+              // Corrección re-optimizada por búsqueda de rejilla sobre la
+              // zona estática (regen_sprites2.py); los sprites T1 se
+              // recortaron con esta MISMA corrección.
+              style={{ transform: "translate(-0.33%, -0.82%) scale(0.984)" }}
               className="pointer-events-none absolute inset-0 h-full w-full [will-change:var(--qb-wc,auto)]"
             />
 
@@ -254,70 +250,6 @@ export default function ExplodedHero() {
                 />
               </div>
             ))}
-
-            {/* Piso reflectante de estudio: duplicado espejado de TODAS las
-                capas (fases y sprites), pegado bajo la caja. GSAP selecciona
-                por data-phase/data-sprite, así que estas copias se animan
-                solas en sincronía exacta con las originales — el reflejo se
-                despieza igual que la moto. Máscara corta el reflejo a una
-                franja corta; blur + opacidad bajos venden el "piso pulido". */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-full left-0 h-full w-full origin-top -scale-y-100 opacity-30 blur-[2px]"
-              // Stops en px (no en % de la caja): el desvanecido ocupa TODO
-              // el piso disponible y muere antes del borde del fondo gris —
-              // sin línea de corte bajo las ruedas.
-              style={{
-                WebkitMaskImage:
-                  "linear-gradient(to bottom, rgba(0,0,0,0.5) 0px, rgba(0,0,0,0.18) 45px, transparent 110px)",
-                maskImage:
-                  "linear-gradient(to bottom, rgba(0,0,0,0.5) 0px, rgba(0,0,0,0.18) 45px, transparent 110px)",
-              }}
-            >
-              {[6, 5, 4, 3, 2].map((n) => (
-                /* eslint-disable-next-line @next/next/no-img-element -- reflejo del despiece */
-                <img
-                  key={n}
-                  data-phase={n}
-                  src={phaseSrc(n)}
-                  srcSet={phaseSrcSet(n)}
-                  sizes={phaseSizes}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className="pointer-events-none invisible absolute inset-0 h-full w-full opacity-0 motion-reduce:hidden [will-change:var(--qb-wc,auto)]"
-                />
-              ))}
-              {/* eslint-disable-next-line @next/next/no-img-element -- reflejo del despiece */}
-              <img
-                data-phase={1}
-                src={phaseSrc(1)}
-                srcSet={phaseSrcSet(1)}
-                sizes={phaseSizes}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                style={{ transform: "translate(-0.33%, -1.02%) scale(0.982)" }}
-                className="pointer-events-none absolute inset-0 h-full w-full [will-change:var(--qb-wc,auto)]"
-              />
-              {SPRITES.map((s) => (
-                <div
-                  key={s.id}
-                  data-sprite={s.id}
-                  className="invisible absolute z-10 opacity-0 [will-change:var(--qb-wc,auto)]"
-                  style={spriteBox(s)}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element -- reflejo de pieza */}
-                  <img
-                    src={withBasePath(`${HERO_DIR}/sprites/${s.id}.webp`)}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-              ))}
-            </div>
 
           </div>
 

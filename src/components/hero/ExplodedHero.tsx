@@ -73,18 +73,23 @@ export default function ExplodedHero() {
 
       tl.to(q("[data-hero-hint]"), { autoAlpha: 0, duration: 0.04, ease: "none" }, 0);
 
-      // Cada fase se funde rápido a la siguiente justo cuando sus piezas se
-      // desprenden. Las fases 2-7 nacen ocultas (donde sus siluetas difieren
-      // asomarían por detrás — espejos dobles); cada una se enciende un
-      // instante antes de que la de encima se funda, así nunca hay más de
-      // dos capas visibles y el registro al píxel hace el resto.
+      // Fundido CRUZADO suave entre fases (pedido del cliente: sin saltos
+      // notables): la entrante se enciende en rampa un poco antes y la
+      // saliente se apaga en una ventana del doble de largo que antes.
+      // Nunca hay más de dos capas visibles (la transición anterior cierra
+      // mucho antes de que abra la siguiente) y el registro al píxel de las
+      // fotos hace el resto.
       for (const p of PHASES) {
-        tl.set(q(`[data-phase="${p.n + 1}"]`), { autoAlpha: 1 }, Math.max(p.fadeAt - 0.012, 0))
-          .to(
-            q(`[data-phase="${p.n}"]`),
-            { autoAlpha: 0, duration: 0.05, ease: "power1.in" },
-            p.fadeAt
-          );
+        tl.fromTo(
+          q(`[data-phase="${p.n + 1}"]`),
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.06, ease: "power1.out" },
+          Math.max(p.fadeAt - 0.03, 0)
+        ).to(
+          q(`[data-phase="${p.n}"]`),
+          { autoAlpha: 0, duration: 0.1, ease: "power1.inOut" },
+          Math.max(p.fadeAt - 0.01, 0)
+        );
       }
 
       // Sprites: aparecen sobre su pieza al abrirse su ventana y salen
@@ -147,19 +152,19 @@ export default function ExplodedHero() {
         // que sea del mismo tono (nada de franjas blancas bajo el header)
         // El timeline ahora termina en ~0.87 (última pieza de T5): el track
         // se recorta en proporción para no dejar scroll muerto al final.
-        className="relative h-[129vh] bg-[#24292f] md:h-[147vh] motion-reduce:h-auto"
+        className="relative h-[129vh] bg-[#1b1f24] md:h-[147vh] motion-reduce:h-auto"
       >
         <div
           ref={stageRef}
           // -1px de solape con el header: elimina la línea clara que dejaba el
           // redondeo subpixel entre el borde del header y el stage
           // pb: reserva una franja de "piso" bajo la moto para el reflejo
-          className="sticky top-[calc(var(--qbh,76px)-1px)] flex h-[calc(100svh-var(--qbh,76px)+1px)] w-full flex-col items-center justify-center overflow-hidden bg-[#31373d] pb-8 motion-reduce:static motion-reduce:h-svh md:pb-12"
+          className="sticky top-[calc(var(--qbh,76px)-1px)] flex h-[calc(100svh-var(--qbh,76px)+1px)] w-full flex-col items-center justify-center overflow-hidden bg-[#262b31] pb-12 motion-reduce:static motion-reduce:h-svh md:pb-16"
         >
           {/* Estudio oscuro: degradé vertical + viñeta, la moto al frente */}
           <div
             aria-hidden
-            className="absolute inset-0 bg-[linear-gradient(180deg,#3f464d_0%,#31373d_45%,#1d2126_100%)]"
+            className="absolute inset-0 bg-[linear-gradient(180deg,#33393f_0%,#262b31_45%,#141619_100%)]"
           />
           <div
             aria-hidden
@@ -183,10 +188,10 @@ export default function ExplodedHero() {
           {/* ——— Escenario: las fases comparten este frame, registradas ——— */}
           {/* Sin título ni eslogan en esta sección (viven en la portada): la
               moto se centra plena en el stage */}
-          {/* El término en svh baja de -140px a -190px: cede ~50px de altura
+          {/* El término en svh baja de -140px a -230px: cede ~90px de altura
               al piso reflectante sin tocar el registro de las fases (los
               sprites se posicionan en % de esta caja y escalan con ella) */}
-          <div className="relative aspect-[15333/10000] w-[94vw] shrink-0 md:w-[min(92vw,calc((100svh-190px)*1.5333),1500px)]">
+          <div className="relative aspect-[15333/10000] w-[94vw] shrink-0 md:w-[min(92vw,calc((100svh-230px)*1.5333),1500px)]">
             {/* Sombra de piso sutil bajo la moto */}
             <div
               data-hero-shadow
@@ -259,11 +264,14 @@ export default function ExplodedHero() {
             <div
               aria-hidden
               className="pointer-events-none absolute top-full left-0 h-full w-full origin-top -scale-y-100 opacity-30 blur-[2px]"
+              // Stops en px (no en % de la caja): el desvanecido ocupa TODO
+              // el piso disponible y muere antes del borde del fondo gris —
+              // sin línea de corte bajo las ruedas.
               style={{
                 WebkitMaskImage:
-                  "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 10%, transparent 30%)",
+                  "linear-gradient(to bottom, rgba(0,0,0,0.5) 0px, rgba(0,0,0,0.18) 45px, transparent 110px)",
                 maskImage:
-                  "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 10%, transparent 30%)",
+                  "linear-gradient(to bottom, rgba(0,0,0,0.5) 0px, rgba(0,0,0,0.18) 45px, transparent 110px)",
               }}
             >
               {[6, 5, 4, 3, 2].map((n) => (
@@ -311,12 +319,6 @@ export default function ExplodedHero() {
               ))}
             </div>
 
-            {/* Brillo especular del piso: vende la superficie pulida bajo la
-                línea de contacto de las ruedas */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-[8%] top-full h-16 bg-[radial-gradient(ellipse_55%_100%_at_50%_0%,rgba(255,255,255,0.05),transparent_70%)]"
-            />
           </div>
 
           <p

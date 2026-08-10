@@ -4,24 +4,32 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { withBasePath } from "@/lib/base-path";
-import { catalogCoverPath, type Motorcycle } from "@/data/motorcycles";
+import { galleryPaths, type Motorcycle } from "@/data/motorcycles";
 
 /**
- * Galería de la ficha: la foto oficial de prensa (fondo blanco) abre la
- * secuencia y después vienen las fotos reales del showroom. Click en
- * cualquier foto abre el lightbox a pantalla completa con flechas, swipe,
- * contador y cierre por X/Escape.
+ * Galería de la ficha. El escenario es vertical (4:5) porque las fotos del
+ * showroom se toman con el teléfono en vertical; las de prensa, horizontales,
+ * caen centradas y el margen sobrante es blanco sobre blanco, así que no se
+ * nota. Las miniaturas van recortadas a 3:4 para que la tira quede pareja
+ * mezclando fotos de las dos formas.
+ *
+ * Cuando el modelo existe en varios colores con fotos propias, sale un
+ * selector de muestras y cambiar de color cambia la secuencia entera.
  */
 export default function MotoGallery({ moto }: { moto: Motorcycle }) {
   const label = `${moto.brand} ${moto.model}`;
-  const srcs = [
-    withBasePath(catalogCoverPath(moto.slug)),
-    ...Array.from({ length: moto.photoCount }, (_, i) =>
-      withBasePath(`/images/inventory/${moto.slug}/${i + 1}.webp`)
-    ),
-  ];
+  const colorways = moto.colorways;
+  const [colorId, setColorId] = useState(colorways?.[0].id);
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState(false);
+
+  const colorway = colorways?.find((c) => c.id === colorId);
+  const srcs = galleryPaths(moto, colorId).map(withBasePath);
+
+  function pickColor(id: string) {
+    setColorId(id);
+    setActive(0); // la secuencia cambia entera: volver a la foto de apertura
+  }
 
   return (
     <div>
@@ -29,9 +37,10 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
         type="button"
         onClick={() => setLightbox(true)}
         aria-label={`Ver foto ${active + 1} de ${label} en pantalla completa`}
-        className="relative block h-96 w-full cursor-zoom-in bg-white lg:h-[480px]"
+        className="relative block aspect-[4/5] w-full cursor-zoom-in border border-black/[0.07] bg-white"
       >
         <Image
+          key={srcs[active]}
           src={srcs[active]}
           alt={label}
           fill
@@ -39,23 +48,72 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
           className="object-contain"
           preload
         />
+        <span className="pointer-events-none absolute right-3 bottom-3 rounded-full bg-black/45 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-white/90 uppercase backdrop-blur-sm">
+          {active + 1}/{srcs.length}
+        </span>
       </button>
+
+      {colorways && colorways.length > 1 && (
+        <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3">
+          <span className="font-mono text-[10px] tracking-[0.2em] text-brand-text/45 uppercase">
+            Color
+          </span>
+          <div className="flex items-center gap-2.5">
+            {colorways.map((c) => {
+              const on = c.id === colorId;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => pickColor(c.id)}
+                  aria-pressed={on}
+                  title={c.name}
+                  className={`relative h-8 w-8 rounded-full border transition duration-300 ${
+                    on
+                      ? "border-brand-navy ring-2 ring-brand-navy/25 ring-offset-2 ring-offset-brand-bg"
+                      : "border-black/15 hover:border-brand-navy/50"
+                  }`}
+                  style={{ background: c.swatch }}
+                >
+                  <span className="sr-only">{c.name}</span>
+                </button>
+              );
+            })}
+          </div>
+          <span className="font-mono text-xs text-brand-text/70">{colorway?.name}</span>
+        </div>
+      )}
+
+      {colorway?.accessories && colorway.accessories.length > 0 && (
+        <p className="mt-3 font-mono text-[11px] leading-relaxed text-brand-text/50">
+          Unidad fotografiada con {colorway.accessories.join(" · ")} — accesorios
+          opcionales, consúltanos para montarlos.
+        </p>
+      )}
+
+      {/* Tira horizontal y no rejilla: con 11 fotos una rejilla de 5 columnas
+          se va a tres filas y deja la columna de specs flotando en medio de un
+          vacío enorme. En fila, la galería termina a la altura de la ficha. */}
       {srcs.length > 1 && (
-        <div className="mt-3 grid grid-cols-5 gap-2">
+        <div className="hide-scrollbar mt-4 flex snap-x snap-mandatory gap-2 overflow-x-auto">
           {srcs.map((src, i) => (
             <button
               key={src}
               onClick={() => setActive(i)}
               aria-label={`Ver foto ${i + 1}`}
-              className={`relative h-16 overflow-hidden border bg-white transition ${
-                active === i ? "border-brand-navy" : "border-black/10 opacity-70 hover:opacity-100"
+              aria-current={active === i}
+              className={`relative aspect-[3/4] w-[18%] shrink-0 snap-start overflow-hidden border bg-white transition duration-300 sm:w-[15%] ${
+                active === i
+                  ? "border-brand-navy"
+                  : "border-black/10 opacity-60 hover:opacity-100"
               }`}
             >
-              <Image src={src} alt="" fill sizes="20vw" className="object-contain" />
+              <Image src={src} alt="" fill sizes="15vw" className="object-cover" />
             </button>
           ))}
         </div>
       )}
+
       {lightbox && (
         <Lightbox
           srcs={srcs}

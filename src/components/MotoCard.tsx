@@ -3,13 +3,15 @@ import Link from "next/link";
 import MotoCover from "./MotoCover";
 import TiltCard from "./TiltCard";
 import { withBasePath } from "@/lib/base-path";
-import type { Motorcycle } from "@/data/motorcycles";
+import { motoPhotoPaths, type Motorcycle } from "@/data/motorcycles";
 
 export default function MotoCard({ moto }: { moto: Motorcycle }) {
-  // Unidades físicas en showroom con fotos reales propias (photoCount > 1
-  // distingue de la Multistrada, cuya única "foto" es la de prensa): al
-  // hover en desktop la portada oficial hace crossfade a la unidad real.
+  // Unidades físicas en showroom con fotos reales propias: al hover en
+  // desktop la portada oficial hace crossfade a la unidad real.
   const hasRealPhotos = moto.availability === "en-stock" && moto.photoCount > 1;
+  // Con colorways la primera foto cuelga de la subcarpeta del color, no de la
+  // raíz del modelo — de ahí que la ruta salga del helper y no se arme aquí.
+  const realPhoto = motoPhotoPaths(moto)[0];
 
   return (
     <TiltCard>
@@ -33,7 +35,7 @@ export default function MotoCard({ moto }: { moto: Motorcycle }) {
              tiene sentido descargar la segunda imagen. */
           <div className="absolute inset-0 hidden bg-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block">
             <Image
-              src={withBasePath(`/images/inventory/${moto.slug}/1.webp`)}
+              src={withBasePath(realPhoto)}
               alt={`${moto.brand} ${moto.model} — unidad real en showroom`}
               fill
               sizes="(max-width: 1024px) 50vw, 25vw"

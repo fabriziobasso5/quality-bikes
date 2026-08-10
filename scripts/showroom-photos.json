@@ -1,0 +1,43 @@
+{
+  "_comment": "Sesión de fotos del showroom (julio-agosto 2026). El orden manda: la 1 es el perfil que abre la galería, luego tres cuartos delanteros, traseros, frontal, trasera y por último puesto de conducción y detalles. IMG_3784 lleva un rótulo quemado abajo (era una pieza de Instagram), se recorta a 1450 px de alto.",
+  "sourceDir": "~/Desktop/nuevas-fotos-qb",
+  "outputRoot": "~/quality-bikes/public/images/inventory",
+  "photos": [
+    { "src": "IMG_4113.HEIC", "out": "ducati-multistrada-v4/1.webp" },
+    { "src": "IMG_4109.HEIC", "out": "ducati-multistrada-v4/2.webp" },
+    { "src": "IMG_4112.HEIC", "out": "ducati-multistrada-v4/3.webp" },
+    { "src": "IMG_4116.HEIC", "out": "ducati-multistrada-v4/4.webp" },
+    { "src": "IMG_4111.HEIC", "out": "ducati-multistrada-v4/5.webp" },
+    { "src": "IMG_4117.HEIC", "out": "ducati-multistrada-v4/6.webp" },
+    { "src": "IMG_4122.heic", "out": "ducati-multistrada-v4/7.webp" },
+    { "src": "IMG_4123.heic", "out": "ducati-multistrada-v4/8.webp" },
+    { "src": "IMG_4110.HEIC", "out": "ducati-multistrada-v4/9.webp" },
+    { "src": "IMG_4121.heic", "out": "ducati-multistrada-v4/10.webp" },
+    { "src": "IMG_4124.HEIC", "out": "ducati-multistrada-v4/11.webp" },
+    { "src": "IMG_4125.HEIC", "out": "ducati-multistrada-v4/12.webp" },
+    { "src": "IMG_4120.HEIC", "out": "ducati-multistrada-v4/13.webp" },
+    { "src": "IMG_4119.HEIC", "out": "ducati-multistrada-v4/14.webp" },
+
+    { "src": "IMG_3728.HEIC", "out": "kawasaki-kle-500/blanco/1.webp" },
+    { "src": "IMG_3729.HEIC", "out": "kawasaki-kle-500/blanco/2.webp" },
+    { "src": "IMG_3727.HEIC", "out": "kawasaki-kle-500/blanco/3.webp" },
+    { "src": "IMG_3726.HEIC", "out": "kawasaki-kle-500/blanco/4.webp" },
+    { "src": "IMG_3734.HEIC", "out": "kawasaki-kle-500/blanco/5.webp" },
+    { "src": "IMG_3735.HEIC", "out": "kawasaki-kle-500/blanco/6.webp" },
+    { "src": "IMG_3733.HEIC", "out": "kawasaki-kle-500/blanco/7.webp" },
+    { "src": "IMG_3732.HEIC", "out": "kawasaki-kle-500/blanco/8.webp" },
+    { "src": "IMG_3731.heic", "out": "kawasaki-kle-500/blanco/9.webp" },
+    { "src": "IMG_3736.HEIC", "out": "kawasaki-kle-500/blanco/10.webp" },
+
+    { "src": "IMG_3784.JPG", "out": "kawasaki-kle-500/verde/1.webp", "crop": [0, 0, 1440, 1450] },
+    { "src": "IMG_3785.JPG", "out": "kawasaki-kle-500/verde/2.webp" },
+    { "src": "IMG_3787.JPG", "out": "kawasaki-kle-500/verde/3.webp" },
+    { "src": "IMG_3789.JPG", "out": "kawasaki-kle-500/verde/4.webp" },
+    { "src": "IMG_3790.JPG", "out": "kawasaki-kle-500/verde/5.webp" },
+    { "src": "IMG_3786.JPG", "out": "kawasaki-kle-500/verde/6.webp" },
+    { "src": "IMG_3791.JPG", "out": "kawasaki-kle-500/verde/7.webp" },
+    { "src": "IMG_3794.JPG", "out": "kawasaki-kle-500/verde/8.webp" },
+    { "src": "IMG_3792.JPG", "out": "kawasaki-kle-500/verde/9.webp" },
+    { "src": "IMG_3793.JPG", "out": "kawasaki-kle-500/verde/10.webp" }
+  ]
+}

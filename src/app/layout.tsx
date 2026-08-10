@@ -78,6 +78,8 @@ export const metadata: Metadata = {
     "Yamaha Ténéré Venezuela",
     "Suzuki DR650 Venezuela",
     "Kawasaki KLR 650 Venezuela",
+    "Kawasaki KLE 500 Venezuela",
+    "Voge DS 900X Venezuela",
     "Voge Venezuela",
   ],
   openGraph: {

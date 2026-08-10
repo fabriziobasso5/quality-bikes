@@ -9,7 +9,7 @@ import { motorcycles } from "@/data/motorcycles";
 export const metadata: Metadata = {
   title: "Inventario completo",
   description:
-    "Todo el inventario de motocicletas de Quality Bikes en Caracas, filtrable por marca: BMW, Ducati, Kawasaki y Voge.",
+    "Todo el inventario de motocicletas de Quality Bikes en Caracas, filtrable por marca: Ducati, Kawasaki y Voge.",
 };
 
 // Página de inventario completo con filtro por marca. Solo se llega desde el

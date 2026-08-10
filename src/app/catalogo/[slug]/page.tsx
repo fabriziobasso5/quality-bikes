@@ -56,10 +56,13 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
         </span>
       </nav>
 
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
         <MotoGallery moto={moto} />
 
-        <div>
+        {/* Sticky en desktop: la galería vertical es más alta que la ficha, así
+            que sin esto las specs y el botón de WhatsApp se quedan atrás
+            mientras se recorren las fotos. */}
+        <div className="lg:sticky lg:top-28">
           <div className="flex items-center gap-3">
             <Eyebrow>{moto.brand}</Eyebrow>
             {moto.availability === "proximo-arribo" && (
@@ -144,7 +147,30 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
         </div>
       </div>
 
-      <Reveal className="mx-auto mt-16 max-w-xl">
+      {/* Las bondades van a todo el ancho y no en la columna de specs: la
+          columna ya llega justa al alto de la galería, y aquí respiran como
+          una ficha editorial en vez de amontonarse como viñetas. */}
+      {moto.highlights && moto.highlights.length > 0 && (
+        <div className="mt-24">
+          <Reveal>
+            <Eyebrow>Por qué esta moto</Eyebrow>
+          </Reveal>
+          <RevealGroup className="mt-8 grid grid-cols-1 gap-x-12 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
+            {moto.highlights.map((point, i) => (
+              <RevealItem key={point}>
+                <div className="border-t border-black/10 pt-5">
+                  <p className="font-mono text-[11px] tracking-[0.2em] text-brand-red">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <p className="mt-3 leading-relaxed text-brand-text/80">{point}</p>
+                </div>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
+      )}
+
+      <Reveal className="mx-auto mt-24 max-w-xl">
         <h2 className="mb-6 text-center font-display text-2xl uppercase tracking-wide">
           Solicita tu cotización
         </h2>

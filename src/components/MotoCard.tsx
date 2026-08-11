@@ -6,12 +6,14 @@ import { withBasePath } from "@/lib/base-path";
 import { motoPhotoPaths, type Motorcycle } from "@/data/motorcycles";
 
 export default function MotoCard({ moto }: { moto: Motorcycle }) {
-  // Unidades físicas en showroom con fotos reales propias: al hover en
-  // desktop la portada oficial hace crossfade a la unidad real.
-  const hasRealPhotos = moto.availability === "en-stock" && moto.photoCount > 1;
   // Con colorways la primera foto cuelga de la subcarpeta del color, no de la
   // raíz del modelo — de ahí que la ruta salga del helper y no se arme aquí.
+  // Puede no haber ninguna: los colores de próximo arribo solo tienen la foto
+  // de prensa sobre blanco, que ya es la portada.
   const realPhoto = motoPhotoPaths(moto)[0];
+  // Unidades físicas en showroom con fotos reales propias: al hover en
+  // desktop la portada oficial hace crossfade a la unidad real.
+  const hasRealPhotos = moto.availability === "en-stock" && Boolean(realPhoto);
 
   return (
     <TiltCard>

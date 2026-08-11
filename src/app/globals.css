@@ -139,7 +139,17 @@ body::after {
    entran después. qb-late-fade anima filter:opacity() — NO la propiedad
    opacity — para no pisar la opacidad inline que gobierna el scroll. Bajo
    prefers-reduced-motion las animaciones se apagan y quedan los valores
-   finales (offset 0 por defecto, fill-opacity inline). */
+   finales (offset 0 por defecto, fill-opacity inline).
+
+   El arranque se retrasa --qb-intro-delay porque en la carga inicial el
+   IntroLoader tapa la pantalla ~2.2s: sin esta espera la silueta se dibujaba
+   entera DETRÁS del logo y el visitante solo veía el resultado. El valor por
+   defecto cubre ese caso incluso sin JS; IntroLoader lo baja a 0s en cuanto
+   termina, para que al volver a la portada por navegación interna (sin
+   loader) el trazo arranque en el acto. */
+:root {
+  --qb-intro-delay: 2.2s;
+}
 @keyframes qb-draw {
   from {
     stroke-dashoffset: 1;
@@ -149,7 +159,7 @@ body::after {
   }
 }
 .qb-sil-draw {
-  animation: qb-draw 2.2s ease-out both;
+  animation: qb-draw 2.2s ease-out var(--qb-intro-delay) both;
 }
 @keyframes qb-fill-in {
   from {
@@ -160,7 +170,7 @@ body::after {
   }
 }
 .qb-sil-fill {
-  animation: qb-fill-in 0.8s ease-out 1.7s both;
+  animation: qb-fill-in 0.8s ease-out calc(1.7s + var(--qb-intro-delay)) both;
 }
 @keyframes qb-late-fade {
   from {
@@ -171,12 +181,61 @@ body::after {
   }
 }
 .qb-late-fade {
-  animation: qb-late-fade 0.7s ease-out 1.5s both;
+  animation: qb-late-fade 0.7s ease-out calc(1.5s + var(--qb-intro-delay)) both;
 }
 @media (prefers-reduced-motion: reduce) {
   .qb-sil-draw,
   .qb-sil-fill,
   .qb-late-fade {
+    animation: none;
+  }
+}
+
+/* Ediciones especiales Black Knight de Voge: al elegir ese color una lámina de
+   luz dorada barre la moto una sola vez — el reflejo de un foco al girarla. El
+   fondo sigue siendo blanco como en el resto de colores (las fotos de prensa
+   traen el blanco incrustado), así que el destello va en multiply: sobre el
+   fondo no se ve y sobre la carrocería negra sí, que es donde se busca. La
+   foto entra a la vez con un acercamiento mínimo para que el conjunto se sienta
+   como una presentación y no como un simple cambio de imagen. */
+@keyframes qb-bk-sheen {
+  from {
+    transform: translateX(-130%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(130%) skewX(-18deg);
+  }
+}
+.qb-bk-sheen {
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(201, 162, 39, 0.55) 48%,
+    rgba(255, 226, 138, 0.85) 52%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+  animation: qb-bk-sheen 1.15s cubic-bezier(0.3, 0, 0.2, 1) 0.12s both;
+}
+@keyframes qb-bk-photo {
+  from {
+    opacity: 0.55;
+    transform: scale(1.035);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.qb-bk-photo {
+  animation: qb-bk-photo 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .qb-bk-sheen {
+    animation: none;
+    opacity: 0;
+  }
+  .qb-bk-photo {
     animation: none;
   }
 }

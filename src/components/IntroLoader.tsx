@@ -7,6 +7,20 @@ import { LOGO_PATHS, LOGO_VIEWBOX } from "./logo-paths";
 const DRAW_DURATION = 1.2;
 const FILL_DELAY = 1.0;
 const HOLD_MS = 1700;
+const EXIT_MS = 500;
+
+// Cuándo se pone --qb-intro-delay a 0s. NO puede ser al desaparecer el velo:
+// bajar el delay de una animación que aún está en su fase de espera adelanta su
+// reloj de golpe — la silueta saltaría directamente al trazo terminado, justo
+// el fallo que esto viene a arreglar. Se espera a que la intro de la portada
+// haya terminado por completo (la más larga acaba en 2.2s de espera + 2.5s de
+// animación) y solo entonces se pone a cero, para que las navegaciones internas
+// posteriores —que no remontan este componente— dibujen la silueta al instante.
+const RELEASE_MS = 5200;
+
+function releaseHeroIntro() {
+  document.documentElement.style.setProperty("--qb-intro-delay", "0s");
+}
 
 /**
  * The initial-load experience IS the brand mark drawing itself — no generic
@@ -23,11 +37,16 @@ export default function IntroLoader() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       setPhase("done");
+      releaseHeroIntro();
       return;
     }
     setPhase("playing");
     const t = setTimeout(() => setPhase("done"), HOLD_MS);
-    return () => clearTimeout(t);
+    const release = setTimeout(releaseHeroIntro, RELEASE_MS);
+    return () => {
+      clearTimeout(t);
+      clearTimeout(release);
+    };
   }, []);
 
   return (
@@ -38,7 +57,7 @@ export default function IntroLoader() {
           className="pointer-events-none fixed inset-0 z-[100] flex items-center justify-center bg-brand-bg"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { duration: 0.15 } }}
-          exit={{ opacity: 0, transition: { duration: 0.5, ease: "easeInOut" } }}
+          exit={{ opacity: 0, transition: { duration: EXIT_MS / 1000, ease: "easeInOut" } }}
           aria-hidden
         >
           <svg viewBox={LOGO_VIEWBOX} className="w-56 sm:w-72" fill="none">

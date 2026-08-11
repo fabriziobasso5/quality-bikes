@@ -16,6 +16,9 @@ export interface MotoColorway {
   lead?: string;
   // Accesorios montados en la unidad fotografiada — no vienen con la moto.
   accessories?: string[];
+  // Edición especial de fábrica (las Black Knight de Voge): la ficha le da un
+  // tratamiento visual propio en vez de tratarla como un color más.
+  special?: boolean;
 }
 
 export interface Motorcycle {
@@ -230,17 +233,18 @@ export const motorcycles: Motorcycle[] = [
       "Bicilíndrico de 895 cc y 94 hp: el mismo bloque que fabrica Loncin para el BMW F 900 GS",
       "Tornillería y despieces compatibles con BMW, a una fracción del precio",
       "825 mm de altura de asiento, la más accesible de la gama grande",
-      "Tres combinaciones de color de fábrica, todas con llantas de radios doradas",
+      "Edición especial Black Knight en negro, con llantas de radios doradas",
     ],
-    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Negro · Gris Azul · Gris Verde", seatHeight: "825 mm", weight: "215 kg" },
-    photoCount: 1,
+    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Black Knight · Gris Azul · Gris Verde", seatHeight: "825 mm", weight: "215 kg" },
+    photoCount: 0,
     colorways: [
       {
-        id: "negro",
-        name: "Negro",
+        id: "black-knight",
+        name: "Black Knight",
         swatch: "#16181A",
-        photoCount: 1,
+        photoCount: 0,
         lead: "/images/catalog/voge-ds-900x.webp",
+        special: true,
       },
       {
         id: "gris-azul",
@@ -274,7 +278,7 @@ export const motorcycles: Motorcycle[] = [
       "850 mm de asiento y cotas de rally: la más off-road de la gama DS",
       "213 kg, doce menos que la DS 900X pese a la misma potencia",
     ],
-    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Blanco Azul · Negro", seatHeight: "850 mm", weight: "213 kg" },
+    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Blanco Azul · Black Knight", seatHeight: "850 mm", weight: "213 kg" },
     photoCount: 0,
     colorways: [
       {
@@ -285,11 +289,12 @@ export const motorcycles: Motorcycle[] = [
         lead: "/images/catalog/voge-ds-800x-rally.webp",
       },
       {
-        id: "negro",
-        name: "Negro",
+        id: "black-knight",
+        name: "Black Knight",
         swatch: "#16181A",
-        photoCount: 1,
+        photoCount: 0,
         lead: "/images/catalog/voge-ds-800x-rally-negro.webp",
+        special: true,
       },
     ],
   },
@@ -309,22 +314,23 @@ export const motorcycles: Motorcycle[] = [
       "Dos modos de manejo, Eco y Sport, con ABS y control de tracción conmutables",
       "191 kg, la más ligera de las bicilíndricas de la gama",
     ],
-    specs: { power: "63 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Beige · Negra", seatHeight: "835 mm", weight: "191 kg" },
-    photoCount: 1,
+    specs: { power: "63 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Beige · Black Knight", seatHeight: "835 mm", weight: "191 kg" },
+    photoCount: 0,
     colorways: [
       {
         id: "beige",
         name: "Beige",
         swatch: "#E5C9A6",
-        photoCount: 1,
+        photoCount: 0,
         lead: "/images/catalog/voge-ds-625x.webp",
       },
       {
-        id: "negra",
-        name: "Negra",
+        id: "black-knight",
+        name: "Black Knight",
         swatch: "#16181A",
         photoCount: 0,
         lead: "/images/catalog/voge-ds-625x-negra.webp",
+        special: true,
       },
     ],
   },
@@ -344,29 +350,30 @@ export const motorcycles: Motorcycle[] = [
       "ABS Bosch desconectable para salir del asfalto sin pelear con la moto",
       "810 mm de asiento: pies en el suelo con toda la pinta de una trail grande",
     ],
-    specs: { power: "47 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Azul · Amarilla · Negra", seatHeight: "810 mm", weight: "206 kg" },
-    photoCount: 1,
+    specs: { power: "47 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Azul · Amarilla · Black Knight", seatHeight: "810 mm", weight: "206 kg" },
+    photoCount: 0,
     colorways: [
       {
         id: "azul",
         name: "Azul",
         swatch: "linear-gradient(135deg, #DCE0E4 50%, #1F5BB5 50%)",
-        photoCount: 1,
+        photoCount: 0,
         lead: "/images/catalog/voge-ds-525x.webp",
       },
       {
         id: "amarilla",
         name: "Amarilla",
         swatch: "linear-gradient(135deg, #D7DADD 50%, #E8C21C 50%)",
-        photoCount: 1,
+        photoCount: 0,
         lead: "/images/catalog/voge-ds-525x-amarilla.webp",
       },
       {
-        id: "negra",
-        name: "Negra",
+        id: "black-knight",
+        name: "Black Knight",
         swatch: "#16181A",
         photoCount: 0,
         lead: "/images/catalog/voge-ds-525x-negra.webp",
+        special: true,
       },
     ],
   },
@@ -387,7 +394,8 @@ export const motorcycles: Motorcycle[] = [
       "810 mm de asiento — el escalón natural antes de una alta cilindrada",
     ],
     specs: { power: "28 hp", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Gris", seatHeight: "810 mm", weight: "155 kg" },
-    photoCount: 2,
+    // Próximo arribo: solo la foto de prensa sobre blanco, que ya es la portada.
+    photoCount: 0,
   },
 ];
 

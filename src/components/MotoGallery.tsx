@@ -31,13 +31,22 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
     setActive(0); // la secuencia cambia entera: volver a la foto de apertura
   }
 
+  // El key del escenario cambia con el color: fuerza el remonte y con él la
+  // animación de entrada, que en las ediciones especiales es la del destello.
+  const stageKey = `${colorId ?? "base"}-${active}`;
+
   return (
     <div>
       <button
         type="button"
         onClick={() => setLightbox(true)}
         aria-label={`Ver foto ${active + 1} de ${label} en pantalla completa`}
-        className="relative block aspect-[4/5] w-full cursor-zoom-in border border-black/[0.07] bg-white"
+        // El escenario NO se oscurece en las ediciones especiales: las fotos de
+        // prensa llevan el fondo blanco incrustado y sobre negro quedaba un
+        // recuadro blanco flotando. La distinción se hace toda en oro.
+        className={`relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden border bg-white transition-colors duration-500 ${
+          colorway?.special ? "border-[#C9A227]/45" : "border-black/[0.07]"
+        }`}
       >
         <Image
           key={srcs[active]}
@@ -45,9 +54,19 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
           alt={label}
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"
-          className="object-contain"
+          className={`object-contain ${colorway?.special ? "qb-bk-photo" : ""}`}
           preload
         />
+        {/* Edición especial: el fondo cae a negro y una lámina de luz dorada
+            barre la moto una sola vez, como el reflejo de un foco al girarla. */}
+        {colorway?.special && (
+          <span key={stageKey} aria-hidden className="qb-bk-sheen pointer-events-none absolute inset-0" />
+        )}
+        {colorway?.special && (
+          <span className="pointer-events-none absolute top-3 left-3 rounded-full border border-[#C9A227]/70 bg-[#FBF7EC] px-3 py-1 font-mono text-[9px] tracking-[0.18em] text-[#8A6D1F] uppercase">
+            Edición especial
+          </span>
+        )}
         <span className="pointer-events-none absolute right-3 bottom-3 rounded-full bg-black/45 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-white/90 uppercase backdrop-blur-sm">
           {active + 1}/{srcs.length}
         </span>
@@ -70,8 +89,12 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
                   title={c.name}
                   className={`relative h-8 w-8 rounded-full border transition duration-300 ${
                     on
-                      ? "border-brand-navy ring-2 ring-brand-navy/25 ring-offset-2 ring-offset-brand-bg"
-                      : "border-black/15 hover:border-brand-navy/50"
+                      ? c.special
+                        ? "border-[#C9A227] ring-2 ring-[#C9A227]/35 ring-offset-2 ring-offset-brand-bg"
+                        : "border-brand-navy ring-2 ring-brand-navy/25 ring-offset-2 ring-offset-brand-bg"
+                      : c.special
+                        ? "border-[#C9A227]/50 hover:border-[#C9A227]"
+                        : "border-black/15 hover:border-brand-navy/50"
                   }`}
                   style={{ background: c.swatch }}
                 >
@@ -80,7 +103,13 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
               );
             })}
           </div>
-          <span className="font-mono text-xs text-brand-text/70">{colorway?.name}</span>
+          <span
+            className={`font-mono text-xs ${
+              colorway?.special ? "tracking-[0.12em] text-[#8A6D1F] uppercase" : "text-brand-text/70"
+            }`}
+          >
+            {colorway?.name}
+          </span>
         </div>
       )}
 

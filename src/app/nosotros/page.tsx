@@ -7,10 +7,10 @@ import { withBasePath } from "@/lib/base-path";
 
 export const metadata: Metadata = {
   title: "Nosotros",
-  description: `Conoce la historia detrás de ${siteConfig.name}: de Moto Accesorios Baró (1977) al showroom de alta gama en el este de Caracas.`,
+  description: `Conoce la historia detrás de ${siteConfig.name}: de Moto Accesorios Baró (1981) al showroom de alta gama en el este de Caracas.`,
 };
 
-// Historia real de la casa (1977 → hoy). Redacción editorial sobre los hechos
+// Historia real de la casa (1981 → hoy). Redacción editorial sobre los hechos
 // entregados por el cliente. Foto propia (BMW GS Adventure en wheelie), sin
 // repetir ninguna otra imagen del sitio.
 export default function NosotrosPage() {
@@ -27,7 +27,7 @@ export default function NosotrosPage() {
       <div className="mt-14 grid grid-cols-1 gap-12 lg:grid-cols-5 lg:items-start lg:gap-16">
         <Reveal delay={0.1} className="lg:col-span-3">
           <p className="text-lg leading-relaxed text-brand-text/70">
-            Nuestra historia arranca en <span className="text-brand-navy">1977</span> con{" "}
+            Nuestra historia arranca en <span className="text-brand-navy">1981</span> con{" "}
             <span className="text-brand-navy">Moto Accesorios Baró</span>, la primera tienda de
             motos de la familia. Fuimos distribuidores oficiales de Yamaha hasta 2006 y hoy
             seguimos siendo distribuidores de Suzuki.
@@ -41,7 +41,7 @@ export default function NosotrosPage() {
             showroom.
           </p>
           <p className="mt-6 text-lg leading-relaxed text-brand-text/70">
-            Hoy, con más de <span className="text-brand-navy">49 años en el mundo motero y
+            Hoy, con <span className="text-brand-navy">45 años en el mundo motero y
             contando</span>, seguimos con la misma pasión: mucho más que solo motos.
           </p>
         </Reveal>
@@ -58,7 +58,7 @@ export default function NosotrosPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           </div>
           <p className="mt-3 text-center font-mono text-xs tracking-[0.15em] text-brand-text/40 uppercase">
-            Caracas · Venezuela · desde 1977
+            Caracas · Venezuela · desde 1981
           </p>
         </Reveal>
       </div>

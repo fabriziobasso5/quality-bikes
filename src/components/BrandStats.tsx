@@ -45,8 +45,9 @@ function Counter({ target, prefix = "" }: { target: number; prefix?: string }) {
  */
 export default function BrandStats() {
   const stats = [
-    { target: 49, prefix: "+", label: "años de experiencia" },
-    { target: 200, prefix: "+", label: "Sueños cumplidos" },
+    // Sin "+": son los años exactos desde 1981, no una cifra aproximada.
+    { target: 45, prefix: "", label: "años de experiencia" },
+    { target: 250, prefix: "+", label: "Clientes satisfechos" },
     { target: 2, prefix: "", label: "tiendas en Caracas" },
     // Derivado del propio sitio para que nunca quede desactualizado. La
     // etiqueta es "Marcas" a secas: no todas son representaciones oficiales.

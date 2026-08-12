@@ -36,6 +36,7 @@ const navItems = [
 export default function Header() {
   const pathname = usePathname();
   const panelRef = useRef<HTMLDivElement>(null);
+  const isHome = pathname === "/";
 
   // Que el panel esté abierto se LEE de la URL, no se guarda: el historial es
   // la única fuente de verdad, así que volver atrás y abrirlo a mano llegan al
@@ -130,26 +131,53 @@ export default function Header() {
           }}
         />
 
-        <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          {/* Anchor plano en vez de next/link: navegación dura al home con el
-              basePath ya resuelto — funciona desde cualquier subpágina de
-              GitHub Pages sin depender del estado del router del cliente. */}
-          <a href={withBasePath("/")} className="flex shrink-0 items-center" aria-label={siteConfig.name}>
-            {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
-            <img
-              src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
-              alt={siteConfig.name}
-              className="h-10 w-auto md:hidden"
-              style={{ filter: "brightness(0) invert(1)" }}
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
-            <img
-              src={withBasePath("/assets/logo/quality-bikes-logo-venezuela.svg")}
-              alt={siteConfig.name}
-              className="hidden h-16 w-auto md:block"
-              style={{ filter: "brightness(0) invert(1)" }}
-            />
-          </a>
+        <div className="relative mx-auto flex max-w-7xl items-start justify-between px-6 py-4">
+          <div className="flex shrink-0 flex-col items-start">
+            {/* Anchor plano en vez de next/link: navegación dura al home con el
+                basePath ya resuelto — funciona desde cualquier subpágina de
+                GitHub Pages sin depender del estado del router del cliente. */}
+            <a href={withBasePath("/")} className="flex items-center" aria-label={siteConfig.name}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
+              <img
+                src={withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg")}
+                alt={siteConfig.name}
+                className="h-10 w-auto md:hidden"
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element -- SVG de marca, dimensiones intrínsecas no fijas */}
+              <img
+                src={withBasePath("/assets/logo/quality-bikes-logo-venezuela.svg")}
+                alt={siteConfig.name}
+                className="hidden h-16 w-auto md:block"
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
+            </a>
+
+            {/* Vuelta a la portada, visible en todas las páginas menos en ella
+                misma. El logo ya lleva al inicio, pero eso no se ve: la flecha
+                lo dice. Mismo destino y misma navegación dura. */}
+            {!isHome && (
+              <a
+                href={withBasePath("/")}
+                aria-label="Ir a la página principal"
+                className="group mt-1.5 -ml-1 inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-white/45 transition hover:text-white"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-3.5 w-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden
+                >
+                  <path d="M15 4 7 12l8 8" />
+                </svg>
+                <span className="font-mono text-[10px] tracking-[0.16em] uppercase">Inicio</span>
+              </a>
+            )}
+          </div>
 
           <nav className="hidden items-center gap-8 font-display text-base tracking-wide uppercase md:flex">
             <button
@@ -189,7 +217,7 @@ export default function Header() {
           desmontarse nunca y se quedaba en la página con todos sus enlaces. */}
       {catalogOpen && (
         <div
-          className="fixed inset-0 z-[-1] cursor-default"
+          className="fixed inset-0 z-[-1] hidden cursor-default md:block"
           onClick={closeCatalogPanel}
           aria-hidden
         />
@@ -207,7 +235,10 @@ export default function Header() {
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-x-0 top-full block max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-black/10 bg-white shadow-xl shadow-black/5"
+                // Solo escritorio: en el teléfono el catálogo se despliega
+                // dentro del menú de la hamburguesa, y como los dos leen la
+                // misma parada del historial, sin esto saldrían a la vez.
+                className="absolute inset-x-0 top-full hidden max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-black/10 bg-white shadow-xl shadow-black/5 md:block"
               >
                 <div className="mx-auto max-w-7xl px-5 py-7 sm:px-6 sm:py-8">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-6 lg:grid-cols-4">

@@ -1,9 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import MotoCover from "./MotoCover";
 import { motorcycles } from "@/data/motorcycles";
+import { rememberBackTarget } from "@/lib/back-target";
+import {
+  closeCatalogPanel,
+  isCatalogOpen,
+  openCatalogPanel,
+  subscribeToCatalogHistory,
+} from "@/lib/catalog-panel";
 
 const navItems = [
   { href: "/productos", label: "Productos" },
@@ -17,43 +24,69 @@ const navItems = [
  * (acordeón) mostrando todas las motos — sin depender del overlay de
  * escritorio, así funciona bien en teléfono. "Productos", "Nosotros" y
  * "Contacto" navegan directo a su página real.
+ *
+ * El acordeón de Catálogo comparte con el panel de escritorio la MISMA parada
+ * de historial (lib/catalog-panel): en el teléfono era estado local y por eso
+ * "Volver" desde una ficha no sabía regresar al catálogo y acababa en la
+ * portada, o en Productos si se había pasado por ahí.
  */
 export default function MobileMenu() {
   const [open, setOpen] = useState(false);
-  const [catalogOpen, setCatalogOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
 
-  function closeAll() {
+  const catalogOpen = useSyncExternalStore(
+    subscribeToCatalogHistory,
+    isCatalogOpen,
+    () => false
+  );
+
+  // El acordeón vive dentro del panel de la hamburguesa, así que al volver al
+  // catálogo hay que reabrir los dos.
+  const navVisible = open || catalogOpen;
+
+  // Navegar desde el menú lo oculta en el acto sin tocar el historial: la
+  // parada del catálogo tiene que sobrevivir para poder volver a ella. Al
+  // cambiar de página el nodo se desmonta y se lleva el estilo con él.
+  function hideNav() {
     setOpen(false);
-    setCatalogOpen(false);
+    if (navRef.current) navRef.current.style.display = "none";
+  }
+
+  function closeEverything() {
+    setOpen(false);
+    if (catalogOpen) closeCatalogPanel();
   }
 
   return (
     <div className="md:hidden">
       <button
         type="button"
-        aria-label={open ? "Cerrar menú" : "Abrir menú"}
-        aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        aria-label={navVisible ? "Cerrar menú" : "Abrir menú"}
+        aria-expanded={navVisible}
+        onClick={() => (navVisible ? closeEverything() : setOpen(true))}
         className="relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5"
       >
         <span
-          className={`h-px w-6 transition ${open ? "translate-y-2 rotate-45 bg-brand-text" : "bg-white"}`}
+          className={`h-px w-6 transition ${navVisible ? "translate-y-2 rotate-45 bg-brand-text" : "bg-white"}`}
         />
-        <span className={`h-px w-6 transition ${open ? "bg-brand-text opacity-0" : "bg-white"}`} />
         <span
-          className={`h-px w-6 transition ${open ? "-translate-y-2 -rotate-45 bg-brand-text" : "bg-white"}`}
+          className={`h-px w-6 transition ${navVisible ? "bg-brand-text opacity-0" : "bg-white"}`}
+        />
+        <span
+          className={`h-px w-6 transition ${navVisible ? "-translate-y-2 -rotate-45 bg-brand-text" : "bg-white"}`}
         />
       </button>
 
-      {open && (
+      {navVisible && (
         <nav
+          ref={navRef}
           data-testid="mobile-nav"
           className="absolute inset-x-0 top-full z-40 max-h-[calc(100svh-4.5rem)] overflow-y-auto border-b border-black/10 bg-brand-bg px-6 py-4 shadow-lg"
         >
           {/* Catálogo — mega-menú móvil: cuadrícula con todas las motos. */}
           <button
             type="button"
-            onClick={() => setCatalogOpen((v) => !v)}
+            onClick={() => (catalogOpen ? closeCatalogPanel() : openCatalogPanel())}
             aria-expanded={catalogOpen}
             className="flex w-full items-center justify-between py-3 text-sm tracking-wide uppercase text-brand-text/80"
           >
@@ -72,7 +105,10 @@ export default function MobileMenu() {
                   <Link
                     key={moto.slug}
                     href={`/catalogo/${moto.slug}`}
-                    onClick={closeAll}
+                    onClick={() => {
+                      rememberBackTarget(`/catalogo/${moto.slug}`, "catalogo");
+                      hideNav();
+                    }}
                     className="group text-center"
                   >
                     <div className="relative">
@@ -98,7 +134,10 @@ export default function MobileMenu() {
               </div>
               <Link
                 href="/catalogo/inventario"
-                onClick={closeAll}
+                onClick={() => {
+                  rememberBackTarget("/catalogo/inventario", "catalogo");
+                  hideNav();
+                }}
                 className="block rounded-full bg-brand-navy px-6 py-3 text-center text-xs tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
               >
                 Ver inventario completo →
@@ -110,7 +149,7 @@ export default function MobileMenu() {
             <Link
               key={item.href}
               href={item.href}
-              onClick={closeAll}
+              onClick={hideNav}
               className="block py-3 text-sm tracking-wide uppercase text-brand-text/80 transition hover:text-brand-red"
             >
               {item.label}

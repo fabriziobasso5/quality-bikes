@@ -1,22 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import MobileMenu from "./MobileMenu";
 import MotoCover from "./MotoCover";
 import { motorcycles } from "@/data/motorcycles";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
+import { rememberBackTarget } from "@/lib/back-target";
+import {
+  closeCatalogPanel,
+  isCatalogOpen,
+  notifyCatalogHistoryChanged,
+  openCatalogPanel,
+  subscribeToCatalogHistory,
+} from "@/lib/catalog-panel";
+
+const PANEL_SCROLL_KEY = "qb:catalog-scroll";
 
 const navItems = [
   { href: "/productos", label: "Productos" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
-
-type MenuId = "catalogo";
 
 /**
  * Ducati-style mega menu: "Catálogo" abre un panel blanco a todo el ancho con
@@ -26,36 +34,73 @@ type MenuId = "catalogo";
  * necesita un panel propio aquí).
  */
 export default function Header() {
-  const [openMenu, setOpenMenu] = useState<MenuId | null>(null);
   const pathname = usePathname();
+  const panelRef = useRef<HTMLDivElement>(null);
 
-  // Any route change closes the panel.
-  useEffect(() => {
-    setOpenMenu(null);
-  }, [pathname]);
+  // Que el panel esté abierto se LEE de la URL, no se guarda: el historial es
+  // la única fuente de verdad, así que volver atrás y abrirlo a mano llegan al
+  // mismo sitio por el mismo camino.
+  const catalogOpen = useSyncExternalStore(
+    subscribeToCatalogHistory,
+    isCatalogOpen,
+    () => false // en el servidor no hay URL del cliente: nace cerrado
+  );
+
+  // Navegar a otra página también cambia la URL (se va el hash y el panel debe
+  // cerrarse), pero Next lo hace con pushState, que no dispara popstate: sin
+  // este aviso la suscripción no se entera y el panel se queda montado y
+  // "abierto" encima de la página nueva.
+  useEffect(notifyCatalogHistoryChanged, [pathname]);
+
+  // Navegar DESDE el panel lo oculta en el acto tocando el DOM, sin pasar por
+  // el estado: la parada del historial tiene que sobrevivir (es lo que permite
+  // volver), y esperar al cambio de ruta dejaba 0.22s de salida animada
+  // cruzándose con la entrada de la página nueva — el click parecía no hacer
+  // nada.
+  //
+  // Se oculta con opacidad, NO con display:none ni visibility:hidden: con esas
+  // dos el navegador deja de animar el elemento, la salida de AnimatePresence
+  // no termina nunca y el panel se quedaba montado para siempre — invisible,
+  // pero con todos sus enlaces en el DOM. La opacidad la anima framer de todas
+  // formas al salir, así que el panel se desmonta solo y se lleva estos estilos.
+  function hideCatalog() {
+    const el = panelRef.current;
+    if (!el) return;
+    // La altura se apunta AQUÍ, al salir, y no escuchando el scroll: es el
+    // único instante que importa y evita depender de un evento que en el panel
+    // no siempre llega.
+    sessionStorage.setItem(PANEL_SCROLL_KEY, String(el.scrollTop));
+    el.style.opacity = "0";
+    el.style.pointerEvents = "none";
+  }
 
   useEffect(() => {
-    if (!openMenu) return;
+    window.addEventListener("qb:open-catalog", openCatalogPanel);
+    return () => window.removeEventListener("qb:open-catalog", openCatalogPanel);
+  }, []);
+
+  useEffect(() => {
+    if (!catalogOpen) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpenMenu(null);
+      if (e.key === "Escape") closeCatalogPanel();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [openMenu]);
+  }, [catalogOpen]);
 
-  // Los demás accesos al catálogo del sitio — "Ver catálogo" (hero), el botón
-  // del showroom, "Catálogo" del footer y del menú móvil — abren este MISMO
-  // mega-menú vía un evento global en vez de navegar a otra página.
+  // Devuelve el panel a la altura en la que se dejó: "volver al catálogo" tiene
+  // que caer en la misma moto que se estaba mirando, no al principio de la
+  // rejilla.
   useEffect(() => {
-    function onOpenCatalog() {
-      setOpenMenu("catalogo");
-    }
-    window.addEventListener("qb:open-catalog", onOpenCatalog);
-    return () => window.removeEventListener("qb:open-catalog", onOpenCatalog);
-  }, []);
+    const el = panelRef.current;
+    if (!catalogOpen || !el) return;
+    const saved = Number(sessionStorage.getItem(PANEL_SCROLL_KEY) ?? 0);
+    if (saved > 0) el.scrollTop = saved;
+  }, [catalogOpen, pathname]);
 
-  function toggle(id: MenuId) {
-    setOpenMenu((cur) => (cur === id ? null : id));
+  function toggle() {
+    if (catalogOpen) closeCatalogPanel();
+    else openCatalogPanel();
   }
 
   return (
@@ -108,11 +153,11 @@ export default function Header() {
 
           <nav className="hidden items-center gap-8 font-display text-base tracking-wide uppercase md:flex">
             <button
-              onClick={() => toggle("catalogo")}
-              aria-expanded={openMenu === "catalogo"}
+              onClick={toggle}
+              aria-expanded={catalogOpen}
               aria-controls="mega-catalogo"
               className={`uppercase tracking-wide transition ${
-                openMenu === "catalogo" ? "text-brand-red" : "text-white/85 hover:text-brand-red"
+                catalogOpen ? "text-brand-red" : "text-white/85 hover:text-brand-red"
               }`}
             >
               Catálogo
@@ -125,7 +170,7 @@ export default function Header() {
                 // esperar a que cambie el pathname: si no, la salida
                 // animada del panel (0.22s) se cruza con la entrada de la
                 // página nueva y el click "parece" no hacer nada.
-                onClick={() => setOpenMenu(null)}
+                onClick={hideCatalog}
                 className="text-white/85 transition hover:text-brand-red"
               >
                 {item.label}
@@ -137,21 +182,30 @@ export default function Header() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {openMenu && (
-          <>
-            {/* Invisible catch-all behind the panel: outside click closes. */}
-            <div
-              className="fixed inset-0 z-[-1] cursor-default"
-              onClick={() => setOpenMenu(null)}
-              aria-hidden
-            />
-            {openMenu === "catalogo" && (
-              <motion.div
+      {/* Invisible catch-all behind the panel: outside click closes. Fuera del
+          AnimatePresence y sin animación: no la necesita, y como hijo directo
+          obligaría a envolver todo en un fragmento — y AnimatePresence no sabe
+          seguir la salida de un fragmento, así que el panel no llegaba a
+          desmontarse nunca y se quedaba en la página con todos sus enlaces. */}
+      {catalogOpen && (
+        <div
+          className="fixed inset-0 z-[-1] cursor-default"
+          onClick={closeCatalogPanel}
+          aria-hidden
+        />
+      )}
+
+      {/* Sin AnimatePresence: su salida animada terminaba pero nunca llegaba a
+          retirar el nodo, y el panel se quedaba para siempre en la página —
+          invisible, pero con sus enlaces dentro, robándole los clicks a los de
+          la página de debajo. Se monta y se desmonta a secas; la entrada sí se
+          anima, que es la que se ve. */}
+      {catalogOpen && (
+            <motion.div
                 id="mega-catalogo"
+                ref={panelRef}
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                 className="absolute inset-x-0 top-full block max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-black/10 bg-white shadow-xl shadow-black/5"
               >
@@ -161,7 +215,10 @@ export default function Header() {
                       <Link
                         key={moto.slug}
                         href={`/catalogo/${moto.slug}`}
-                        onClick={() => setOpenMenu(null)}
+                        onClick={() => {
+                          rememberBackTarget(`/catalogo/${moto.slug}`, "catalogo");
+                          hideCatalog();
+                        }}
                         className="group text-center"
                       >
                         <div className="relative">
@@ -189,18 +246,18 @@ export default function Header() {
                   <div className="mt-8 flex justify-center border-t border-black/10 pt-6">
                     <Link
                       href="/catalogo/inventario"
-                      onClick={() => setOpenMenu(null)}
+                      onClick={() => {
+                        rememberBackTarget("/catalogo/inventario", "catalogo");
+                        hideCatalog();
+                      }}
                       className="rounded-full bg-brand-navy px-8 py-3 text-xs tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft"
                     >
                       Ver inventario completo →
                     </Link>
                   </div>
                 </div>
-              </motion.div>
-            )}
-          </>
-        )}
-      </AnimatePresence>
+            </motion.div>
+      )}
     </header>
   );
 }

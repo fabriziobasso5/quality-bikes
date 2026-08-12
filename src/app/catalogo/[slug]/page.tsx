@@ -45,17 +45,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
-      {/* forceFallback: desde una ficha "Volver" siempre lleva al catálogo, no
-          al historial. Al catálogo se entra por el mega-menú, que es un panel
-          sobre la página anterior — sin esto, router.back() devolvía a la
-          portada, y saltando entre fichas relacionadas devolvía a la ficha
-          anterior. */}
-      <BackLink
-        fallbackHref="/catalogo/inventario"
-        label="Volver al catálogo"
-        forceFallback
-        className="mb-6"
-      />
+      <BackLink className="mb-6" />
       <nav className="mb-8 flex items-center gap-2 font-mono text-xs tracking-[0.08em] text-brand-text/60 uppercase">
         <span aria-hidden className="text-brand-red">
           ›
@@ -197,7 +187,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
           <RevealGroup className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {related.map((m) => (
               <RevealItem key={m.slug}>
-                <MotoCard moto={m} />
+                <MotoCard moto={m} origin="moto" />
               </RevealItem>
             ))}
           </RevealGroup>

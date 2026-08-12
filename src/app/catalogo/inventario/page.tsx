@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function InventoryPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
-      <BackLink fallbackHref="/" className="mb-6" />
+      <BackLink className="mb-6" />
       <nav className="mb-8 flex items-center gap-2 font-mono text-xs tracking-[0.08em] text-brand-text/60 uppercase">
         <span aria-hidden className="text-brand-red">
           ›

@@ -1,11 +1,21 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import MotoCover from "./MotoCover";
 import TiltCard from "./TiltCard";
 import { withBasePath } from "@/lib/base-path";
 import { motoPhotoPaths, type Motorcycle } from "@/data/motorcycles";
+import { rememberBackTarget, type BackTarget } from "@/lib/back-target";
 
-export default function MotoCard({ moto }: { moto: Motorcycle }) {
+export default function MotoCard({
+  moto,
+  // De dónde se está entrando, para rotular el "Volver" de la ficha.
+  origin = "inventario",
+}: {
+  moto: Motorcycle;
+  origin?: BackTarget;
+}) {
   // Con colorways la primera foto cuelga de la subcarpeta del color, no de la
   // raíz del modelo — de ahí que la ruta salga del helper y no se arme aquí.
   // Puede no haber ninguna: los colores de próximo arribo solo tienen la foto
@@ -19,6 +29,7 @@ export default function MotoCard({ moto }: { moto: Motorcycle }) {
     <TiltCard>
     <Link
       href={`/catalogo/${moto.slug}`}
+      onClick={() => rememberBackTarget(`/catalogo/${moto.slug}`, origin)}
       className="group block overflow-hidden border border-black/10 bg-brand-bg transition duration-300 hover:border-brand-navy/40"
     >
       <div className="relative overflow-hidden">

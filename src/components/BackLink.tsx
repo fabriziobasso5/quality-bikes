@@ -1,45 +1,67 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useCallback, useSyncExternalStore } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { backLabel, readBackTarget } from "@/lib/back-target";
 
 /**
- * Botón minimalista "← Volver" para las vistas internas (ficha de moto, marca de
- * productos, inventario). Reutiliza el mismo estilo del "← Volver" de las
- * opciones de productos (BrandCatalog) para que sea coherente en todo el sitio.
+ * Botón "← Volver" de las vistas internas (ficha de moto, marca de productos,
+ * inventario).
  *
- * Vuelve en el historial cuando es posible; si se entró directo a la URL, cae en
- * un destino fijo (`fallbackHref`) para no dejar al usuario sin salida.
+ * El salto lo hace el historial del navegador, nunca un destino fijo: así
+ * "Volver" siempre devuelve al sitio exacto del que se vino —incluido el panel
+ * de catálogo, que también es una parada del historial— y con la página a la
+ * altura en la que se dejó. El rótulo sí se calcula (ver lib/back-target), solo
+ * para anunciar a dónde lleva.
+ *
+ * Sin historial —el visitante abrió el enlace de la moto directamente desde
+ * WhatsApp, en una pestaña nueva— no hay nada atrás. La salida entonces es
+ * `fallbackHref` si se indicó y, si no, abrir el panel de catálogo ahí mismo,
+ * que es lo natural desde una ficha suelta.
  */
 export default function BackLink({
-  fallbackHref = "/",
-  label = "Volver",
+  label,
   className = "",
+  fallbackHref,
   forceFallback = false,
 }: {
-  fallbackHref?: string;
+  // Fuerza el rótulo. Sin esto se deduce de por dónde entró el visitante.
   label?: string;
   className?: string;
-  // Ignora el historial y navega siempre a fallbackHref — para vistas donde
-  // "Volver" debe llevar a un destino fijo (ej. el selector de marcas de
-  // /productos) sin importar desde dónde se entró (ej. un link directo del
-  // mega-menú que salta el selector).
+  // Destino cuando no hay historial. Sin esto se abre el catálogo.
+  fallbackHref?: string;
+  // Ignora el historial y va siempre al destino fijo — para vistas donde
+  // "Volver" tiene un único sitio con sentido (ej. el selector de marcas de
+  // /productos, al que se puede llegar saltándoselo desde el mega-menú).
   forceFallback?: boolean;
 }) {
+  const pathname = usePathname();
   const router = useRouter();
+
+  // Vive en sessionStorage, que solo existe en el cliente: en el servidor se
+  // devuelve null y el rótulo nace genérico, así no hay desajuste al hidratar.
+  // No cambia mientras esta vista está montada (se escribe al hacer click en el
+  // enlace que trae aquí), de ahí que no haga falta suscribirse a nada.
+  const target = useSyncExternalStore(
+    useCallback(() => () => {}, []),
+    useCallback(() => readBackTarget(pathname), [pathname]),
+    () => null
+  );
 
   return (
     <button
       type="button"
       onClick={() => {
-        if (!forceFallback && typeof window !== "undefined" && window.history.length > 1) {
-          router.back();
-        } else {
-          router.push(fallbackHref);
-        }
+        // Lo que decide el salto es que HAYA historial, no la nota: desde la
+        // portada a una moto no hay nota que apuntar y aun así "Volver" tiene
+        // que devolver a la portada. La nota solo pone el rótulo.
+        if (!forceFallback && window.history.length > 1) window.history.back();
+        else if (fallbackHref) router.push(fallbackHref);
+        else window.dispatchEvent(new CustomEvent("qb:open-catalog"));
       }}
       className={`inline-flex items-center gap-2 rounded-full border border-black/15 px-4 py-2 font-mono text-xs tracking-[0.1em] text-brand-text/70 uppercase transition hover:border-brand-navy hover:text-brand-navy ${className}`}
     >
-      ← {label}
+      ← {label ?? backLabel(target)}
     </button>
   );
 }

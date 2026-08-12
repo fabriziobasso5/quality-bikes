@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Eyebrow from "@/components/Eyebrow";
+import ExplodedHero from "@/components/hero/ExplodedHero";
 import { Reveal } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
@@ -15,7 +16,8 @@ export const metadata: Metadata = {
 // repetir ninguna otra imagen del sitio.
 export default function NosotrosPage() {
   return (
-    <div className="mx-auto max-w-5xl px-6 py-24 sm:py-32">
+    <>
+    <div className="mx-auto max-w-5xl px-6 pt-24 pb-16 sm:pt-32 sm:pb-20">
       <Reveal>
         <Eyebrow tone="red">Nosotros</Eyebrow>
         <h1 className="mt-3 font-display text-4xl leading-tight tracking-wide uppercase sm:text-5xl">
@@ -63,5 +65,12 @@ export default function NosotrosPage() {
         </Reveal>
       </div>
     </div>
+
+    {/* El despiece en fases de la R 1300 GS Adventure cierra esta página, no la
+        portada: allí competía con el plano de entrada —misma moto, otra
+        animación larga— y era lo que más pesaba en la primera impresión. Aquí
+        acompaña al relato de la casa y lo ve quien ha entrado a conocerla. */}
+    <ExplodedHero />
+    </>
   );
 }

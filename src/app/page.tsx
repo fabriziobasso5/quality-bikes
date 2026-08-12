@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import BrandStats from "@/components/BrandStats";
 import BlueprintReveal from "@/components/BlueprintReveal";
-import ExplodedHero from "@/components/hero/ExplodedHero";
 import MotoCover from "@/components/MotoCover";
 import Magnetic from "@/components/Magnetic";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
@@ -100,12 +99,6 @@ export default function Home() {
              es justo lo que sobra. */
           className="object-cover object-[62%_50%] sm:object-[50%_60%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-        <Reveal className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14">
-          <p className="max-w-md font-display text-3xl leading-snug tracking-wide text-white uppercase sm:text-4xl">
-            Tu próxima carretera empieza aquí
-          </p>
-        </Reveal>
       </section>
 
       {/* Franja de datos de marca: respira entre el lifestyle y la tienda */}
@@ -177,58 +170,20 @@ export default function Home() {
           las motos de próximo arribo — foto flotante, specs y "Reservar". */}
       {upcoming.length > 0 && <FeaturedArrivals motos={upcoming} />}
 
-      {/* La pieza de la casa: el despiece en fases de la R 1300 GS Adventure
-          — cierre visual de la página, después de productos y antes del
-          bloque de contacto (intercambiado con el plano, que ahora es la
-          portada) */}
-      <ExplodedHero />
-
-      {/* (a) Invitación: bloque de texto extraído de la antigua sección de
-          ubicación, ahora protagonista y centrado. Compacto — menos aire
-          arriba/abajo para acercarlo al plano y al mapa. */}
-      <section className="mx-auto max-w-3xl px-6 py-12 text-center sm:py-14">
-        <Reveal>
+      {/* Cierre: la invitación y el mapa en un solo bloque. Antes eran dos
+          secciones separadas por una franja de foto; al quitarla, el texto se
+          quedaba huérfano entre dos bloques y con su propio "Visítanos"
+          repetido justo encima del del mapa. */}
+      <section className="border-t border-black/5 bg-brand-bg-soft">
+        <Reveal className="mx-auto max-w-3xl px-6 py-14 text-center sm:py-16">
           <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Visítanos</p>
           <h2 className="mt-3 font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
             Te ayudamos a conseguir la moto de tus sueños
           </h2>
-          <p className="mx-auto mt-6 max-w-md text-brand-text/70">
+          <p className="mx-auto mt-5 max-w-md text-brand-text/70">
             Te acompañamos en todo el proceso, desde elegir el modelo correcto hasta la
-            entrega.
+            entrega. Pásate por el showroom.
           </p>
-        </Reveal>
-      </section>
-
-      {/* (b) Lifestyle a sangre — Triumph Tiger 900 Rally en acción off-road
-          (movida aquí desde antes de "También en tienda"). */}
-      <section className="relative h-[65vh] overflow-hidden">
-        <Image
-          src={withBasePath("/images/lifestyle/tiger-900-rally-action.webp")}
-          alt="Triumph Tiger 900 Rally derrapando sobre tierra en terreno desértico"
-          fill
-          sizes="100vw"
-          /* La moto/piloto están a la derecha del encuadre (~65%). En mobile
-             el recorte vertical se centra ahí para que la moto sea protagónica
-             y no solo la cola; en desktop la foto entra casi completa. */
-          className="object-cover object-[66%_45%] sm:object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-        <Reveal className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14">
-          <p className="max-w-md font-display text-3xl leading-snug tracking-wide text-white uppercase sm:text-4xl">
-            Sin excusas
-          </p>
-        </Reveal>
-      </section>
-
-      {/* (c) Ubicación: encabezado compacto + mapa a todo el ancho con una
-          tarjeta flotante de datos clave (overlay en desktop, apilada en
-          mobile para no tapar el pin). */}
-      <section className="border-t border-black/5 bg-brand-bg-soft">
-        <Reveal className="px-6 py-10 text-center sm:py-12">
-          <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Visítanos</p>
-          <h2 className="mt-3 font-display text-3xl leading-tight tracking-wide uppercase sm:text-4xl">
-            Ubicación del showroom
-          </h2>
         </Reveal>
         <div className="relative">
           <div className="h-[500px] w-full">

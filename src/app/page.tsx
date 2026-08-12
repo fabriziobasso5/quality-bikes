@@ -84,19 +84,26 @@ export default function Home() {
 
       {/* Lifestyle a sangre #1 — BMW R 1300 GS Adventure en paisaje de montaña
           (foto de prensa oficial, alta resolución). Intercala marca con el
-          bloque Triumph más abajo. */}
+          bloque Triumph más abajo. La foto va recortada de origen a 2:1
+          quitándole cielo: a 3:2 el recorte de object-cover se comía las
+          ruedas. En móvil la caja es vertical, así que el foco se corre a la
+          derecha, donde está la moto. */}
       <section className="relative h-[65vh] overflow-hidden">
         <Image
           src={withBasePath("/images/lifestyle/bmw-r1300-gsa-scenic.webp")}
           alt="BMW R 1300 GS Adventure sobre un mirador de montaña al atardecer"
           fill
           sizes="100vw"
-          className="object-cover"
+          /* En escritorio el foco se baja al 60%: la caja es muy apaisada
+             (65vh) y con el foco centrado, en pantallas anchas y bajas el
+             recorte volvía a comerse las ruedas. Bajarlo sacrifica cielo, que
+             es justo lo que sobra. */
+          className="object-cover object-[62%_50%] sm:object-[50%_60%]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         <Reveal className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14">
           <p className="max-w-md font-display text-3xl leading-snug tracking-wide text-white uppercase sm:text-4xl">
-            Ideal para todo terreno
+            Tu próxima carretera empieza aquí
           </p>
         </Reveal>
       </section>
@@ -208,7 +215,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         <Reveal className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-14">
           <p className="max-w-md font-display text-3xl leading-snug tracking-wide text-white uppercase sm:text-4xl">
-            El próximo destino lo eliges tú
+            Sin excusas
           </p>
         </Reveal>
       </section>

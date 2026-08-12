@@ -323,38 +323,10 @@ export default function BlueprintReveal() {
             />
           </svg>
 
-          {/* Cotas de plano (datos reales del GS Adventure): entran solas al
-              final del dibujo (qb-late-fade) y mueren cuando llega la moto */}
-          <div
-            aria-hidden
-            style={{ opacity: fade(0.16, 0.28) }}
-            className="qb-late-fade absolute inset-0"
-          >
-            {/* Cota DENTRO del escenario (franja libre bajo la silueta, cuyas
-                ruedas llegan al ~90% de alto): así no roba ni un píxel de
-                altura a la moto ni pisa el eslogan que ahora solapa el borde
-                inferior de la caja */}
-            <div className="absolute bottom-8 left-[4%] right-[4%] border-t border-white/40" />
-            <div className="absolute bottom-6 left-[4%] h-2 border-l border-white/40" />
-            <div className="absolute bottom-6 right-[4%] h-2 border-r border-white/40" />
-            <p className="absolute bottom-9 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.25em] text-white/50">
-              2.270 mm
-            </p>
-            <div className="absolute -right-6 top-[6%] bottom-[12%] border-r border-white/40 max-sm:hidden" />
-            <p className="absolute -right-11 top-1/2 -translate-y-1/2 rotate-90 font-mono text-[10px] tracking-[0.25em] text-white/50 max-sm:hidden">
-              1.460 mm
-            </p>
-          </div>
-
-          {/* Anotaciones de la fase plano */}
-          {/* Dentro del escenario (esquina sup. izq.): arriba chocaba con el
-              título ahora que la moto ocupa todo el alto disponible */}
-          <p
-            style={{ opacity: fade(0.16, 0.28) }}
-            className="qb-late-fade absolute top-2 left-2 font-mono text-[10px] tracking-[0.25em] text-white/50 uppercase"
-          >
-            Fig. 01 — R 1250 GS Adventure
-          </p>
+          {/* Sin cotas ni rótulo de figura: la lámina se lee mejor con la
+              silueta sola. La retícula y el color del plano ya cuentan que
+              esto es un despiece técnico, sin necesidad de medidas ni de
+              nombrar un modelo concreto. */}
 
           {/* La moto real se materializa sobre la silueta en 0.18–0.32 y
               asienta hasta 0.45. --bike-t es el progreso local. */}

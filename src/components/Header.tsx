@@ -131,8 +131,13 @@ export default function Header() {
           }}
         />
 
-        <div className="relative mx-auto flex max-w-7xl items-start justify-between px-6 py-4">
-          <div className="flex shrink-0 flex-col items-start">
+        {/* items-center: los cuatro accesos del nav quedan a media altura del
+            header, no pegados arriba. Como el bloque del logo puede crecer con
+            la flecha, centrar es lo único que los mantiene entre techo y piso. */}
+        <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          {/* items-center: la flecha va centrada bajo el logo, no alineada a su
+              borde izquierdo. */}
+          <div className="flex shrink-0 flex-col items-center">
             {/* Anchor plano en vez de next/link: navegación dura al home con el
                 basePath ya resuelto — funciona desde cualquier subpágina de
                 GitHub Pages sin depender del estado del router del cliente. */}
@@ -153,14 +158,16 @@ export default function Header() {
               />
             </a>
 
-            {/* Vuelta a la portada, visible en todas las páginas menos en ella
-                misma. El logo ya lleva al inicio, pero eso no se ve: la flecha
-                lo dice. Mismo destino y misma navegación dura. */}
-            {!isHome && (
+            {/* Vuelta a la portada. El logo ya lleva al inicio, pero eso no se
+                ve: la flecha lo dice. Aparece en los cuatro apartados — y eso
+                incluye el catálogo abierto SOBRE la portada, donde el pathname
+                sigue siendo "/" pero el visitante ya no está viendo la portada
+                sino el panel, y necesita la misma salida. */}
+            {(!isHome || catalogOpen) && (
               <a
                 href={withBasePath("/")}
                 aria-label="Ir a la página principal"
-                className="group mt-1.5 -ml-1 inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-white/45 transition hover:text-white"
+                className="group mt-1.5 inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-white/45 transition hover:text-white"
               >
                 <svg
                   viewBox="0 0 24 24"

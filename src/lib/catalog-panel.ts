@@ -22,9 +22,14 @@ export function notifyCatalogHistoryChanged() {
 
 export function subscribeToCatalogHistory(onChange: () => void) {
   window.addEventListener("popstate", onChange);
+  // Un enlace normal a "/" desde "/#catalogo" es navegación dentro del mismo
+  // documento: cambia el hash y avisa por hashchange, NUNCA por popstate. Es
+  // justo lo que hacen el logo y la flecha de inicio con el panel abierto.
+  window.addEventListener("hashchange", onChange);
   window.addEventListener(CHANGED, onChange);
   return () => {
     window.removeEventListener("popstate", onChange);
+    window.removeEventListener("hashchange", onChange);
     window.removeEventListener(CHANGED, onChange);
   };
 }

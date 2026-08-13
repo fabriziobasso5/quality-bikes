@@ -52,3 +52,12 @@ Otras páginas: /productos (las 5 marcas, fondo fibra de carbono), /productos/[m
 5. Si una orden nueva contradice algo ya hecho, avisarlo en vez de mezclar las dos versiones.
 6. Si algo no se puede hacer como se pidió, proponer la alternativa más cercana en lugar
    de improvisar.
+
+## Nota técnica — el Next.js de este repo
+La versión de Next.js instalada aquí NO es la que el modelo conoce de memoria: cambian
+APIs, convenciones y estructura de archivos. Antes de escribir código hay que leer la guía
+correspondiente en `node_modules/next/dist/docs/` y hacer caso a los avisos de obsolescencia.
+La regla completa vive en AGENTS.md y se carga con la línea de abajo; ese archivo lo mantiene
+una herramienta automática, así que su texto no se copia aquí para que no quede desactualizado.
+
+@AGENTS.md

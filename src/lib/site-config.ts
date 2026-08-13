@@ -29,10 +29,14 @@ export const siteConfig = {
   // no convive con la estética minimalista del sitio.
   // Mismo orden que productBrands en data/products.ts (VP Racing, Mobil, BK3,
   // Falken, EWAY): el índice de cada tarjeta se usa para resolver su ruta.
+  // Descripciones deliberadamente cortas y de largo parejo: en la fila de cinco
+  // de la portada, textos de 1 y de 3 líneas dejaban el "Ver productos" a
+  // alturas distintas y la fila se veía desnivelada. El detalle completo de
+  // cada casa vive en su página /productos/[marca].
   productsCarried: [
     {
       name: "VP Racing",
-      description: "Gasolina de alto octanaje, elevadores, ethanol y aceites",
+      description: "Gasolina y aceites",
       logo: "/images/brands/vp-racing.png",
       sublabel: null,
     },
@@ -50,13 +54,13 @@ export const siteConfig = {
     },
     {
       name: "Falken",
-      description: "Cauchos de alto rendimiento para todo terreno",
+      description: "Cauchos de alto rendimiento",
       logo: "/images/brands/falken.png",
       sublabel: null,
     },
     {
       name: "EWAY",
-      description: "Combustibles de competencia Gulf",
+      description: "Combustibles de competencia",
       logo: "/images/brands/eway-racing.png",
       sublabel: null,
     },

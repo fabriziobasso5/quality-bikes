@@ -81,33 +81,11 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* Lifestyle a sangre #1 — BMW R 1300 GS Adventure en paisaje de montaña
-          (foto de prensa oficial, alta resolución). Intercala marca con el
-          bloque Triumph más abajo. La foto va recortada de origen a 2:1
-          quitándole cielo: a 3:2 el recorte de object-cover se comía las
-          ruedas. En móvil la caja es vertical, así que el foco se corre a la
-          derecha, donde está la moto. */}
-      <section className="relative h-[65vh] overflow-hidden">
-        <Image
-          src={withBasePath("/images/lifestyle/bmw-r1300-gsa-scenic.webp")}
-          alt="BMW R 1300 GS Adventure sobre un mirador de montaña al atardecer"
-          fill
-          sizes="100vw"
-          /* En escritorio el foco se baja al 60%: la caja es muy apaisada
-             (65vh) y con el foco centrado, en pantallas anchas y bajas el
-             recorte volvía a comerse las ruedas. Bajarlo sacrifica cielo, que
-             es justo lo que sobra. */
-          className="object-cover object-[62%_50%] sm:object-[50%_60%]"
-        />
-      </section>
-
-      {/* Franja de datos de marca: respira entre el lifestyle y la tienda */}
-      <BrandStats />
-
       {/* Productos en tienda: marcas complementarias, mismos logos en placas
           idénticas. Fondo de fibra de carbono forjada — misma familia visual
           que header/footer — con divisor superior + eyebrow en rojo de marca
-          para marcar que aquí empieza la zona de tienda. */}
+          para marcar que aquí empieza la zona de tienda. Intercambiada con la
+          foto de la R 1300, que ahora va después de los contadores. */}
       <section className="relative overflow-hidden border-t border-black/10">
         <div
           aria-hidden
@@ -134,7 +112,11 @@ export default function Home() {
               También en tienda
             </p>
           </Reveal>
-          <RevealGroup className="mx-auto mt-14 grid max-w-6xl grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
+          {/* Cinco marcas no se reparten parejo en 2 ni en 3 columnas: siempre
+              sobraba una placa suelta pegada a la izquierda. Hasta lg va una
+              sola columna centrada (toda fila llena, simetría trivial) y en lg
+              entran las cinco en una única fila. */}
+          <RevealGroup className="mx-auto mt-14 grid max-w-sm grid-cols-1 gap-8 lg:max-w-6xl lg:grid-cols-5">
           {siteConfig.productsCarried.map((product, i) => {
             // productsCarried y productBrands describen las mismas casas en el
             // mismo orden (VP Racing, Mobil, BK3, Falken, EWAY): el índice da
@@ -154,7 +136,12 @@ export default function Home() {
                       className="max-h-16 w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <p className="mt-4 text-sm text-white/60">{product.description}</p>
+                  {/* En la fila de cinco las columnas son estrechas y algunas
+                      descripciones caen a dos líneas: se reservan las dos
+                      siempre para que el "Ver productos" quede a la misma
+                      altura en las cinco. En una columna sobra, todas caben
+                      en una línea. */}
+                  <p className="mt-4 text-sm text-white/60 lg:min-h-10">{product.description}</p>
                   <p className="link-underline mt-2 inline-block text-xs tracking-widest text-white/85 uppercase">
                     Ver productos →
                   </p>
@@ -164,6 +151,30 @@ export default function Home() {
           })}
           </RevealGroup>
         </div>
+      </section>
+
+      {/* Franja de datos de marca: respira entre la tienda y el lifestyle */}
+      <BrandStats />
+
+      {/* Lifestyle a sangre — BMW R 1300 GS Adventure en paisaje de montaña
+          (foto de prensa oficial, alta resolución). La foto va recortada de
+          origen a 2:1 quitándole cielo: a 3:2 el recorte de object-cover se
+          comía las ruedas. */}
+      <section className="relative h-[65vh] overflow-hidden">
+        <Image
+          src={withBasePath("/images/lifestyle/bmw-r1300-gsa-scenic.webp")}
+          alt="BMW R 1300 GS Adventure sobre un mirador de montaña al atardecer"
+          fill
+          sizes="100vw"
+          /* En móvil la caja es vertical y solo cabe un tercio del ancho de la
+             foto, así que el foco horizontal tiene que caer sobre la moto: en
+             el recorte actual está centrada (~49%), no a la derecha.
+             En escritorio el foco vertical se baja al 60%: la caja es muy
+             apaisada (65vh) y con el foco centrado, en pantallas anchas y
+             bajas el recorte volvía a comerse las ruedas. Bajarlo sacrifica
+             cielo, que es justo lo que sobra. */
+          className="object-cover object-center sm:object-[50%_60%]"
+        />
       </section>
 
       {/* Moto destacada rotativa (estilo CAKE): alterna cada ~5 s entre TODAS

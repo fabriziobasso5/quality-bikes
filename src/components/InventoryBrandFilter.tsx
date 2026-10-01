@@ -8,11 +8,13 @@ import type { Motorcycle } from "@/data/motorcycles";
 
 // Marcas con su logo (sobre fondo transparente para "flotar"). Solo se muestran
 // las que realmente están en el inventario.
-const BRAND_LOGOS: { brand: string; logo: string }[] = [
+// Yamaha aún no tiene logo en el repo: el chip muestra el nombre hasta que llegue.
+const BRAND_LOGOS: { brand: string; logo?: string }[] = [
   { brand: "BMW", logo: "/images/brands-motos/bmw.webp" },
   { brand: "Ducati", logo: "/images/brands-motos/ducati.webp" },
   { brand: "Kawasaki", logo: "/images/brands-motos/kawasaki.webp" },
   { brand: "Voge", logo: "/images/brands-motos/voge.webp" },
+  { brand: "Yamaha" },
 ];
 
 /** Botón de marca: logo en caja uniforme; si el logo falla, muestra el nombre. */

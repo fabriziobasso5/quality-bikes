@@ -1,4 +1,4 @@
-export type MotoCategory = "dual-sport" | "enduro" | "naked" | "adventure";
+export type MotoCategory = "dual-sport" | "enduro" | "naked" | "adventure" | "supermotard";
 
 // Una combinación de color de fábrica de un modelo/año concreto. Solo se
 // declara cuando hay fotos REALES de cada color: media docena de muestras de
@@ -97,9 +97,10 @@ export function galleryPaths(moto: Motorcycle, colorwayId?: string): string[] {
   return [...(lead ? [lead] : []), ...motoPhotoPaths(moto, colorwayId)];
 }
 
-// Inventario 2026-08-10: unidades físicas en showroom (Kawasaki KLE 500 SE ABS,
-// Kawasaki KLR 650 ABS, Ducati Monster, Ducati Multistrada V4 S) + la gama dual
-// sport Voge DS-X de próximo arribo. Se retiraron Kymco, los scooters Voge
+// Inventario 2026-10-01: unidades físicas en showroom (Kawasaki KLE 500 SE ABS,
+// Kawasaki KLR 650 ABS, Ducati Monster, Ducati Multistrada V4 S y V2 S, BMW
+// F 800 GS, Yamaha WR450F Supermotard) + la gama dual sport Voge DS-X, toda en
+// el showroom salvo la DS 800X Rally, que sigue de próximo arribo. Se retiraron Kymco, los scooters Voge
 // SR3/SR4 y la BMW G 310 GS. El precio nunca se muestra (decisión de negocio):
 // "consultar disponibilidad y precio" fuerza contacto directo.
 export const motorcycles: Motorcycle[] = [
@@ -219,6 +220,77 @@ export const motorcycles: Motorcycle[] = [
     photoCount: 14,
   },
   {
+    // Ficha oficial Ducati MY2024 (Testastretta 11°, 113 hp a 9.000 rpm y
+    // 96 Nm a 7.750 rpm). Librea Thrilling Black & Street Grey, la de rines rojos.
+    slug: "ducati-multistrada-v2-s",
+    brand: "Ducati",
+    model: "Multistrada V2 S",
+    year: 2024,
+    cc: 937,
+    category: "adventure",
+    condition: "seminueva",
+    availability: "en-stock",
+    featured: true,
+    summary: "La Multistrada más ligera y accesible: Testastretta 11° de 113 hp, suspensión semiactiva Skyhook y la electrónica de la familia Multistrada en un paquete pensado para el día a día y los viajes largos.",
+    highlights: [
+      "Testastretta 11° de 937 cc con 113 hp a 9.000 rpm y 96 Nm a 7.750 rpm",
+      "Suspensión semiactiva Ducati Skyhook y Vehicle Hold Control de serie en la versión S",
+      "Cambio de 6 marchas con Quick Shift subida y bajada, control de crucero y luces de curva",
+      "Unidad seminueva en el showroom, lista para entrega inmediata",
+    ],
+    specs: { power: "113 hp", transmission: "Sincrónica", gears: "6 + Quick Shift", cylinders: "2 cilindros (L-Twin)", color: "Thrilling Black & Street Grey", seatHeight: "830 mm", weight: "225 kg" },
+    // Galería con las 9 fotos reales de la unidad (sesión de septiembre 2026),
+    // en el orden que numeró el cliente.
+    photoCount: 9,
+  },
+  {
+    // Ficha oficial BMW Motorrad 2009: bicilíndrico paralelo de 798 cc, 85 hp
+    // a 7.500 rpm y 83 Nm a 5.750 rpm; 207 kg en orden de marcha. Portada
+    // recortada de la foto real de la unidad (no hay prensa de calidad).
+    slug: "bmw-f-800-gs",
+    brand: "BMW",
+    model: "F 800 GS",
+    year: 2009,
+    cc: 798,
+    category: "adventure",
+    condition: "seminueva",
+    availability: "en-stock",
+    featured: true,
+    summary: "La GS mediana que convirtió a toda una generación al off-road: bicilíndrico paralelo de 798 cc, rueda delantera de 21\" y la robustez de la familia GS. Esta unidad viene equipada con maletas laterales y baúl.",
+    highlights: [
+      "Bicilíndrico paralelo de 798 cc con 85 hp a 7.500 rpm y 83 Nm a 5.750 rpm",
+      "Rueda delantera de 21\" y trasera de 17\" con rines de radios, pensada para salir del asfalto",
+      "207 kg en orden de marcha y tanque de 16 litros",
+    ],
+    specs: { power: "85 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros (paralelo)", color: "Gris y negro", seatHeight: "880 mm", weight: "207 kg" },
+    // Galería con las 12 fotos reales de la unidad (sesión de septiembre 2026).
+    photoCount: 12,
+  },
+  {
+    // Yamaha WR450F 2015 convertida a supermotard (rines y cauchos de asfalto).
+    // Datos de la ficha oficial Yamaha 2015: monocilíndrico de 449 cc, 5 válvulas
+    // de titanio, inyección y caja de 5 marchas. Yamaha no publica la potencia,
+    // y la altura de asiento y el peso de fábrica no aplican tras la conversión,
+    // así que esos tres datos quedan vacíos en vez de inventarse.
+    slug: "yamaha-wr450f-supermotard",
+    brand: "Yamaha",
+    model: "WR450F Supermotard",
+    year: 2015,
+    cc: 449,
+    category: "supermotard",
+    condition: "seminueva",
+    availability: "en-stock",
+    featured: true,
+    summary: "Una WR450F convertida a supermotard: el monocilíndrico de 449 cc de la enduro de competencia de Yamaha, ahora sobre rines y cauchos de asfalto para curvas, ciudad y circuito.",
+    highlights: [
+      "Monocilíndrico de 449 cc DOHC con 5 válvulas de titanio e inyección electrónica",
+      "Convertida a supermotard: rines y cauchos de asfalto en las dos ruedas",
+      "Caja de 5 marchas de relación ancha y embrague multidisco en baño de aceite",
+    ],
+    specs: { power: "—", transmission: "Sincrónica", gears: "5", cylinders: "1 cilindro", color: "Azul y blanco" },
+    photoCount: 10,
+  },
+  {
     slug: "voge-ds-900x",
     brand: "Voge",
     model: "DS 900X",
@@ -226,7 +298,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 895,
     category: "dual-sport",
     condition: "0km",
-    availability: "proximo-arribo",
+    availability: "en-stock",
     featured: true,
     summary: "Utiliza el motor 895cc fabricado por Loncin, la misma planta que provee el motor del BMW F 900 GS — mismo bloque, tornillería BMW-compatible, a un precio muy inferior.",
     highlights: [
@@ -236,13 +308,15 @@ export const motorcycles: Motorcycle[] = [
       "Edición especial Black Knight en negro, con llantas de radios doradas",
     ],
     specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Black Knight · Gris Azul · Gris Verde", seatHeight: "825 mm", weight: "215 kg" },
-    photoCount: 0,
+    // Galería con las 10 fotos reales de la unidad Black Knight en el showroom
+    // (sesión de septiembre 2026). Los otros dos colores solo tienen prensa.
+    photoCount: 10,
     colorways: [
       {
         id: "black-knight",
         name: "Black Knight",
         swatch: "#16181A",
-        photoCount: 0,
+        photoCount: 10,
         lead: "/images/catalog/voge-ds-900x.webp",
         special: true,
       },
@@ -306,7 +380,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 581,
     category: "dual-sport",
     condition: "0km",
-    availability: "proximo-arribo",
+    availability: "en-stock",
     featured: false,
     summary: "Bicilíndrico de cigüeñal a 270° con dos modos de manejo (Eco/Sport), ABS y control de tracción conmutables — el punto medio ideal entre agilidad y presencia.",
     highlights: [
@@ -315,13 +389,15 @@ export const motorcycles: Motorcycle[] = [
       "191 kg, la más ligera de las bicilíndricas de la gama",
     ],
     specs: { power: "63 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Beige · Black Knight", seatHeight: "835 mm", weight: "191 kg" },
-    photoCount: 0,
+    // Galería con las 9 fotos reales de la unidad Beige en el showroom (sesión
+    // de septiembre 2026; no hay toma de perfil, abre en tres cuartos).
+    photoCount: 9,
     colorways: [
       {
         id: "beige",
         name: "Beige",
         swatch: "#E5C9A6",
-        photoCount: 0,
+        photoCount: 9,
         lead: "/images/catalog/voge-ds-625x.webp",
       },
       {
@@ -342,7 +418,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 494,
     category: "dual-sport",
     condition: "0km",
-    availability: "proximo-arribo",
+    availability: "en-stock",
     featured: false,
     summary: "Dual sport bicilíndrico de cilindrada intermedia con ABS Bosch desconectable, ideal para quien busca versatilidad sin sacrificar carácter.",
     highlights: [
@@ -385,7 +461,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 292,
     category: "dual-sport",
     condition: "0km",
-    availability: "proximo-arribo",
+    availability: "en-stock",
     featured: false,
     summary: "La puerta de entrada de la gama dual sport Voge: monocilíndrico ágil y liviano, perfecto para dar el salto a las motos de alta cilindrada.",
     highlights: [
@@ -394,7 +470,7 @@ export const motorcycles: Motorcycle[] = [
       "810 mm de asiento — el escalón natural antes de una alta cilindrada",
     ],
     specs: { power: "28 hp", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Gris", seatHeight: "810 mm", weight: "155 kg" },
-    // Próximo arribo: solo la foto de prensa sobre blanco, que ya es la portada.
+    // Sin fotos del showroom todavía: solo la de prensa, que ya es la portada.
     photoCount: 0,
   },
 ];
@@ -406,6 +482,7 @@ export const categories: { value: MotoCategory; label: string }[] = [
   { value: "enduro", label: "Enduro" },
   { value: "naked", label: "Naked" },
   { value: "adventure", label: "Adventure" },
+  { value: "supermotard", label: "Supermotard" },
 ];
 
 export function getMotoBySlug(slug: string) {

@@ -91,7 +91,10 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
               <div key={stat.label}>
                 <p className="font-mono text-3xl tracking-tight sm:text-4xl">
                   {stat.value}
-                  <span className="ml-1 text-sm text-brand-text/50 sm:text-base">{stat.unit}</span>
+                  {/* Sin dato oficial ("—") la unidad sobra */}
+                  {stat.value !== "—" && (
+                    <span className="ml-1 text-sm text-brand-text/50 sm:text-base">{stat.unit}</span>
+                  )}
                 </p>
                 <p className="mt-2 font-mono text-[10px] tracking-[0.2em] text-brand-text/50 uppercase">
                   {stat.label}

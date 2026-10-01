@@ -35,6 +35,21 @@ WHITE_TARGET = 247
 
 def decode(path: Path) -> np.ndarray:
     """HEIC/JPG -> RGB float con la orientación EXIF ya aplicada."""
+    if path.suffix.lower() == ".heic":
+        # El ImageMagick de Homebrew perdió el decodificador HEIC (sept. 2026).
+        # sips lo convierte a JPEG al 100 % conservando la etiqueta de
+        # orientación, que magick aplica después con -auto-orient.
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as tmp:
+            subprocess.run(
+                ["sips", "-s", "format", "jpeg", "-s", "formatOptions", "100",
+                 str(path), "--out", tmp.name],
+                capture_output=True, check=True,
+            )
+            png = subprocess.run(
+                ["magick", tmp.name, "-auto-orient", "png:-"],
+                capture_output=True, check=True,
+            ).stdout
+        return np.asarray(Image.open(io.BytesIO(png)).convert("RGB")).astype(np.float32)
     png = subprocess.run(
         ["magick", str(path), "-auto-orient", "png:-"],
         capture_output=True,

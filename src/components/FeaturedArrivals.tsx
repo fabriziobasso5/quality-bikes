@@ -85,7 +85,7 @@ export default function FeaturedArrivals({ motos }: { motos: Motorcycle[] }) {
           </div>
 
           <p className="mx-auto mt-8 max-w-md text-brand-text/70">
-            La gama dual sport de Voge llega a Caracas. Resérvala antes de que toque piso.
+            Próximamente en Caracas. Resérvala antes de que toque piso.
           </p>
           <div className="mt-8 flex items-center justify-center gap-10 font-mono text-sm text-brand-text/60">
             <span>{moto.specs.power}</span>

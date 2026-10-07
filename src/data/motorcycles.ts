@@ -1,4 +1,11 @@
-export type MotoCategory = "dual-sport" | "enduro" | "naked" | "adventure" | "supermotard";
+export type MotoCategory =
+  | "dual-sport"
+  | "enduro"
+  | "naked"
+  | "adventure"
+  | "supermotard"
+  | "cruiser"
+  | "scooter";
 
 // Una combinación de color de fábrica de un modelo/año concreto. Solo se
 // declara cuando hay fotos REALES de cada color: media docena de muestras de
@@ -97,12 +104,13 @@ export function galleryPaths(moto: Motorcycle, colorwayId?: string): string[] {
   return [...(lead ? [lead] : []), ...motoPhotoPaths(moto, colorwayId)];
 }
 
-// Inventario 2026-10-01: unidades físicas en showroom (Kawasaki KLE 500 SE ABS,
-// Kawasaki KLR 650 ABS, Ducati Monster, Ducati Multistrada V4 S y V2 S, BMW
-// F 800 GS, Yamaha WR450F Supermotard) + la gama dual sport Voge DS-X, toda en
-// el showroom salvo la DS 800X Rally, que sigue de próximo arribo. Se retiraron Kymco, los scooters Voge
-// SR3/SR4 y la BMW G 310 GS. El precio nunca se muestra (decisión de negocio):
-// "consultar disponibilidad y precio" fuerza contacto directo.
+// Inventario 2026-10-07: unidades físicas en showroom (Kawasaki KLR 650 ABS,
+// Ducati Monster, Ducati Multistrada V2 S, BMW F 800 GS, Yamaha WR450F
+// Supermotard, Voge DS 900X y DS 300X). De próximo arribo: Kawasaki KLE 500 SE
+// ABS, Voge DS 800X Rally, DS 625X y DS 525X, y las tres Voge 2027 (CU 250,
+// CU 625 y SR 450X). Se retiraron Kymco, los scooters Voge SR3/SR4, la BMW
+// G 310 GS y la Ducati Multistrada V4 S. El precio nunca se muestra (decisión
+// de negocio): "consultar disponibilidad y precio" fuerza contacto directo.
 export const motorcycles: Motorcycle[] = [
   {
     // Datos de la ficha oficial Kawasaki 2026 (2026KLE500-SE-ABS.pdf): las
@@ -114,7 +122,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 451,
     category: "dual-sport",
     condition: "0km",
-    availability: "en-stock",
+    availability: "proximo-arribo",
     featured: true,
     summary:
       "El regreso del nombre KLE: bicilíndrico paralelo de 451 cc con rueda delantera de 21\", chasis trellis y equipamiento SE de serie. La adventure de acceso que no se siente de acceso.",
@@ -196,28 +204,6 @@ export const motorcycles: Motorcycle[] = [
     ],
     specs: { power: "111 hp", transmission: "Sincrónica", gears: "6 + Quick Shift", cylinders: "2 cilindros (L-Twin)", color: "Rojo Ducati", seatHeight: "820 mm", weight: "188 kg" },
     photoCount: 10,
-  },
-  {
-    slug: "ducati-multistrada-v4",
-    brand: "Ducati",
-    model: "Multistrada V4 S",
-    year: 2025,
-    cc: 1158,
-    category: "adventure",
-    condition: "seminueva",
-    availability: "en-stock",
-    featured: true,
-    summary: "La sport-touring definitiva: V4 Granturismo de 170 hp con radar, electrónica de punta y comodidad para devorar continentes.",
-    highlights: [
-      "V4 Granturismo de 1.158 cc y 170 hp — el motor de cuatro cilindros más compacto de su clase",
-      "Altura de asiento regulable entre 840 y 860 mm sin herramientas",
-      "Cambio de 6 marchas con Quick Shift subida y bajada",
-      "Unidad seminueva en el showroom, lista para entrega inmediata",
-    ],
-    specs: { power: "170 hp", transmission: "Sincrónica", gears: "6 + Quick Shift", cylinders: "4 cilindros (V4)", color: "Rojo Ducati", seatHeight: "840–860 mm", weight: "229 kg" },
-    // Galería con las 14 fotos reales de la unidad en el showroom (sesión de
-    // agosto 2026). La portada del catálogo sigue siendo la oficial sobre blanco.
-    photoCount: 14,
   },
   {
     // Ficha oficial Ducati MY2024 (Testastretta 11°, 113 hp a 9.000 rpm y
@@ -380,7 +366,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 581,
     category: "dual-sport",
     condition: "0km",
-    availability: "en-stock",
+    availability: "proximo-arribo",
     featured: false,
     summary: "Bicilíndrico de cigüeñal a 270° con dos modos de manejo (Eco/Sport), ABS y control de tracción conmutables — el punto medio ideal entre agilidad y presencia.",
     highlights: [
@@ -418,7 +404,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 494,
     category: "dual-sport",
     condition: "0km",
-    availability: "en-stock",
+    availability: "proximo-arribo",
     featured: false,
     summary: "Dual sport bicilíndrico de cilindrada intermedia con ABS Bosch desconectable, ideal para quien busca versatilidad sin sacrificar carácter.",
     highlights: [
@@ -473,6 +459,124 @@ export const motorcycles: Motorcycle[] = [
     // Sin fotos del showroom todavía: solo la de prensa, que ya es la portada.
     photoCount: 0,
   },
+  {
+    // Ficha oficial vogeglobal.com/cu250: V2 de 249,9 cc refrigerado por
+    // líquido, 26,8 hp a 9.000 rpm y 23 Nm a 7.000 rpm; 163 kg netos.
+    // Voge solo la publica en negro y con una única foto de perfil.
+    slug: "voge-cu-250",
+    brand: "Voge",
+    model: "CU 250",
+    year: 2027,
+    cc: 250,
+    category: "cruiser",
+    condition: "0km",
+    availability: "proximo-arribo",
+    featured: false,
+    summary:
+      "Una cruiser deportiva de cola corta y postura relajada: bicilíndrico en V de 250 cc con eje de balance, transmisión final por correa y un asiento de 720 mm que pone los pies de cualquiera en el suelo.",
+    highlights: [
+      "Bicilíndrico en V de 249,9 cc, 8 válvulas y refrigeración líquida: 26,8 hp a 9.000 rpm y 23 Nm a 7.000 rpm",
+      "Eje de balance que filtra las vibraciones y transmisión final por correa, limpia y silenciosa",
+      "720 mm de altura de asiento y 1.460 mm de distancia entre ejes para moverse con soltura en ciudad",
+      "Frenos de disco delante y detrás con ABS y control de tracción, iluminación full LED",
+    ],
+    specs: { power: "26,8 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros (V)", color: "Negra", seatHeight: "720 mm", weight: "163 kg" },
+    // Solo la foto de prensa sobre blanco, que ya es la portada.
+    photoCount: 0,
+  },
+  {
+    // Ficha oficial vogeglobal.com/cu625: V2 de 578,2 cc, 60,3 hp a 8.500 rpm
+    // y 61 Nm a 5.500 rpm; 199 kg netos. Fotos de prensa de los dos colores
+    // que publica Voge (Black y Red), cada uno con perfil, tres cuartos,
+    // frente y trasera.
+    slug: "voge-cu-625",
+    brand: "Voge",
+    model: "CU 625",
+    year: 2027,
+    cc: 578,
+    category: "cruiser",
+    condition: "0km",
+    availability: "proximo-arribo",
+    featured: false,
+    summary:
+      "La cruiser de carácter de Voge: bicilíndrico en V de 578 cc con vibración casi nula, correa de transmisión, ABS y control de tracción, y un asiento de 710 mm para rodar a lo grande sin esfuerzo.",
+    highlights: [
+      "Bicilíndrico en V de 578,2 cc y refrigeración líquida: 60,3 hp a 8.500 rpm y 61 Nm a 5.500 rpm",
+      "Eje de balance y pistones aligerados para una vibración casi nula a cualquier régimen",
+      "ABS de doble canal y control de tracción desconectable",
+      "710 mm de asiento, cuadro TFT con presión de neumáticos y desvío lateral del aire caliente del motor",
+    ],
+    specs: { power: "60,3 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros (V)", color: "Negra · Roja", seatHeight: "710 mm", weight: "199 kg" },
+    photoCount: 5,
+    colorways: [
+      {
+        id: "negra",
+        name: "Negra",
+        swatch: "#16181A",
+        photoCount: 5,
+        lead: "/images/catalog/voge-cu-625.webp",
+      },
+      {
+        id: "roja",
+        name: "Roja",
+        swatch: "linear-gradient(135deg, #16181A 50%, #6E2A22 50%)",
+        photoCount: 5,
+        lead: "/images/catalog/voge-cu-625-roja.webp",
+      },
+    ],
+  },
+  {
+    // Ficha oficial de Voge Francia (vogefrance.fr/product/sr-450-x), traducida:
+    // scooter de aventura con bicilíndrico de 398 cc, 42 CV a 8.000 rpm (≈ 41 hp)
+    // y 44 Nm a 5.750 rpm, caja automática CVT, 198 kg y asiento a 795 mm.
+    // La foto de prensa del negro sale a 3000 px; la del azul y la del gris
+    // solo existen a 1200 px, por eso esas portadas no se amplían.
+    slug: "voge-sr-450x",
+    brand: "Voge",
+    model: "SR 450X",
+    year: 2027,
+    cc: 398,
+    category: "scooter",
+    condition: "0km",
+    availability: "proximo-arribo",
+    featured: false,
+    summary:
+      "Un scooter de aventura sin rival en su segmento: bicilíndrico de 398 cc, suspensiones Kayaba, rines de radios y equipamiento de gran turismo — radar de punto ciego, cámaras delantera y trasera, pantalla eléctrica y asiento y puños calefactables.",
+    highlights: [
+      "Bicilíndrico de 398 cc, 8 válvulas y refrigeración líquida: 42 CV a 8.000 rpm y 44 Nm a 5.750 rpm, con dos modos de motor",
+      "Suspensiones Kayaba regulables, pinza radial J.Juan de cuatro pistones y ABS de doble canal desconectable atrás",
+      "Rines de radios tubeless 17\"/14\" con cauchos mixtos y estriberas para manejar de pie fuera del asfalto",
+      "Radar de punto ciego, cámaras delantera y trasera, TFT de 7\" con Bluetooth y presión de neumáticos",
+      "Pantalla regulable eléctricamente, asiento y puños calefactables, arranque sin llave y espacio para dos cascos",
+    ],
+    specs: { power: "41 hp", transmission: "Automática (CVT)", gears: "Variador continuo", cylinders: "2 cilindros", color: "Negra · Azul · Gris", seatHeight: "795 mm", weight: "198 kg" },
+    // Galería del negro: los siete ángulos de estudio y siete detalles de
+    // prensa. Azul y gris solo tienen la foto de perfil.
+    photoCount: 14,
+    colorways: [
+      {
+        id: "negra",
+        name: "Negra",
+        swatch: "#16181A",
+        photoCount: 14,
+        lead: "/images/catalog/voge-sr-450x.webp",
+      },
+      {
+        id: "azul",
+        name: "Azul",
+        swatch: "#1E2A44",
+        photoCount: 0,
+        lead: "/images/catalog/voge-sr-450x-azul.webp",
+      },
+      {
+        id: "gris",
+        name: "Gris",
+        swatch: "#A9ACAE",
+        photoCount: 0,
+        lead: "/images/catalog/voge-sr-450x-gris.webp",
+      },
+    ],
+  },
 ];
 
 export const brands = Array.from(new Set(motorcycles.map((m) => m.brand)));
@@ -483,6 +587,8 @@ export const categories: { value: MotoCategory; label: string }[] = [
   { value: "naked", label: "Naked" },
   { value: "adventure", label: "Adventure" },
   { value: "supermotard", label: "Supermotard" },
+  { value: "cruiser", label: "Cruiser" },
+  { value: "scooter", label: "Scooter" },
 ];
 
 export function getMotoBySlug(slug: string) {

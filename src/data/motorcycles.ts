@@ -104,13 +104,13 @@ export function galleryPaths(moto: Motorcycle, colorwayId?: string): string[] {
   return [...(lead ? [lead] : []), ...motoPhotoPaths(moto, colorwayId)];
 }
 
-// Inventario 2026-10-07: unidades físicas en showroom (Kawasaki KLR 650 ABS,
+// Inventario 2026-10-13: unidades físicas en showroom (Kawasaki KLR 650 ABS,
 // Ducati Monster, Ducati Multistrada V2 S, BMW F 800 GS, Yamaha WR450F
-// Supermotard, Voge DS 900X y DS 300X). De próximo arribo: Kawasaki KLE 500 SE
-// ABS, Voge DS 800X Rally, DS 625X y DS 525X, y las tres Voge 2027 (CU 250,
-// CU 625 y SR 450X). Se retiraron Kymco, los scooters Voge SR3/SR4, la BMW
-// G 310 GS y la Ducati Multistrada V4 S. El precio nunca se muestra (decisión
-// de negocio): "consultar disponibilidad y precio" fuerza contacto directo.
+// Supermotard, Voge DS 900X, DS 300X, CU 250 y CU 625). De próximo arribo:
+// Kawasaki KLE 500 SE ABS, Voge DS 800X Rally, DS 625X, DS 525X y SR 450X.
+// Se retiraron Kymco, los scooters Voge SR3/SR4, la BMW G 310 GS y la Ducati
+// Multistrada V4 S. El precio nunca se muestra (decisión de negocio):
+// "consultar disponibilidad y precio" fuerza contacto directo.
 export const motorcycles: Motorcycle[] = [
   {
     // Datos de la ficha oficial Kawasaki 2026 (2026KLE500-SE-ABS.pdf): las
@@ -470,7 +470,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 250,
     category: "cruiser",
     condition: "0km",
-    availability: "proximo-arribo",
+    availability: "en-stock",
     featured: false,
     summary:
       "Una cruiser deportiva de cola corta y postura relajada: bicilíndrico en V de 250 cc con eje de balance, transmisión final por correa y un asiento de 720 mm que pone los pies de cualquiera en el suelo.",
@@ -496,7 +496,7 @@ export const motorcycles: Motorcycle[] = [
     cc: 578,
     category: "cruiser",
     condition: "0km",
-    availability: "proximo-arribo",
+    availability: "en-stock",
     featured: false,
     summary:
       "La cruiser de carácter de Voge: bicilíndrico en V de 578 cc con vibración casi nula, correa de transmisión, ABS y control de tracción, y un asiento de 710 mm para rodar a lo grande sin esfuerzo.",

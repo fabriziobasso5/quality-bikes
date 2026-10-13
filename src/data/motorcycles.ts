@@ -106,11 +106,12 @@ export function galleryPaths(moto: Motorcycle, colorwayId?: string): string[] {
 
 // Inventario 2026-10-13: unidades físicas en showroom (Kawasaki KLR 650 ABS,
 // Ducati Monster, Ducati Multistrada V2 S, BMW F 800 GS, Yamaha WR450F
-// Supermotard, Voge DS 900X, DS 300X, CU 250 y CU 625). De próximo arribo:
-// Kawasaki KLE 500 SE ABS, Voge DS 800X Rally, DS 625X, DS 525X y SR 450X.
-// Se retiraron Kymco, los scooters Voge SR3/SR4, la BMW G 310 GS y la Ducati
-// Multistrada V4 S. El precio nunca se muestra (decisión de negocio):
-// "consultar disponibilidad y precio" fuerza contacto directo.
+// Supermotard, Voge DS 900X, DS 900X Black Knight 2025 usada, DS 300X, CU 250
+// y CU 625). De próximo arribo: Kawasaki KLE 500 SE ABS, Voge DS 800X Rally,
+// DS 625X, DS 525X y SR 450X. Se retiraron Kymco, los scooters Voge SR3/SR4,
+// la BMW G 310 GS y la Ducati Multistrada V4 S. El precio nunca se muestra
+// (decisión de negocio): "consultar disponibilidad y precio" fuerza contacto
+// directo.
 export const motorcycles: Motorcycle[] = [
   {
     // Datos de la ficha oficial Kawasaki 2026 (2026KLE500-SE-ABS.pdf): las
@@ -294,15 +295,15 @@ export const motorcycles: Motorcycle[] = [
       "Edición especial Black Knight en negro, con llantas de radios doradas",
     ],
     specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Black Knight · Gris Azul · Gris Verde", seatHeight: "825 mm", weight: "215 kg" },
-    // Galería con las 10 fotos reales de la unidad Black Knight en el showroom
-    // (sesión de septiembre 2026). Los otros dos colores solo tienen prensa.
-    photoCount: 10,
+    // Solo fotos de prensa sobre blanco. Las 10 fotos del showroom que tenía
+    // eran de la unidad usada de 2025 y se mudaron a su ficha (oct. 2026).
+    photoCount: 0,
     colorways: [
       {
         id: "black-knight",
         name: "Black Knight",
         swatch: "#16181A",
-        photoCount: 10,
+        photoCount: 0,
         lead: "/images/catalog/voge-ds-900x.webp",
         special: true,
       },
@@ -319,6 +320,47 @@ export const motorcycles: Motorcycle[] = [
         swatch: "linear-gradient(135deg, #D9DCDE 50%, #B4D435 50%)",
         photoCount: 0,
         lead: "/images/catalog/voge-ds-900x-gris-verde.webp",
+      },
+    ],
+  },
+  {
+    // Unidad usada en el showroom: 2025, segundo dueño (título 2-1), 4.861 km
+    // (se lee en el tablero, foto 9). Datos técnicos de la ficha oficial de la
+    // DS 900X. Los accesorios VIENEN con la moto, por eso van en el resumen y
+    // en los argumentos y no en `accessories`, que la galería presenta como
+    // opcionales. Portada recortada de la foto real de perfil (BiRefNet +
+    // matting), sobre blanco y con sombra de piso.
+    slug: "voge-ds-900x-usada",
+    brand: "Voge",
+    model: "DS 900X Black Knight",
+    year: 2025,
+    cc: 895,
+    category: "dual-sport",
+    condition: "seminueva",
+    mileageKm: 4861,
+    availability: "en-stock",
+    featured: true,
+    summary:
+      "Una DS 900X Black Knight 2025 de segundo dueño, con apenas 4.861 km y lista para viajar: top case LS2, asiento de gel y protector de la boca del tanque. El bicilíndrico de 895 cc que fabrica Loncin, el mismo bloque del BMW F 900 GS.",
+    highlights: [
+      "4.861 km y segundo dueño (título 2-1)",
+      "Incluye top case LS2 y asiento de gel",
+      "Protector de la boca del tanque, que sirve de base para un bolso de tanque (el bolso no está incluido)",
+      "Escape sin catalizador",
+      "Bicilíndrico de 895 cc y 94 hp: el mismo bloque que fabrica Loncin para el BMW F 900 GS",
+      "Edición especial Black Knight en negro, con llantas de radios doradas",
+    ],
+    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Black Knight", seatHeight: "825 mm", weight: "215 kg" },
+    // Galería con las 10 fotos reales de la unidad (sesión de septiembre 2026).
+    photoCount: 10,
+    colorways: [
+      {
+        id: "black-knight",
+        name: "Black Knight",
+        swatch: "#16181A",
+        photoCount: 10,
+        lead: "/images/catalog/voge-ds-900x-usada.webp",
+        special: true,
       },
     ],
   },

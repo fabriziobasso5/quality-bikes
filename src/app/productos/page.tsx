@@ -4,11 +4,22 @@ import BrandCard from "@/components/products/BrandCard";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { productBrands } from "@/data/products";
 import { withBasePath } from "@/lib/base-path";
+import { shareMetadata } from "@/lib/og";
+
+const title = "Productos — aditivos, gasolinas, aceites y cauchos";
+const description =
+  "VP Racing, Mobil, BK3, Falken y EWAY en Quality Bikes: aditivos y combustibles de competencia, aceites sintéticos y cauchos de alto rendimiento. Arma tu pedido y consúltanos por WhatsApp.";
 
 export const metadata: Metadata = {
-  title: "Productos — aditivos, gasolinas, aceites y cauchos",
-  description:
-    "VP Racing, Mobil, BK3, Falken y EWAY en Quality Bikes: aditivos y combustibles de competencia, aceites sintéticos y cauchos de alto rendimiento. Arma tu pedido y consúltanos por WhatsApp.",
+  title,
+  description,
+  ...shareMetadata({
+    title: `${title} | Quality Bikes`,
+    description,
+    path: "/productos",
+    image: "/og/productos.jpg",
+    alt: "VP Racing, Mobil, BK3, Falken y EWAY en Quality Bikes",
+  }),
 };
 
 export default function ProductsPage() {

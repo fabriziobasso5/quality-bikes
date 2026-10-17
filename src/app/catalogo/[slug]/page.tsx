@@ -10,6 +10,7 @@ import Magnetic from "@/components/Magnetic";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles, getMotoBySlug } from "@/data/motorcycles";
 import { buildWhatsAppLink } from "@/lib/site-config";
+import { shareMetadata } from "@/lib/og";
 
 type Params = Promise<{ slug: string }>;
 
@@ -26,9 +27,17 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const moto = getMotoBySlug(slug);
   if (!moto) return {};
 
+  const title = `${moto.brand} ${moto.model} — Consultar disponibilidad`;
   return {
-    title: `${moto.brand} ${moto.model} — Consultar disponibilidad`,
+    title,
     description: moto.summary,
+    ...shareMetadata({
+      title: `${moto.brand} ${moto.model} ${moto.year} | Quality Bikes`,
+      description: moto.summary,
+      path: `/catalogo/${moto.slug}`,
+      image: `/og/motos/${moto.slug}.jpg`,
+      alt: `${moto.brand} ${moto.model} ${moto.year} en Quality Bikes`,
+    }),
   };
 }
 

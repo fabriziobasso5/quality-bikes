@@ -3,10 +3,22 @@ import ContactForm from "@/components/ContactForm";
 import Eyebrow from "@/components/Eyebrow";
 import { RevealGroup, RevealItem } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
+import { shareMetadata } from "@/lib/og";
+
+const title = "Contacto";
+const description =
+  `Visita nuestro showroom en Caracas o contáctanos por WhatsApp. ${siteConfig.name}, motos de alta cilindrada.`;
 
 export const metadata: Metadata = {
-  title: "Contacto",
-  description: `Visita nuestro showroom en Caracas o contáctanos por WhatsApp. ${siteConfig.name}, motos de alta cilindrada.`,
+  title,
+  description,
+  ...shareMetadata({
+    title: `${title} | Quality Bikes`,
+    description,
+    path: "/contacto",
+    image: "/og/home.jpg",
+    alt: "Showroom de Quality Bikes en Caracas",
+  }),
 };
 
 export default function ContactoPage() {

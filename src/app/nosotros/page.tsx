@@ -5,10 +5,22 @@ import ExplodedHero from "@/components/hero/ExplodedHero";
 import { Reveal } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
+import { shareMetadata } from "@/lib/og";
+
+const title = "Nosotros";
+const description =
+  `Conoce la historia detrás de ${siteConfig.name}: de Moto Accesorios Baró (1981) al showroom de alta gama en el este de Caracas.`;
 
 export const metadata: Metadata = {
-  title: "Nosotros",
-  description: `Conoce la historia detrás de ${siteConfig.name}: de Moto Accesorios Baró (1981) al showroom de alta gama en el este de Caracas.`,
+  title,
+  description,
+  ...shareMetadata({
+    title: `${title} | Quality Bikes`,
+    description,
+    path: "/nosotros",
+    image: "/og/home.jpg",
+    alt: "Quality Bikes — mucho más que solo motos",
+  }),
 };
 
 // Historia real de la casa (1981 → hoy). Redacción editorial sobre los hechos

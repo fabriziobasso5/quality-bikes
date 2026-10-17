@@ -18,6 +18,7 @@ import IntroLoader from "@/components/IntroLoader";
 import CustomCursor from "@/components/CustomCursor";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
+import { shareMetadata } from "@/lib/og";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -82,14 +83,13 @@ export const metadata: Metadata = {
     "Voge DS 900X Venezuela",
     "Voge Venezuela",
   ],
-  openGraph: {
+  ...shareMetadata({
     title: `${siteConfig.name} | Motos de Lujo en Caracas`,
     description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    locale: "es_VE",
-    type: "website",
-  },
+    path: "/",
+    image: "/og/home.jpg",
+    alt: "Quality Bikes — mucho más que solo motos",
+  }),
   icons: {
     icon: withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg"),
     shortcut: withBasePath("/assets/logo/quality-bikes-isotipo-qb.svg"),

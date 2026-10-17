@@ -14,6 +14,7 @@ import {
   type ProductBrandMeta,
 } from "@/data/products";
 import { withBasePath } from "@/lib/base-path";
+import { shareMetadata } from "@/lib/og";
 
 type Params = Promise<{ brand: string }>;
 
@@ -28,9 +29,17 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { brand } = await params;
   const meta = getProductBrand(brand);
   if (!meta) return {};
+  const description = `${meta.name} en Quality Bikes: ${meta.tagline}. Arma tu pedido y cotízalo por WhatsApp.`;
   return {
     title: `${meta.name} — ${meta.tagline}`,
-    description: `${meta.name} en Quality Bikes: ${meta.tagline}. Arma tu pedido y cotízalo por WhatsApp.`,
+    description,
+    ...shareMetadata({
+      title: `${meta.name} | Tienda Quality Bikes`,
+      description,
+      path: `/productos/${meta.id}`,
+      image: `/og/productos/${meta.id}.jpg`,
+      alt: `Productos ${meta.name} en Quality Bikes`,
+    }),
   };
 }
 

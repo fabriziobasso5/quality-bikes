@@ -5,11 +5,22 @@ import InventoryBrandFilter from "@/components/InventoryBrandFilter";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { Reveal } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
+import { shareMetadata } from "@/lib/og";
+
+const title = "Inventario completo";
+const description =
+  "Todo el inventario de motocicletas de Quality Bikes en Caracas, filtrable por marca: BMW, Ducati, Kawasaki, Voge y Yamaha.";
 
 export const metadata: Metadata = {
-  title: "Inventario completo",
-  description:
-    "Todo el inventario de motocicletas de Quality Bikes en Caracas, filtrable por marca: BMW, Ducati, Kawasaki, Voge y Yamaha.",
+  title,
+  description,
+  ...shareMetadata({
+    title: `${title} | Quality Bikes`,
+    description,
+    path: "/catalogo/inventario",
+    image: "/og/home.jpg",
+    alt: "Inventario de motos de Quality Bikes",
+  }),
 };
 
 // Página de inventario completo con filtro por marca. Solo se llega desde el

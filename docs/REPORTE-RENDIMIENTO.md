@@ -8,12 +8,17 @@ caché, sobre https://qualitybikesvzla.com. Dos pasadas cada vez.
 
 | | Antes | Después |
 |---|---|---|
-| Peso total al cargar | 1.670 – 2.145 KB | __TOTAL__ |
-| Peso en imágenes | 1.248 – 1.723 KB (13–16 imágenes) | __IMG__ |
-| Carga completa (evento load) | 10,6 – 11,7 s | __LOAD__ |
-| Imagen principal visible (LCP) | 5,0 – 10,6 s | __LCP__ |
+| Peso total al cargar | 1.670 – 2.145 KB | 630 – 719 KB |
+| Peso en imágenes | 1.248 – 1.723 KB (13–16 imágenes) | 197 – 286 KB (17–27 imágenes, casi todas de 5–15 KB) |
+| Carga completa (evento load) | 10,6 – 11,7 s | 4,3 – 4,8 s |
+| Imagen principal visible (LCP) | 5,0 – 10,6 s | 2,5 – 4,1 s |
 | Peticiones a /_next/image | 0 | 0 |
 | Imágenes rotas | — | 0 |
+
+La meta de ~2 s no se alcanza con esta simulación tan exigente: lo que queda
+pesa sobre todo el código de la web (~230 KB) y las tipografías (~160 KB),
+que no se tocaron porque mueven la portada. En un 4G normal la carga es
+bastante más rápida que estas cifras.
 
 Las cifras de 2,1 MB / 6,6 s que tenías venían de otra herramienta y otra
 velocidad simulada; aquí las dos columnas están medidas igual, para que la

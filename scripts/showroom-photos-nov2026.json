@@ -3,13 +3,13 @@
   "sourceDir": "~/Desktop/QUALITY BIKES/MOTOS QB/SUZUKI/V-STROM 250 SX",
   "outputRoot": "~/quality-bikes/public/images/inventory",
   "photos": [
-    { "src": "IMG_6132.heic", "out": "suzuki-v-strom-250-sx/1.webp" },
-    { "src": "IMG_6133.heic", "out": "suzuki-v-strom-250-sx/2.webp" },
-    { "src": "IMG_6129.heic", "out": "suzuki-v-strom-250-sx/3.webp" },
-    { "src": "IMG_6135.heic", "out": "suzuki-v-strom-250-sx/4.webp" },
-    { "src": "IMG_6136.heic", "out": "suzuki-v-strom-250-sx/5.webp" },
-    { "src": "IMG_6134.heic", "out": "suzuki-v-strom-250-sx/6.webp" },
-    { "src": "IMG_6137.heic", "out": "suzuki-v-strom-250-sx/7.webp" },
-    { "src": "IMG_6138.HEIC", "out": "suzuki-v-strom-250-sx/8.webp" }
+    { "src": "IMG_6132.heic", "out": "suzuki-v-strom-250-sx/negra/1.webp" },
+    { "src": "IMG_6133.heic", "out": "suzuki-v-strom-250-sx/negra/2.webp" },
+    { "src": "IMG_6129.heic", "out": "suzuki-v-strom-250-sx/negra/3.webp" },
+    { "src": "IMG_6135.heic", "out": "suzuki-v-strom-250-sx/negra/4.webp" },
+    { "src": "IMG_6136.heic", "out": "suzuki-v-strom-250-sx/negra/5.webp" },
+    { "src": "IMG_6134.heic", "out": "suzuki-v-strom-250-sx/negra/6.webp" },
+    { "src": "IMG_6137.heic", "out": "suzuki-v-strom-250-sx/negra/7.webp" },
+    { "src": "IMG_6138.HEIC", "out": "suzuki-v-strom-250-sx/negra/8.webp" }
   ]
 }

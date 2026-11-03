@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Foto from "./Foto";
 import MotoCover from "./MotoCover";
 import {
   estadoDe,
@@ -26,6 +27,17 @@ import { rememberBackTarget, type BackTarget } from "@/lib/back-target";
 
 const ORDEN_ESTADO: Estado[] = ["nueva", "usada", "proximo-arribo"];
 
+// Logos de las marcas (public/images/brands-motos, fondo transparente). Una
+// marca sin logo aquí sale solo con su nombre.
+const LOGOS: Record<string, string> = {
+  BMW: "/images/brands-motos/bmw.webp",
+  Ducati: "/images/brands-motos/ducati.webp",
+  Kawasaki: "/images/brands-motos/kawasaki.webp",
+  Suzuki: "/images/brands-motos/suzuki.webp",
+  Voge: "/images/brands-motos/voge.webp",
+  Yamaha: "/images/brands-motos/yamaha.webp",
+};
+
 // Normaliza para buscar sin importar tildes, guiones ni mayúsculas:
 // "vstrom", "V-Strom" y "v strom" encuentran la misma moto.
 const normal = (t: string) =>
@@ -39,22 +51,33 @@ function Chip({
   active,
   onClick,
   children,
+  logo,
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  logo?: string;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`shrink-0 rounded-full border px-3.5 py-1.5 text-[11px] tracking-[0.12em] whitespace-nowrap uppercase transition ${
+      className={`flex shrink-0 items-center gap-2 rounded-full border py-1.5 text-[11px] tracking-[0.12em] whitespace-nowrap uppercase transition ${
+        logo ? "pr-3.5 pl-1.5" : "px-3.5"
+      } ${
         active
           ? "border-brand-navy bg-brand-navy text-white"
           : "border-black/12 bg-white text-brand-text/70 hover:border-brand-navy/50 hover:text-brand-navy"
       }`}
     >
+      {/* El logo va en su círculo blanco: así se lee también con el botón
+          activo (azul marino), aunque el logo sea negro. */}
+      {logo && (
+        <span className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full bg-white">
+          <Foto src={logo} alt="" fill sizes="24px" className="object-contain p-[3px]" />
+        </span>
+      )}
       {children}
     </button>
   );
@@ -234,7 +257,7 @@ export default function CatalogoMotos({
           </Chip>
           <Separador label="Marca" />
           {marcas.map((b) => (
-            <Chip key={b} active={marca === b} onClick={() => setMarca(marca === b ? null : b)}>
+            <Chip key={b} logo={LOGOS[b]} active={marca === b} onClick={() => setMarca(marca === b ? null : b)}>
               {b}
             </Chip>
           ))}

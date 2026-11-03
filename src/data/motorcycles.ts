@@ -282,23 +282,49 @@ export const motorcycles: Motorcycle[] = [
     photoCount: 10,
   },
   {
-    // Unidad 0 km en el showroom (fotos del 23 oct 2026). La carpeta del
-    // cliente solo trae fotos, sin hoja técnica: año, cilindrada, potencia,
-    // caja, cilindros, altura de asiento y peso quedan en "—" hasta tener los
-    // datos oficiales. El color se ve en las fotos. Portada: la foto de prensa
-    // de perfil (IMG_1098.PNG), mismo color que la unidad.
+    // 0 km 2027 en el showroom, en negro (fotos reales del 23 oct 2026) y en
+    // azul (sin fotos propias: foto de prensa oficial de Suzuki sobre blanco).
+    // Datos de la ficha oficial de Suzuki Japón (DS250RL, modelo 2026, el más
+    // reciente publicado): monocilíndrico de 249 cc refrigerado por aceite,
+    // 19 kW (26 PS ≈ 25,5 hp) a 9.300 rpm, 22 Nm a 7.300 rpm, 6 marchas,
+    // asiento a 835 mm, 164 kg en orden de marcha, tanque de 12 L, ruedas
+    // 19"/17" y ABS de serie.
     slug: "suzuki-v-strom-250-sx",
     brand: "Suzuki",
     model: "V-Strom 250 SX",
+    year: 2027,
+    cc: 249,
     category: "adventure",
     condition: "0km",
     availability: "en-stock",
     featured: true,
     summary:
-      "La V-Strom 250 SX de Suzuki, 0 km y disponible ahora mismo en el showroom. Escríbenos por WhatsApp y un asesor te envía la ficha técnica completa.",
-    specs: { power: "—", transmission: "—", gears: "—", cylinders: "—", color: "Negra" },
-    // Galería con las 8 fotos reales de la unidad.
+      "La trail de entrada de Suzuki: monocilíndrico de 249 cc refrigerado por aceite, rueda delantera de 19\", ABS de serie y un asiento de 835 mm para viajar y moverse en ciudad con soltura. 0 km 2027, en negro y en azul.",
+    highlights: [
+      "Monocilíndrico de 249 cc, SOHC de 4 válvulas y refrigeración por aceite SOCS: 26 PS a 9.300 rpm y 22 Nm a 7.300 rpm",
+      "Rueda delantera de 19\" y trasera de 17\" en rines de aleación de 10 radios",
+      "ABS de serie, con disco delantero de 310 mm y trasero de 240 mm",
+      "835 mm de asiento, 164 kg en orden de marcha y tanque de 12 litros",
+    ],
+    specs: { power: "25,5 hp", transmission: "Sincrónica", gears: "6", cylinders: "1 cilindro", color: "Negra · Azul", seatHeight: "835 mm", weight: "164 kg" },
     photoCount: 8,
+    colorways: [
+      {
+        id: "negra",
+        name: "Negra",
+        swatch: "#16181A",
+        photoCount: 8,
+        lead: "/images/catalog/suzuki-v-strom-250-sx.webp",
+      },
+      {
+        // Suzuki la llama Pearl Fresh Blue / Glass Sparkle Black.
+        id: "azul",
+        name: "Azul",
+        swatch: "linear-gradient(135deg, #2338A8 50%, #16181A 50%)",
+        photoCount: 0,
+        lead: "/images/catalog/suzuki-v-strom-250-sx-azul.webp",
+      },
+    ],
   },
   {
     slug: "voge-ds-900x",

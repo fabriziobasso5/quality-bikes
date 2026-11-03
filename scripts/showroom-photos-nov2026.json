@@ -1,0 +1,15 @@
+{
+  "_comment": "Suzuki V-Strom 250 SX 0 km (sesión del 23 oct 2026, carpeta SUZUKI/V-STROM 250 SX). Orden: tres cuartos delantero derecho, tres cuartos delantero izquierdo, frontal, tres cuartos traseros, trasera, puesto de conducción y tablero. La portada sobre blanco sale de la foto de prensa IMG_1098.PNG (make-catalog-cover.py --no-upscale).",
+  "sourceDir": "~/Desktop/QUALITY BIKES/MOTOS QB/SUZUKI/V-STROM 250 SX",
+  "outputRoot": "~/quality-bikes/public/images/inventory",
+  "photos": [
+    { "src": "IMG_6132.heic", "out": "suzuki-v-strom-250-sx/1.webp" },
+    { "src": "IMG_6133.heic", "out": "suzuki-v-strom-250-sx/2.webp" },
+    { "src": "IMG_6129.heic", "out": "suzuki-v-strom-250-sx/3.webp" },
+    { "src": "IMG_6135.heic", "out": "suzuki-v-strom-250-sx/4.webp" },
+    { "src": "IMG_6136.heic", "out": "suzuki-v-strom-250-sx/5.webp" },
+    { "src": "IMG_6134.heic", "out": "suzuki-v-strom-250-sx/6.webp" },
+    { "src": "IMG_6137.heic", "out": "suzuki-v-strom-250-sx/7.webp" },
+    { "src": "IMG_6138.HEIC", "out": "suzuki-v-strom-250-sx/8.webp" }
+  ]
+}

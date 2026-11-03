@@ -64,18 +64,16 @@ filtros solo con texto (no hay logo de Suzuki en "Logos Marcas QB"). El botón d
 WhatsApp lleva "Hola, me interesa la Suzuki V-Strom 250 SX disponible en
 Quality Bikes."
 
-*Actualización (mismo día, pedido tuyo):* la V-Strom es 0 km **2027** y se
-añadió el color **Azul** (Suzuki: Pearl Fresh Blue / Glass Sparkle Black) con
-la foto de prensa oficial de Suzuki de perfil (1280 px; venía con la marca de
-agua de la revista Young Machine en una esquina del fondo, que se quitó sin
-tocar la moto, y el fondo gris claro se pasó a blanco). Las 8 fotos de tu
-showroom quedan en el color Negra. Datos técnicos de la ficha oficial de Suzuki
-Japón (modelo 2026, el más reciente publicado; Suzuki aún no publica datos
-"2027"): 249 cc monocilíndrico refrigerado por aceite, 19 kW (26 PS ≈ 25,5 hp)
-a 9.300 rpm, 22 Nm a 7.300 rpm, 6 marchas, asiento 835 mm, 164 kg en orden de
-marcha, tanque 12 L, ruedas 19"/17", ABS de serie. Logos de Yamaha y Suzuki
-(los que dejaste en "Logos Marcas QB") puestos en los botones de marca del
-catálogo, junto a BMW, Ducati, Kawasaki y Voge.
+*Actualización (mismo día, pedidos tuyos):* la V-Strom es 0 km **2027** y
+tiene selector de color **Negra / Azul**. Negra: portada IMG_1098.PNG y tus 8
+fotos del showroom. Azul: portada con tu foto IMG_1101.PNG (perfil sobre
+blanco), procesada igual que la negra: mismo lienzo, moto centrada con el
+mismo margen, sin ampliar píxeles. Datos técnicos de la ficha oficial de
+Suzuki (modelo 2026, que confirmaste igual a la 2027): 249 cc monocilíndrico
+refrigerado por aceite, 19 kW (26 PS ≈ 25,5 hp) a 9.300 rpm, 22 Nm a
+7.300 rpm, 6 marchas, asiento 835 mm, 164 kg en orden de marcha, tanque 12 L,
+ruedas 19"/17", ABS de serie. Logos de Yamaha y Suzuki (de "Logos Marcas QB")
+en los botones de marca del catálogo, junto a BMW, Ducati, Kawasaki y Voge.
 
 **Tarea 4 — Voge DS 900X.** La portada y la única foto de la ficha es ahora la
 Gris Verde (foto de prensa sobre blanco que ya estaba procesada). Se quitaron
@@ -118,7 +116,7 @@ peticiones a /_next/image. Publicado en dos lotes.
     moto plateada sin maletas y con fondo gris. Se dejó la actual.
   - **Ducati Multistrada V2 S:** la foto nueva (`v2s fondo blanco.webp`) es la
     misma que ya está publicada. Sin cambios.
-  - **Yamaha WR450F — opción 1 (ya aplicada desde antes):** la portada actual es
+  - **Yamaha WR450F — opción 1 (ya aplicada desde antes, confirmado):** la portada actual es
     el recorte de la foto real de *vuestra unidad en versión motard*, sobre
     blanco. La foto nueva (`wr450f.jpeg`) es la WR450F original de enduro y NO se
     usó. No hizo falta editar ni fabricar nada.
@@ -142,10 +140,51 @@ peticiones a /_next/image. Publicado en dos lotes.
 - **vercel.json nuevo:** solo añade las reglas de caché; no cambia cómo se
   publica.
 
-## 4. Lo que necesito de ti
+## 4. Yamaha WR450F — respuesta
 
-- **Suzuki V-Strom 250 SX:** confirma que los datos oficiales del modelo 2026
-  valen para tus unidades 2027. Cuando tengas la azul en el showroom, fotos
-  reales de ella.
+Se aplicó la **opción 1**. La foto principal es el recorte de la foto real de
+VUESTRA unidad en versión motard (rines y cauchos de asfalto, gráficos azul y
+blanco con el n.º 25), tomada en el showroom (`IMG_4207.HEIC` de la carpeta
+YAMAHA/WR450F), puesta sobre blanco con sombra de piso. No se editó ninguna
+foto de enduro ni se fabricó nada: la foto de enduro `wr450f.jpeg` no se usa en
+la web. No hace falta otra foto.
+
+## 5. Fotos que NO salieron de tus carpetas
+
+Revisé todas las imágenes que usa la web. Estas no estaban en tus carpetas del
+Escritorio: se tomaron de internet (sitios y prensa oficial de las marcas) en
+sesiones anteriores. No se borró ninguna.
+
+| Ruta en el proyecto | Qué es | De dónde salió |
+|---|---|---|
+| `public/images/blueprint/gs-adventure-719.webp` | Moto de la portada (BMW R 1250 GS Adventure Triple Black, plano de entrada) | **Generada con IA** en julio a partir de una foto de prensa de BMW como referencia de pose. No es una foto real |
+| `public/images/lifestyle/bmw-r1300-gsa-scenic.webp` | Foto a sangre de la portada (BMW R 1300 GS Adventure en mirador) | Foto de prensa oficial de BMW Motorrad (internet) |
+| `public/images/lifestyle/bmw-r1300-gsa-wheelie.webp` | Foto de "Nosotros" (GS Adventure en wheelie) | Foto de prensa de BMW (internet), según el historial |
+| `public/images/catalog/ducati-monster.webp` | Portada Ducati Monster | Prensa oficial de Ducati (internet) |
+| `public/images/catalog/kawasaki-klr-650-abs.webp` | Portada Kawasaki KLR 650 ABS | Prensa oficial de Kawasaki (internet) |
+| `public/images/catalog/voge-ds-300x.webp` | Portada Voge DS 300X | Prensa oficial de Voge (internet) |
+| `public/images/catalog/voge-cu-250.webp` | Portada Voge CU 250 | vogeglobal.com (prensa oficial) |
+| `public/images/catalog/voge-cu-625.webp`, `voge-cu-625-roja.webp` + galería `public/images/inventory/voge-cu-625/negra/1-5` y `roja/1-5` | CU 625 negra y roja | vogeglobal.com (prensa oficial) |
+| `public/images/catalog/voge-sr-450x.webp`, `-azul.webp`, `-gris.webp` + galería `public/images/inventory/voge-sr-450x/negra/1-14` | SR 450X | vogeglobal.com / vogefrance.fr (prensa oficial) |
+| `public/images/hero/adventure-hero.webp` | Dos motos de aventura en terreno rocoso | Prensa oficial (internet). **Ya no se usa en ninguna página**: solo queda el archivo |
+
+Vienen de tus carpetas, aunque muchas son fotos de prensa de las marcas que tú
+guardaste: las portadas de las Voge DS (900X, 800X Rally, 625X, 525X), Kawasaki
+KLE 500 (blanca y verde), Multistrada V2 S, V-Strom 250 SX (negra y azul); los
+recortes de tus unidades (F 800 GS, WR450F, DS 900X usada); todas las galerías
+del showroom; los logos de marcas de motos ("Logos Marcas QB"); los productos y
+sus logos ("Productos"); la textura de carbono.
+
+La foto azul anterior de la V-Strom, sacada de internet, se reemplazó por la
+tuya. No queda en el proyecto ni en mi carpeta de trabajo, y
+no se menciona en ningún archivo. Solo sigue en el historial de cambios de
+GitHub (las versiones anteriores guardadas). Borrarla de ahí exige reescribir
+ese historial; no lo hice sin tu permiso.
+
+## 6. Lo que necesito de ti
+
+- Nada obligatorio. Opcional: fotos reales de la V-Strom azul cuando esté en
+  el showroom (para su galería), y decidir qué hacer con las fotos ajenas del
+  punto 5. La más delicada es la moto de la portada, generada con IA.
 - Si tenías más fotos nuevas de la Ducati, Yamaha o BMW (pediste revisar 3 por
   carpeta y solo había 1), déjalas en esas carpetas y las reviso.

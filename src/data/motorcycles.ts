@@ -283,9 +283,10 @@ export const motorcycles: Motorcycle[] = [
   },
   {
     // 0 km 2027 en el showroom, en negro (fotos reales del 23 oct 2026) y en
-    // azul (sin fotos propias: foto de prensa oficial de Suzuki sobre blanco).
-    // Datos de la ficha oficial de Suzuki Japón (DS250RL, modelo 2026, el más
-    // reciente publicado): monocilíndrico de 249 cc refrigerado por aceite,
+    // azul. Portadas de las dos: fotos de perfil sobre blanco de la carpeta
+    // del cliente (IMG_1098.PNG negra, IMG_1101.PNG azul). Datos de la ficha
+    // oficial de Suzuki Japón (modelo 2026; el cliente confirma que la 2027
+    // es igual): monocilíndrico de 249 cc refrigerado por aceite,
     // 19 kW (26 PS ≈ 25,5 hp) a 9.300 rpm, 22 Nm a 7.300 rpm, 6 marchas,
     // asiento a 835 mm, 164 kg en orden de marcha, tanque de 12 L, ruedas
     // 19"/17" y ABS de serie.

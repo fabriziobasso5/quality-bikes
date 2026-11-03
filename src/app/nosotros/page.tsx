@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Foto from "@/components/Foto";
 import Eyebrow from "@/components/Eyebrow";
 import ExplodedHero from "@/components/hero/ExplodedHero";
 import { Reveal } from "@/components/Reveal";
 import { siteConfig } from "@/lib/site-config";
-import { withBasePath } from "@/lib/base-path";
 import { shareMetadata } from "@/lib/og";
 
 const title = "Nosotros";
@@ -62,8 +61,9 @@ export default function NosotrosPage() {
 
         <Reveal delay={0.2} className="lg:col-span-2">
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-lg shadow-black/10">
-            <Image
-              src={withBasePath("/images/lifestyle/bmw-r1300-gsa-wheelie.webp")}
+            <Foto
+              placeholder
+              src="/images/lifestyle/bmw-r1300-gsa-wheelie.webp"
               alt="BMW GS Adventure en wheelie sobre camino de montaña — el espíritu de Quality Bikes"
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"

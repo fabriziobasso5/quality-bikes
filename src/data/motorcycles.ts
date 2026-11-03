@@ -32,8 +32,10 @@ export interface Motorcycle {
   slug: string;
   brand: string;
   model: string;
-  year: number;
-  cc: number;
+  // Opcionales solo para fichas recién llegadas sin hoja técnica todavía: la
+  // web muestra "—" en vez de inventar un dato.
+  year?: number;
+  cc?: number;
   category: MotoCategory;
   condition: "0km" | "seminueva";
   // Kilometraje real, solo aplica a unidades "seminueva".
@@ -104,6 +106,8 @@ export function galleryPaths(moto: Motorcycle, colorwayId?: string): string[] {
   return [...(lead ? [lead] : []), ...motoPhotoPaths(moto, colorwayId)];
 }
 
+// Nov. 2026: se suma la Suzuki V-Strom 250 SX 0 km y la DS 900X 0 km queda
+// solo en Gris Verde.
 // Inventario 2026-10-13: unidades físicas en showroom (Kawasaki KLR 650 ABS,
 // Ducati Monster, Ducati Multistrada V2 S, BMW F 800 GS, Yamaha WR450F
 // Supermotard, Voge DS 900X, DS 900X Black Knight 2025 usada, DS 300X, CU 250
@@ -278,6 +282,25 @@ export const motorcycles: Motorcycle[] = [
     photoCount: 10,
   },
   {
+    // Unidad 0 km en el showroom (fotos del 23 oct 2026). La carpeta del
+    // cliente solo trae fotos, sin hoja técnica: año, cilindrada, potencia,
+    // caja, cilindros, altura de asiento y peso quedan en "—" hasta tener los
+    // datos oficiales. El color se ve en las fotos. Portada: la foto de prensa
+    // de perfil (IMG_1098.PNG), mismo color que la unidad.
+    slug: "suzuki-v-strom-250-sx",
+    brand: "Suzuki",
+    model: "V-Strom 250 SX",
+    category: "adventure",
+    condition: "0km",
+    availability: "en-stock",
+    featured: true,
+    summary:
+      "La V-Strom 250 SX de Suzuki, 0 km y disponible ahora mismo en el showroom. Escríbenos por WhatsApp y un asesor te envía la ficha técnica completa.",
+    specs: { power: "—", transmission: "—", gears: "—", cylinders: "—", color: "Negra" },
+    // Galería con las 8 fotos reales de la unidad.
+    photoCount: 8,
+  },
+  {
     slug: "voge-ds-900x",
     brand: "Voge",
     model: "DS 900X",
@@ -292,36 +315,13 @@ export const motorcycles: Motorcycle[] = [
       "Bicilíndrico de 895 cc y 94 hp: el mismo bloque que fabrica Loncin para el BMW F 900 GS",
       "Tornillería y despieces compatibles con BMW, a una fracción del precio",
       "825 mm de altura de asiento, la más accesible de la gama grande",
-      "Edición especial Black Knight en negro, con llantas de radios doradas",
     ],
-    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Black Knight · Gris Azul · Gris Verde", seatHeight: "825 mm", weight: "215 kg" },
-    // Solo fotos de prensa sobre blanco. Las 10 fotos del showroom que tenía
-    // eran de la unidad usada de 2025 y se mudaron a su ficha (oct. 2026).
+    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Gris Verde", seatHeight: "825 mm", weight: "215 kg" },
+    // Solo queda disponible la Gris Verde (nov. 2026): su foto de prensa sobre
+    // blanco es la portada y la única de la ficha. Las Black Knight y Gris
+    // Azul 0 km se retiraron de la página (la Black Knight usada de 2025
+    // sigue en su propia ficha).
     photoCount: 0,
-    colorways: [
-      {
-        id: "black-knight",
-        name: "Black Knight",
-        swatch: "#16181A",
-        photoCount: 0,
-        lead: "/images/catalog/voge-ds-900x.webp",
-        special: true,
-      },
-      {
-        id: "gris-azul",
-        name: "Gris Azul",
-        swatch: "linear-gradient(135deg, #E8EAEC 50%, #1F4E9C 50%)",
-        photoCount: 0,
-        lead: "/images/catalog/voge-ds-900x-gris-azul.webp",
-      },
-      {
-        id: "gris-verde",
-        name: "Gris Verde",
-        swatch: "linear-gradient(135deg, #D9DCDE 50%, #B4D435 50%)",
-        photoCount: 0,
-        lead: "/images/catalog/voge-ds-900x-gris-verde.webp",
-      },
-    ],
   },
   {
     // Unidad usada en el showroom: 2025, segundo dueño (título 2-1), 4.861 km
@@ -632,6 +632,44 @@ export const categories: { value: MotoCategory; label: string }[] = [
   { value: "cruiser", label: "Cruiser" },
   { value: "scooter", label: "Scooter" },
 ];
+
+// Estado comercial tal como lo lee el cliente en el catálogo.
+export type Estado = "nueva" | "usada" | "proximo-arribo";
+export const estadoLabels: Record<Estado, string> = {
+  nueva: "Nueva",
+  usada: "Usada",
+  "proximo-arribo": "Próximo arribo",
+};
+export function estadoDe(m: Motorcycle): Estado {
+  if (m.availability === "proximo-arribo") return "proximo-arribo";
+  return m.condition === "0km" ? "nueva" : "usada";
+}
+
+// Tipo de moto para el filtro del catálogo. Agrupa las categorías finas en
+// las que un cliente reconoce: adventure, dual sport y enduro son todas
+// "Aventura" (motos de viaje con rueda grande delante y algo de tierra).
+export type Tipo = "aventura" | "naked" | "supermotard" | "cruiser" | "scooter";
+export const tipoLabels: Record<Tipo, string> = {
+  aventura: "Aventura",
+  naked: "Naked",
+  supermotard: "Supermotard",
+  cruiser: "Cruiser",
+  scooter: "Scooter",
+};
+export function tipoDe(m: Motorcycle): Tipo {
+  switch (m.category) {
+    case "naked":
+      return "naked";
+    case "supermotard":
+      return "supermotard";
+    case "cruiser":
+      return "cruiser";
+    case "scooter":
+      return "scooter";
+    default:
+      return "aventura";
+  }
+}
 
 export function getMotoBySlug(slug: string) {
   return motorcycles.find((m) => m.slug === slug);

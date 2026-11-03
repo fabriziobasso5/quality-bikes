@@ -1,9 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import Foto from "./Foto";
 import { motion } from "framer-motion";
-import { withBasePath } from "@/lib/base-path";
 import { galleryPaths, type Motorcycle } from "@/data/motorcycles";
 
 /**
@@ -24,7 +23,7 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
   const [lightbox, setLightbox] = useState(false);
 
   const colorway = colorways?.find((c) => c.id === colorId);
-  const srcs = galleryPaths(moto, colorId).map(withBasePath);
+  const srcs = galleryPaths(moto, colorId);
 
   function pickColor(id: string) {
     setColorId(id);
@@ -48,14 +47,14 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
           colorway?.special ? "border-[#C9A227]/45" : "border-black/[0.07]"
         }`}
       >
-        <Image
+        <Foto
           key={srcs[active]}
           src={srcs[active]}
-          alt={label}
+          alt={`${label} en Quality Bikes Caracas — foto ${active + 1}`}
           fill
-          sizes="(max-width: 1024px) 100vw, 50vw"
+          priority
+          sizes="(max-width: 1024px) calc(100vw - 48px), 600px"
           className={`object-contain ${colorway?.special ? "qb-bk-photo" : ""}`}
-          preload
         />
         {/* Edición especial: el fondo cae a negro y una lámina de luz dorada
             barre la moto una sola vez, como el reflejo de un foco al girarla. */}
@@ -137,7 +136,7 @@ export default function MotoGallery({ moto }: { moto: Motorcycle }) {
                   : "border-black/10 opacity-60 hover:opacity-100"
               }`}
             >
-              <Image src={src} alt="" fill sizes="15vw" className="object-cover" />
+              <Foto src={src} alt="" fill placeholder sizes="(max-width: 640px) 18vw, (max-width: 1024px) 15vw, 90px" className="object-cover" />
             </button>
           ))}
         </div>
@@ -251,10 +250,11 @@ function Lightbox({
         className="absolute inset-x-4 inset-y-14 sm:inset-x-16"
         onClick={(e) => e.stopPropagation()}
       >
-        <Image
+        <Foto
           src={srcs[index]}
           alt={`${label} — foto ${index + 1}`}
           fill
+          priority
           sizes="100vw"
           className="object-contain"
         />

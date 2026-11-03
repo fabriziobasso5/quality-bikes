@@ -1,22 +1,18 @@
-import Image from "next/image";
+import Foto, { FondoCarbono } from "@/components/Foto";
 import Link from "next/link";
 import BrandStats from "@/components/BrandStats";
 import BlueprintReveal from "@/components/BlueprintReveal";
-import MotoCover from "@/components/MotoCover";
-import Magnetic from "@/components/Magnetic";
-import OpenCatalogButton from "@/components/OpenCatalogButton";
+import CatalogoMotos from "@/components/CatalogoMotos";
 import FeaturedArrivals from "@/components/FeaturedArrivals";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
 import { productBrands } from "@/data/products";
 import { siteConfig, buildWhatsAppLink } from "@/lib/site-config";
-import { withBasePath } from "@/lib/base-path";
 
 // Home editorial (referencias aprobadas: mega-menú Ducati, estética CAKE).
 // Regla de composición: una idea protagonista por pantalla, aire generoso,
 // bloques de producto sobre blanco alternados con fotos lifestyle a sangre.
 export default function Home() {
-  const inShowroom = motorcycles.filter((m) => m.availability === "en-stock");
   const upcoming = motorcycles.filter((m) => m.availability === "proximo-arribo");
 
   return (
@@ -27,58 +23,25 @@ export default function Home() {
           ahora cierra la página. */}
       <BlueprintReveal />
 
-      {/* En el showroom ahora — las unidades físicas reales, nada más */}
-      <section className="mx-auto max-w-7xl px-6 py-24 sm:py-32">
+      {/* Catálogo: todas las motos en tarjetas compactas con filtros por
+          marca, tipo y estado, buscador y contador. Antes era una columna con
+          solo las del showroom, una moto por pantalla en el teléfono. El id es
+          "motos" y no "catalogo": #catalogo es la parada del historial que abre
+          el mega-menú, y con ese id el navegador saltaría aquí al abrirlo. */}
+      <section id="motos" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-20 sm:py-28">
         <Reveal>
-          <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Disponibles hoy</p>
+          <p className="text-xs tracking-[0.3em] text-brand-red uppercase">Catálogo</p>
           <h2 className="mt-3 max-w-xl font-display text-4xl leading-tight tracking-wide uppercase sm:text-5xl">
-            En el showroom ahora
+            Encuentra tu moto
           </h2>
+          <p className="mt-4 max-w-lg text-brand-text/65">
+            Nuevas, usadas y por llegar. Filtra por marca, tipo o estado y escríbenos por
+            WhatsApp por la que te guste.
+          </p>
         </Reveal>
-        <RevealGroup className="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-2">
-          {inShowroom.map((moto) => (
-            <RevealItem key={moto.slug}>
-              <Link href={`/catalogo/${moto.slug}`} className="group block">
-                {/* Portada oficial fondo blanco — las fotos reales viven solo
-                    en la galería de la ficha */}
-                <MotoCover
-                  moto={moto}
-                  className="aspect-[4/3] w-full overflow-hidden"
-                  imgClassName="transition-transform duration-500 group-hover:scale-[1.03]"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                />
-                <div className="mt-6 flex items-baseline justify-between gap-4">
-                  <div>
-                    <p className="text-xs tracking-widest text-brand-text/50 uppercase">
-                      {moto.brand}
-                    </p>
-                    <h3 className="mt-1 font-display text-2xl tracking-wide uppercase">
-                      {moto.model}
-                    </h3>
-                  </div>
-                  <p className="shrink-0 font-mono text-sm text-brand-text/60">
-                    {moto.condition === "0km"
-                      ? "0 km"
-                      : `Seminueva${moto.mileageKm ? ` · ${moto.mileageKm} km` : ""}`}
-                  </p>
-                </div>
-                <p className="link-underline mt-4 inline-block text-sm tracking-wide text-brand-navy uppercase">
-                  Ver ficha →
-                </p>
-              </Link>
-            </RevealItem>
-          ))}
-        </RevealGroup>
-
-        {/* Acceso al catálogo completo: abre el mega-menú (todas las motos
-            sobre blanco) — el mismo panel que el nav y el hero. */}
-        <Reveal className="mt-16 text-center">
-          <Magnetic className="inline-block">
-            <OpenCatalogButton className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-10 py-4 text-sm tracking-widest text-brand-bg uppercase transition hover:bg-brand-navy-soft">
-              Ver todo el catálogo →
-            </OpenCatalogButton>
-          </Magnetic>
-        </Reveal>
+        <div className="mt-10">
+          <CatalogoMotos motos={motorcycles} origin="catalogo" />
+        </div>
       </section>
 
       {/* Productos en tienda: marcas complementarias, mismos logos en placas
@@ -87,16 +50,9 @@ export default function Home() {
           para marcar que aquí empieza la zona de tienda. Intercambiada con la
           foto de la R 1300, que ahora va después de los contadores. */}
       <section className="relative overflow-hidden border-t border-black/10">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: `url("${withBasePath("/images/carbono-forjado.jpg")}")`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
-        />
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <FondoCarbono sizes="(max-width: 1024px) 1600px, 100vw" />
+        </div>
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/55" />
         <div
           aria-hidden
@@ -129,10 +85,11 @@ export default function Home() {
                   {/* Placas idénticas: el logo se maximiza dentro del mismo
                       marco en todas las marcas, así se ven simétricos en tamaño. */}
                   <div className="flex h-28 items-center justify-center overflow-hidden rounded-2xl border border-black/10 bg-white px-7 shadow-sm shadow-black/[0.04] transition duration-300 group-hover:-translate-y-1 group-hover:border-black/20 group-hover:shadow-lg group-hover:shadow-black/10">
-                    {/* eslint-disable-next-line @next/next/no-img-element -- logos de terceros, dimensiones intrínsecas variables */}
-                    <img
-                      src={withBasePath(product.logo)}
-                      alt={product.name}
+                    <Foto
+                      src={product.logo}
+                      alt={`Logo de ${product.name}`}
+                      sizes="(max-width: 1024px) 330px, 180px"
+                      sinMedidas
                       className="max-h-16 w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
@@ -161,11 +118,14 @@ export default function Home() {
           origen a 2:1 quitándole cielo: a 3:2 el recorte de object-cover se
           comía las ruedas. */}
       <section className="relative h-[65vh] overflow-hidden">
-        <Image
-          src={withBasePath("/images/lifestyle/bmw-r1300-gsa-scenic.webp")}
+        <Foto
+          src="/images/lifestyle/bmw-r1300-gsa-scenic.webp"
           alt="BMW R 1300 GS Adventure sobre un mirador de montaña al atardecer"
           fill
-          sizes="100vw"
+          placeholder
+          /* La caja es más alta que ancha en el teléfono y la foto es 2:1:
+             con object-cover se ve al ancho de 2 × 65vh, no al de la pantalla. */
+          sizes="(orientation: portrait) 130vh, 100vw"
           /* En móvil la caja es vertical y solo cabe un tercio del ancho de la
              foto, así que el foco horizontal tiene que caer sobre la moto: en
              el recorte actual está centrada (~49%), no a la derecha.

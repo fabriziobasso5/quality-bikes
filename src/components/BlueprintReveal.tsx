@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
+import Foto from "@/components/Foto";
 import { useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { MOTO_SILHOUETTE_PATH, MOTO_SILHOUETTE_VIEWBOX } from "./logo3d/moto-silhouette-path";
 import { siteConfig } from "@/lib/site-config";
-import { withBasePath } from "@/lib/base-path";
 
 /**
  * PORTADA "del plano al asfalto": sección pinned (120–135vh de recorrido)
@@ -341,8 +340,11 @@ export default function BlueprintReveal() {
             }
             className="absolute inset-0"
           >
-            <Image
-              src={withBasePath("/images/blueprint/gs-adventure-719.webp")}
+            {/* Las dos capas piden EXACTAMENTE la misma lista de versiones con
+                el mismo `sizes`: el navegador elige el mismo archivo para las
+                dos y lo descarga una sola vez. */}
+            <Foto
+              src="/images/blueprint/gs-adventure-719.webp"
               alt="BMW R 1250 GS Adventure Triple Black Option 719 con luces ámbar encendidas, materializada sobre el plano técnico"
               fill
               priority
@@ -356,11 +358,11 @@ export default function BlueprintReveal() {
                 brillante, enmascarado a la franja inferior — ilumina motor,
                 escape y ruedas de abajo hacia arriba sin tocar el fondo (la
                 máscara respeta la transparencia del asset). */}
-            <Image
-              src={withBasePath("/images/blueprint/gs-adventure-719.webp")}
+            <Foto
+              src="/images/blueprint/gs-adventure-719.webp"
               alt=""
-              aria-hidden
               fill
+              priority
               sizes="(max-width: 640px) 88vw, 820px"
               className="object-contain"
               style={{

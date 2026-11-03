@@ -2,6 +2,7 @@ import Link from "next/link";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { siteConfig, buildWhatsAppLink } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
+import { FondoCarbono } from "@/components/Foto";
 
 // Enlaces del footer distintos de "Catálogo" (ese abre el mega-menú, no navega).
 const navLinks = [
@@ -65,16 +66,9 @@ export default function Footer() {
       {/* Fibra de carbono forjada: foto real de la textura, UNA sola imagen con
           background-size: cover y no-repeat → sin costuras ni rayas. Cubre todo
           el ancho del footer, igual en móvil y desktop. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `url("${withBasePath("/images/carbono-forjado.jpg")}")`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }}
-      />
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <FondoCarbono sizes="(max-width: 1024px) 1600px, 100vw" />
+        </div>
       {/* Velo oscuro semitransparente encima de la textura: asegura el contraste
           del logo claro y el texto. Es un tinte mate, no un brillo. */}
       <div

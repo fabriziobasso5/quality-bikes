@@ -32,11 +32,11 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     title,
     description: moto.summary,
     ...shareMetadata({
-      title: `${moto.brand} ${moto.model} ${moto.year} | Quality Bikes`,
+      title: `${moto.brand} ${moto.model}${moto.year ? ` ${moto.year}` : ""} | Quality Bikes`,
       description: moto.summary,
       path: `/catalogo/${moto.slug}`,
       image: `/og/motos/${moto.slug}.jpg`,
-      alt: `${moto.brand} ${moto.model} ${moto.year} en Quality Bikes`,
+      alt: `${moto.brand} ${moto.model}${moto.year ? ` ${moto.year}` : ""} en Quality Bikes`,
     }),
   };
 }
@@ -93,7 +93,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
               en grande arriba, el resto en filas finas etiqueta-valor. */}
           <div className="mt-10 grid grid-cols-3 gap-4 border-y border-black/10 py-8">
             {[
-              { value: `${moto.cc}`, unit: "cc", label: "Cilindrada" },
+              { value: moto.cc ? `${moto.cc}` : "—", unit: "cc", label: "Cilindrada" },
               { value: moto.specs.power.replace(/\s*hp$/i, ""), unit: "hp", label: "Potencia" },
               { value: (moto.specs.weight ?? "—").replace(/\s*kg$/i, ""), unit: "kg", label: "Peso" },
             ].map((stat) => (
@@ -115,7 +115,7 @@ export default async function MotoDetailPage({ params }: { params: Params }) {
           <dl className="divide-y divide-black/[0.07] border-b border-black/10">
             {(
               [
-                ["Año", String(moto.year)],
+                ["Año", moto.year ? String(moto.year) : "—"],
                 ["Cilindros", moto.specs.cylinders],
                 ["Transmisión", moto.specs.transmission],
                 ["Marchas", moto.specs.gears],

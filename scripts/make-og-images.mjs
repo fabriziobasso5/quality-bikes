@@ -135,7 +135,7 @@ function motoHtml(m) {
     ? "0 km"
     : `Seminueva${m.mileageKm ? ` · ${m.mileageKm.toLocaleString("es-VE")} km` : ""}`;
   const stats = [
-    [String(m.cc), "cc", "Cilindrada"],
+    [m.cc ? String(m.cc) : "—", "cc", "Cilindrada"],
     [m.specs.power.replace(/\s*hp$/i, ""), "hp", "Potencia"],
     [(m.specs.weight ?? "—").replace(/\s*kg$/i, ""), "kg", "Peso"],
   ].filter(([v]) => v !== "—"); // sin dato oficial, mejor no mostrar un guion en un anuncio
@@ -164,7 +164,7 @@ function motoHtml(m) {
   <div style="height:44px"></div>
   <div class="eyebrow">${esc(m.brand)}</div>
   <div class="model">${esc(m.model)}</div>
-  <div class="meta">${m.year} · ${esc(state)}</div>
+  <div class="meta">${m.year ? `${m.year} · ` : ""}${esc(state)}</div>
   ${special ? `<div class="special">Edición especial Black Knight</div>` : ""}
   <div class="stats">${stats
     .map(([v, u, l]) => `<div><div class="num">${esc(v)}<small>${u}</small></div><div class="lab">${l}</div></div>`)

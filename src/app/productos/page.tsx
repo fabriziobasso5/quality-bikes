@@ -3,7 +3,7 @@ import Eyebrow from "@/components/Eyebrow";
 import BrandCard from "@/components/products/BrandCard";
 import { Reveal, RevealGroup, RevealItem } from "@/components/Reveal";
 import { productBrands } from "@/data/products";
-import { withBasePath } from "@/lib/base-path";
+import { FondoCarbono } from "@/components/Foto";
 import { shareMetadata } from "@/lib/og";
 
 const title = "Productos — aditivos, gasolinas, aceites y cauchos";
@@ -28,16 +28,9 @@ export default function ProductsPage() {
     // velo oscuro detrás de las tarjetas — las tarjetas (fondo blanco) quedan
     // "flotando" encima, sin cambiar de color.
     <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `url("${withBasePath("/images/carbono-forjado.jpg")}")`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }}
-      />
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <FondoCarbono sizes="(max-width: 1024px) 1600px, 100vw" />
+        </div>
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/55" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">

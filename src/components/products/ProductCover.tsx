@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { withBasePath } from "@/lib/base-path";
+import Foto from "../Foto";
 import ProductPlaceholder from "./ProductPlaceholder";
 import { getProductBrand, type Product } from "@/data/products";
 
@@ -28,8 +27,8 @@ export default function ProductCover({
 
   return (
     <div className={`relative bg-white ${className}`}>
-      <Image
-        src={withBasePath(product.image)}
+      <Foto
+        src={product.image}
         alt={product.name}
         fill
         sizes={sizes ?? "(max-width: 768px) 100vw, 33vw"}

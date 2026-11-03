@@ -1,11 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
+import Foto from "@/components/Foto";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Reveal } from "@/components/Reveal";
-import { withBasePath } from "@/lib/base-path";
 import type { Motorcycle } from "@/data/motorcycles";
 
 const ROTATE_MS = 5000;
@@ -68,14 +67,11 @@ export default function FeaturedArrivals({ motos }: { motos: Motorcycle[] }) {
           </h2>
 
           <div className="relative mx-auto mt-10 max-w-2xl">
-            <Image
-              src={withBasePath(`/images/catalog/${moto.slug}.webp`)}
-              alt={`${moto.brand} ${moto.model}`}
-              width={1600}
-              height={1200}
-              sizes="(max-width: 640px) 100vw, 672px"
+            <Foto
+              src={`/images/catalog/${moto.slug}.webp`}
+              alt={`${moto.brand} ${moto.model}, próximo arribo a Quality Bikes Caracas`}
+              sizes="(max-width: 640px) calc(100vw - 48px), 672px"
               className="relative z-10 h-auto w-full"
-              priority={index === 0}
             />
             {/* Sombra elíptica difusa bajo la moto: el truco CAKE de "flotar" */}
             <div
@@ -90,7 +86,7 @@ export default function FeaturedArrivals({ motos }: { motos: Motorcycle[] }) {
           <div className="mt-8 flex items-center justify-center gap-10 font-mono text-sm text-brand-text/60">
             <span>{moto.specs.power}</span>
             <span aria-hidden className="text-brand-text/20">|</span>
-            <span>{moto.cc} cc</span>
+            <span>{moto.cc ? `${moto.cc} cc` : "—"}</span>
             {moto.specs.weight && (
               <>
                 <span aria-hidden className="text-brand-text/20">|</span>

@@ -1,4 +1,4 @@
-import { withBasePath } from "@/lib/base-path";
+import Foto from "../Foto";
 import type { ProductBrandMeta } from "@/data/products";
 
 /**
@@ -27,10 +27,11 @@ export default function BrandLogo({
   return (
     <span className={`flex items-center justify-center ${className}`}>
       {src ? (
-        // eslint-disable-next-line @next/next/no-img-element -- logo de tercero, dimensiones intrínsecas variables
-        <img
-          src={withBasePath(src)}
+        <Foto
+          src={src}
           alt={brand.name}
+          sizes="(max-width: 640px) 80vw, 420px"
+          sinMedidas
           className={`w-auto max-w-full object-contain ${imgClassName}`}
         />
       ) : (

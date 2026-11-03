@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import BackLink from "@/components/BackLink";
 import Eyebrow from "@/components/Eyebrow";
-import InventoryBrandFilter from "@/components/InventoryBrandFilter";
+import CatalogoMotos from "@/components/CatalogoMotos";
 import OpenCatalogButton from "@/components/OpenCatalogButton";
 import { Reveal } from "@/components/Reveal";
 import { motorcycles } from "@/data/motorcycles";
@@ -9,7 +9,7 @@ import { shareMetadata } from "@/lib/og";
 
 const title = "Inventario completo";
 const description =
-  "Todo el inventario de motocicletas de Quality Bikes en Caracas, filtrable por marca: BMW, Ducati, Kawasaki, Voge y Yamaha.";
+  "Todo el inventario de motocicletas de Quality Bikes en Caracas, filtrable por marca, tipo y estado: BMW, Ducati, Kawasaki, Suzuki, Voge y Yamaha.";
 
 export const metadata: Metadata = {
   title,
@@ -46,12 +46,14 @@ export default function InventoryPage() {
           Todas las motos
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-brand-text/70">
-          Elige una marca para ver solo sus modelos. Los precios se manejan por asesoría
-          directa — escríbenos para conocer disponibilidad y valor.
+          Filtra por marca, tipo o estado, o busca por modelo. Los precios se manejan por
+          asesoría directa — escríbenos para conocer disponibilidad y valor.
         </p>
       </Reveal>
 
-      <InventoryBrandFilter motorcycles={motorcycles} />
+      <div className="mt-12">
+        <CatalogoMotos motos={motorcycles} />
+      </div>
     </div>
   );
 }

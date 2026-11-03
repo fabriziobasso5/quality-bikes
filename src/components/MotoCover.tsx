@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { withBasePath } from "@/lib/base-path";
+import Foto from "./Foto";
 import { catalogCoverPath, type Motorcycle } from "@/data/motorcycles";
 
 /**
@@ -14,18 +13,21 @@ export default function MotoCover({
   className = "",
   imgClassName = "",
   sizes,
+  priority = false,
 }: {
   moto: Motorcycle;
   className?: string;
   imgClassName?: string;
   sizes?: string;
+  priority?: boolean;
 }) {
   return (
     <div className={`relative bg-white ${className}`}>
-      <Image
-        src={withBasePath(catalogCoverPath(moto.slug))}
-        alt={`${moto.brand} ${moto.model}`}
+      <Foto
+        src={catalogCoverPath(moto.slug)}
+        alt={`${moto.brand} ${moto.model} en Quality Bikes Caracas`}
         fill
+        priority={priority}
         sizes={sizes ?? "(max-width: 768px) 100vw, 33vw"}
         className={`object-contain ${imgClassName}`}
       />

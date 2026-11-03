@@ -9,6 +9,7 @@ import MotoCover from "./MotoCover";
 import { motorcycles } from "@/data/motorcycles";
 import { siteConfig } from "@/lib/site-config";
 import { withBasePath } from "@/lib/base-path";
+import { FondoCarbono } from "@/components/Foto";
 import { rememberBackTarget } from "@/lib/back-target";
 import {
   closeCatalogPanel,
@@ -112,16 +113,9 @@ export default function Header() {
           no necesita el contenedor) y el panel del menú móvil, que sí es
           descendiente de este div, necesita poder desbordar hacia abajo. */}
       <div className="relative bg-[#0d0f11]">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: `url("${withBasePath("/images/carbono-forjado.jpg")}")`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
-        />
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <FondoCarbono priority />
+        </div>
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/55" />
         <div
           aria-hidden

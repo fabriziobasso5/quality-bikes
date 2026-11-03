@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
+import Foto from "./Foto";
 import Link from "next/link";
 import MotoCover from "./MotoCover";
 import TiltCard from "./TiltCard";
-import { withBasePath } from "@/lib/base-path";
 import { motoPhotoPaths, type Motorcycle } from "@/data/motorcycles";
 import { rememberBackTarget, type BackTarget } from "@/lib/back-target";
 
@@ -47,8 +46,8 @@ export default function MotoCard({
           /* Solo desktop (hidden md:block): en mobile no hay hover y no
              tiene sentido descargar la segunda imagen. */
           <div className="absolute inset-0 hidden bg-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block">
-            <Image
-              src={withBasePath(realPhoto)}
+            <Foto
+              src={realPhoto}
               alt={`${moto.brand} ${moto.model} — unidad real en showroom`}
               fill
               sizes="(max-width: 1024px) 50vw, 25vw"
@@ -68,8 +67,13 @@ export default function MotoCard({
         <p className="font-mono text-xs tracking-[0.12em] text-brand-navy uppercase">{moto.brand}</p>
         <h3 className="mt-1 font-display text-lg tracking-wide">{moto.model}</h3>
         <p className="mt-2 font-mono text-sm text-brand-text/60">
-          {moto.cc} cc · {moto.year} ·{" "}
-          {moto.condition === "0km" ? "0 km" : `Seminueva${moto.mileageKm ? ` · ${moto.mileageKm} km` : ""}`}
+          {[
+            moto.cc ? `${moto.cc} cc` : null,
+            moto.year ? String(moto.year) : null,
+            moto.condition === "0km" ? "0 km" : `Seminueva${moto.mileageKm ? ` · ${moto.mileageKm} km` : ""}`,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
         </p>
         <p className="mt-4 text-sm tracking-wide text-brand-text/80 group-hover:text-brand-red">
           Consultar disponibilidad →

@@ -107,7 +107,9 @@ export function galleryPaths(moto: Motorcycle, colorwayId?: string): string[] {
 }
 
 // Nov. 2026: se suma la Suzuki V-Strom 250 SX 0 km y la DS 900X 0 km queda
-// solo en Gris Verde.
+// solo en Gris Verde. 14 nov 2026: se vendió la DS 900X Black Knight 2025
+// usada; su ficha redirige al inventario (vercel.json) y sus fotos quedan en
+// _archivo/vendidas/voge-ds900x-usada/.
 // Inventario 2026-10-13: unidades físicas en showroom (Kawasaki KLR 650 ABS,
 // Ducati Monster, Ducati Multistrada V2 S, BMW F 800 GS, Yamaha WR450F
 // Supermotard, Voge DS 900X, DS 900X Black Knight 2025 usada, DS 300X, CU 250
@@ -346,50 +348,8 @@ export const motorcycles: Motorcycle[] = [
     specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Gris Verde", seatHeight: "825 mm", weight: "215 kg" },
     // Solo queda disponible la Gris Verde (nov. 2026): su foto de prensa sobre
     // blanco es la portada y la única de la ficha. Las Black Knight y Gris
-    // Azul 0 km se retiraron de la página (la Black Knight usada de 2025
-    // sigue en su propia ficha).
+    // Azul 0 km se retiraron de la página.
     photoCount: 0,
-  },
-  {
-    // Unidad usada en el showroom: 2025, segundo dueño (título 2-1), 4.861 km
-    // (se lee en el tablero, foto 9). Datos técnicos de la ficha oficial de la
-    // DS 900X. Los accesorios VIENEN con la moto, por eso van en el resumen y
-    // en los argumentos y no en `accessories`, que la galería presenta como
-    // opcionales. Portada recortada de la foto real de perfil (BiRefNet +
-    // matting), sobre blanco y con sombra de piso.
-    slug: "voge-ds-900x-usada",
-    brand: "Voge",
-    model: "DS 900X Black Knight",
-    year: 2025,
-    cc: 895,
-    category: "dual-sport",
-    condition: "seminueva",
-    mileageKm: 4861,
-    availability: "en-stock",
-    featured: true,
-    summary:
-      "Una DS 900X Black Knight 2025 de segundo dueño, con apenas 4.861 km y lista para viajar: top case LS2, asiento de gel y protector de la boca del tanque. El bicilíndrico de 895 cc que fabrica Loncin, el mismo bloque del BMW F 900 GS.",
-    highlights: [
-      "4.861 km y segundo dueño (título 2-1)",
-      "Incluye top case LS2 y asiento de gel",
-      "Protector de la boca del tanque, que sirve de base para un bolso de tanque (el bolso no está incluido)",
-      "Escape sin catalizador",
-      "Bicilíndrico de 895 cc y 94 hp: el mismo bloque que fabrica Loncin para el BMW F 900 GS",
-      "Edición especial Black Knight en negro, con llantas de radios doradas",
-    ],
-    specs: { power: "94 hp", transmission: "Sincrónica", gears: "6", cylinders: "2 cilindros", color: "Black Knight", seatHeight: "825 mm", weight: "215 kg" },
-    // Galería con las 10 fotos reales de la unidad (sesión de septiembre 2026).
-    photoCount: 10,
-    colorways: [
-      {
-        id: "black-knight",
-        name: "Black Knight",
-        swatch: "#16181A",
-        photoCount: 10,
-        lead: "/images/catalog/voge-ds-900x-usada.webp",
-        special: true,
-      },
-    ],
   },
   {
     slug: "voge-ds-800x-rally",

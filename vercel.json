@@ -1,5 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/catalogo/voge-ds-900x-usada(.*)",
+      "destination": "/catalogo/inventario",
+      "statusCode": 301
+    }
+  ],
   "headers": [
     {
       "source": "/v/(.*)",
